@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/main">
+<head>
+<title>MSTQ</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div layout:fragment="content">
+		<ol class="breadcrumb">
+  			<li><a href="#" th:href="@{/web/}"><i class="fa fa-home"></i> Home</a></li>
+		</ol>
+	
+		
+		<h3 th:text="${category.nameTh}">กลุ่มผลิตภัณฑ์ยาง</h3>
+		
+		<table class="table table-bordered table-hover">
+	      <tr>
+	        <th>มาตรฐาน</th>
+	        <th>ผลิตภัณฑ์</th>
+	      </tr>
+	      <tr th:each="standard : ${standards}">
+	        <td><a href="#" th:href="@{'/web/idcat/'+ ${category.id} + '/standard/' + ${standard.id}}" th:text="${standard.nameTh}">มอก. 5226-2546</a></td>
+	        <td><a href="#" th:href="@{'/web/idcat/'+ ${category.id} + '/standard/' + ${standard.id}}" th:text="${standard.productNameTh}">เครื่องใช้ไฟฟ้า</a></td>
+	      </tr>
+	    </table>
+	</div>
+</body>
+</html>
