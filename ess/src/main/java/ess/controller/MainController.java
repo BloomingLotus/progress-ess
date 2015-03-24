@@ -15,6 +15,26 @@ public class MainController {
 	public String index(Model model) {
 		log.debug("Entering : /");
 		
-		return "dashboard";
+		model.addAttribute("indexPage", true);
+		
+		return "index";
+	}
+	
+	
+	@RequestMapping("/web/personal")
+	public String personal(Model model) {
+		log.debug("Entering : /");
+		
+		model.addAttribute("personalPage", true);
+		return "personal";
+	}
+	
+
+	@RequestMapping("/web/form")
+	public String form(Model model) {
+		log.debug("Entering : /");
+		
+		model.addAttribute("formPage", true);
+		return "form";
 	}
 }

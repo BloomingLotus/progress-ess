@@ -38,18 +38,7 @@
 	 	 th:href="@{/static/css/responsive.css}" media="screen">
 	
 	<!-- Color CSS Styles  -->
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/red.css}" title="red" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/jade.css}" title="jade" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/blue.css}" title="blue" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/beige.css}" title="beige" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/cyan.css}" title="cyan" media="screen" />
 	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/green.css}" title="green" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/orange.css}" title="orange" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/peach.css}" title="peach" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/pink.css}" title="pink" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/purple.css}" title="purple" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/sky-blue.css}" title="sky-blue" media="screen" />
-	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/yellow.css}" title="yellow" media="screen" />
 	
 	
 	
@@ -85,64 +74,7 @@
 		
 		<!-- Start Header -->
 		<div class="hidden-header"></div>
-		<header class="clearfix">
-			
-			<!-- Start Top Bar -->
-			<div class="top-bar">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-6">
-							<!-- Start Contact Info -->
-							<ul class="contact-details">
-                                <li><a href="#"><i class="fa fa-map-marker"></i> HR Self Service</a>
-                                </li>
-                                <li><a href="#"><i class="fa fa-envelope-o"></i> hr@progress.com</a>
-                                </li>
-                                <li><a href="#"><i class="fa fa-phone"></i> 0 2345 6789 #1234</a>
-                                </li>
-                            </ul>
-							<!-- End Contact Info -->
-						</div>
-						<div class="col-md-6">
-
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Top Bar -->
-			
-			<!-- Start Header ( Logo & Naviagtion ) -->
-			<div class="navbar navbar-default navbar-top">
-				<div class="container">
-					<div class="navbar-header">
-						<!-- Stat Toggle Nav Link For Mobiles -->
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-							<i class="fa fa-bars"></i>
-						</button>
-						<!-- End Toggle Nav Link For Mobiles -->
-						<a class="navbar-brand" href="index.html"><img alt="" th:src="@{/static/images/progress.png}"></a>
-					</div>
-					<div class="navbar-collapse collapse">
-						<!-- Start Navigation List -->
-						<ul class="nav navbar-nav navbar-right">
-							<li>
-								<a class="active" th:href="@{/web/}">Home</a>
-							</li>
-							<li>
-								<a th:href="@{/web/form}">แบบฟอร์มออนไลน์</a>
-							</li>
-							<li>
-								<a th:href="@{web/download}">ปฏิทินกิจกรรม</a>
-							</li>
-							<li>
-								<a href="portfolio-3.html">สารจากผู้บริหาร</a>
-							</li>
-						</ul>
-						<!-- End Navigation List -->
-					</div>
-				</div>
-			</div>
-			<!-- End Header ( Logo & Naviagtion ) -->
+		<header class="clearfix"  th:replace="layout/fragments/header :: header">
 			
 		</header>
 		<!-- End Header -->
@@ -151,19 +83,8 @@
 		
 		
 		<!-- Start Page Banner -->
-		<div class="page-banner no-subtitle">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<h2 layout:fragment="banner">Right Sidebar</h2>
-					</div>
-					<div class="col-md-6">
-						<ul class="breadcrumbs">
-							<li><a th:href="@{/static/web/}">Home</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
+		<div class="page-banner no-subtitle"  th:replace="layout/fragments/banner :: banner">
+
 		</div>
 		<!-- End Page Banner -->
 		
@@ -181,80 +102,9 @@
 						
 						<!-- layout Content!!! -->
 						<div layout:fragment="content">
-						
 					
-						<!-- Classic Heading -->
-						<h4 class="classic-title"><span>Page With Right Sidebar</span></h4>
-						
-						<!-- Some Text -->
-						<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
-						<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
-						
-						<!-- Divider -->
-						<div class="hr5" style="margin-top:30px; margin-bottom:45px;"></div>
-						
-						<!-- Accordion -->
-						<div class="panel-group" id="accordion">
-							
-							<!-- Start Accordion 1 -->
-							<div class="panel panel-default">
-								<!-- Toggle Heading -->
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordion" href="#collapse-4">
-											<i class="fa fa-angle-up control-icon"></i>
-											<i class="fa fa-desktop"></i> Fully Responsive Theme
-										</a>
-									</h4>
-								</div>
-								<!-- Toggle Content -->
-								<div id="collapse-4" class="panel-collapse collapse in">
-									<div class="panel-body"><img class="img-thumbnail image-text" style="float:left; width:180px;" alt="" src="images/bussniss-pic.jpg" /> <strong class="accent-color">Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown <strong>printer</strong> took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur.</div>
-								</div>
-							</div>
-							<!-- End Accordion 3 -->
-							
-							<!-- Start Accordion 2 -->
-							<div class="panel panel-default">
-								<!-- Toggle Heading -->
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordion" href="#collapse-5" class="collapsed">
-											<i class="fa fa-angle-up control-icon"></i>
-											<i class="fa fa-gift"></i> Touchable Slider
-										</a>
-									</h4>
-								</div>
-								<!-- Toggle Content -->
-								<div id="collapse-5" class="panel-collapse collapse">
-									<div class="panel-body">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. The point of using Lorem Ipsum is that it has a <strong>more-or-less</strong> normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</div>
-								</div>
-							</div>
-							<!-- End Accordion 3 -->
-							
-							<!-- Start Accordion 3 -->
-							<div class="panel panel-default">
-								<!-- Toggle Heading -->
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordion" href="#collapse-6" class="collapsed">
-											<i class="fa fa-angle-up control-icon"></i>
-											<i class="fa fa-tint"></i> Retina Ready
-										</a>
-									</h4>
-								</div>
-								<!-- Toggle Content -->
-								<div id="collapse-6" class="panel-collapse collapse">
-									<div class="panel-body"><strong>Duis</strong> aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</div>
-								</div>
-							</div>
-							<!-- End Accordion 3 -->
-							
 						</div>
-						<!-- End Accordion -->
-					
 						<!-- End layout content -->
-						</div>		
 					</div>
 					<!-- End Page Content-->
 					
@@ -354,8 +204,6 @@
 					</div>
 					<!--End sidebar-->
 					
-					
-				</div>
 			</div>
 		</div>
 		<!-- End Content -->
@@ -364,173 +212,8 @@
 
 
 		<!-- Start Footer -->
-		<footer>
-			<div class="container">
-				<div class="row footer-widgets">
-					
-					<!-- Start Subscribe & Social Links Widget -->
-                    <div class="col-md-3">
-                        <div class="footer-widget mail-subscribe-widget">
-                            <h4>Get in touch<span class="head-line"></span></h4>
-                            <p>Join our mailing list to stay up to date and get notices about our new releases!</p>
-                            <form class="subscribe">
-                                <input type="text" placeholder="mail@example.com">
-                                <input type="submit" class="main-button" value="Send">
-                            </form>
-                        </div>
-                        <div class="footer-widget social-widget">
-                            <h4>Follow Us<span class="head-line"></span></h4>
-                            <ul class="social-icons">
-                                <li>
-                                    <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
-                                </li>
-                                <li>
-                                    <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
-                                </li>
-                                <li>
-                                    <a class="google" href="#"><i class="fa fa-google-plus"></i></a>
-                                </li>
-                                <li>
-                                    <a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a>
-                                </li>
-                                <li>
-                                    <a class="linkdin" href="#"><i class="fa fa-linkedin"></i></a>
-                                </li>
-                                <li>
-                                    <a class="flickr" href="#"><i class="fa fa-flickr"></i></a>
-                                </li>
-                                <li>
-                                    <a class="tumblr" href="#"><i class="fa fa-tumblr"></i></a>
-                                </li>
-                                <li>
-                                    <a class="instgram" href="#"><i class="fa fa-instagram"></i></a>
-                                </li>
-                                <li>
-                                    <a class="vimeo" href="#"><i class="fa fa-vimeo-square"></i></a>
-                                </li>
-                                <li>
-                                    <a class="skype" href="#"><i class="fa fa-skype"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- .col-md-3 -->
-                    <!-- End Subscribe & Social Links Widget -->
-                    
-                    
-                    <!-- Start Twitter Widget -->
-                    <div class="col-md-3">
-                        <div class="footer-widget twitter-widget">
-                            <h4>Twitter Feed<span class="head-line"></span></h4>
-                            <ul>
-                                <li>
-                                    <p><a href="#">@ithemeslab </a> Lorem ipsum dolor et, consectetur adipiscing eli.</p>
-                                    <span>28 February 2014</span>
-                                </li>
-                                <li>
-                                    <p><a href="#">@ithemeslab </a> Lorem ipsum dolor et, consectetur adipiscing eli.An Fusce eleifend aliquet nis application.</p>
-                                    <span>26 February 2014</span>
-                                </li>
-                                <li>
-                                    <p><a href="#">@ithemeslab </a> Lorem ipsum dolor et, consectetur adipiscing eli.</p>
-                                    <span>28 February 2014</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- .col-md-3 -->
-                    <!-- End Twitter Widget -->
+		<footer  th:replace="layout/fragments/footer :: footer">
 
-
-                    <!-- Start Flickr Widget -->
-                    <div class="col-md-3">
-                        <div class="footer-widget flickr-widget">
-                            <h4>Flicker Feed<span class="head-line"></span></h4>
-                            <ul class="flickr-list">
-                                <li>
-                                    <a href="images/flickr-01.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-01.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-02.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-02.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-03.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-03.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-04.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-04.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-05.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-05.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-06.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-06.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-07.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-07.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-08.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-08.jpg">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images/flickr-09.jpg" class="lightbox">
-                                        <img alt="" src="images/flickr-09.jpg">
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- .col-md-3 -->
-                    <!-- End Flickr Widget -->
-
-                    
-                    <!-- Start Contact Widget -->
-                    <div class="col-md-3">
-                        <div class="footer-widget contact-widget">
-                            <h4><img th:src="@{/static/images/footer-margo.png}" class="img-responsive" alt="Footer Logo" /></h4>
-                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
-                            <ul>
-                                <li><span>Phone Number:</span> +01 234 567 890</li>
-                                <li><span>Email:</span> company@company.com</li>
-                                <li><span>Website:</span> www.yourdomain.com</li>
-                            </ul>
-                        </div>
-                    </div><!-- .col-md-3 -->
-                    <!-- End Contact Widget -->
-
-				
-				</div><!-- .row -->
-				
-				<!-- Start Copyright -->
-				<div class="copyright-section">
-					<div class="row">
-						<div class="col-md-6">
-							<p>&copy; 2014 Margo -  All Rights Reserved</p>
-						</div>
-						<div class="col-md-6">
-							<ul class="footer-nav">
-								<li><a href="#">Sitemap</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Contact</a></li>
-							</ul>
-						</div>						
-					</div>
-				</div>
-				<!-- End Copyright -->
-				
-			</div>
 		</footer>
 		<!-- End Footer -->
 		
@@ -539,13 +222,6 @@
 	
 	<!-- Go To Top Link -->
 	<a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
-	
-	<div id="loader">
-		<div class="spinner">
-			<div class="dot1"></div>
-			<div class="dot2"></div>
-		</div>
-	</div>
 	
 	
 	

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><html lang="en" class="no-js"> <![endif]-->
+<head>
+	
+	<!-- Basic -->
+	<title>ESS | Progress</title>
+	
+	<!-- Define Charset -->
+	<meta charset="utf-8">
+	
+	<!-- Responsive Metatag -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<!-- Page Description and Author -->
+	<meta name="description" content="Margo - Responsive HTML5 Template">
+	<meta name="author" content="iThemesLab">
+	
+	
+	<!-- Bootstrap CSS  -->
+	<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+      	th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+      	rel="stylesheet" media="screen" />
+      
+     <!-- Font Awesome  -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+		th:href="@{/webjars/font-awesome/4.3.0/css/font-awesome.min.css}" />
+	
+	<!-- Margo CSS Styles  -->
+	<link href="../../static/css/style.css"
+		th:href="@{/static/css/style.css}" rel="stylesheet" media="screen"/>
+	
+	<!-- Responsive CSS Styles  -->
+	<link rel="stylesheet" type="text/css" href="../../static/css/responsive.css"
+	 	 th:href="@{/static/css/responsive.css}" media="screen">
+	
+	<!-- Color CSS Styles  -->
+	<link rel="stylesheet" type="text/css" th:href="@{/static/css/colors/green.css}" title="green" media="screen" />
+	
+	
+	
+	<!-- Margo JS  -->
+    <script type="text/javascript" th:src="@{/static/js/jquery-2.1.1.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.migrate.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/modernizrr.js}"></script>
+	
+	<script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/js/bootstrap.js"
+        th:src="@{/webjars/bootstrap/3.3.4/js/bootstrap.js}"></script>
+        
+	<script type="text/javascript" th:src="@{/static/js/jquery.fitvids.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/owl.carousel.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/nivo-lightbox.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.isotope.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.appear.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/count-to.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.textillate.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.lettering.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.easypiechart.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.nicescroll.min.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/jquery.parallax.js}"></script>
+	<script type="text/javascript" th:src="@{/static/js/script.js}"></script>
+	
+	<!--[if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
+</head>
+<body>
+
+	<!-- Container -->
+	<div id="container" class="boxed-page">
+
+		<!-- Start Header -->
+		<div class="hidden-header"></div>
+		<header class="clearfix" th:fragment="header">
+						<!-- Start Top Bar -->
+			<div class="top-bar">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<!-- Start Contact Info -->
+							<ul class="contact-details">
+                                <li><a href="#"><i class="fa fa-map-marker"></i> HR Self Service</a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-envelope-o"></i> hr@progress.com</a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-phone"></i> 0 2345 6789 #1234</a>
+                                </li>
+                            </ul>
+							<!-- End Contact Info -->
+						</div>
+						<div class="col-md-6">
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Top Bar -->
+			
+			<!-- Start Header ( Logo & Naviagtion ) -->
+			<div class="navbar navbar-default navbar-top">
+				<div class="container">
+					<div class="navbar-header">
+						<!-- Stat Toggle Nav Link For Mobiles -->
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<i class="fa fa-bars"></i>
+						</button>
+						<!-- End Toggle Nav Link For Mobiles -->
+						<a class="navbar-brand" href="index.html"><img alt="" th:src="@{/static/images/progress.png}"></a>
+					</div>
+					<div class="navbar-collapse collapse">
+						<!-- Start Navigation List -->
+						<ul class="nav navbar-nav navbar-right">
+							<li>
+								<a class="active" th:class="${indexPage} ? 'active': 'inactive'" th:href="@{/web/}">Home</a>
+							</li>
+							<li>
+								<a th:href="@{/web/personal}" th:class="${personalPage} ? 'active' : 'inactive'" href="portfolio-3.html">ข้อมูลส่วนบุคคล</a>
+							</li>
+							<li>
+								<a th:href="@{/web/form}" th:class="${formPage} ? 'active' : 'inactive'">แบบฟอร์มออนไลน์</a>
+							</li>
+							<li>
+								<a th:href="@{web/calender}" th:class="${calendarPage} ? 'active' : 'inactive'">ปฏิทินกิจกรรม</a>
+							</li>
+						</ul>
+						<!-- End Navigation List -->
+					</div>
+				</div>
+			</div>
+			<!-- End Header ( Logo & Naviagtion ) -->
+		</header>
+		<!-- End Header -->
+		
+		<!-- Start Page Banner -->
+		<div class="page-banner no-subtitle">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<h2 layout:fragment="banner">Right Sidebar</h2>
+					</div>
+					<div class="col-md-6">
+						<ul class="breadcrumbs">
+							<li><a th:href="@{/static/web/}">Home</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Page Banner -->
+		
+		
+		<!-- Start Content -->
+		<div id="content">
+			<div class="container">
+			</div>
+		</div>
+		<!-- End Content -->
+		
+		
+		<!-- Start Footer -->
+		<footer>
+		</footer>
+		<!-- End Footer -->
+		
+	</div>
+	<!-- End Container -->
+	
+	<!-- Go To Top Link -->
+	<a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+	
+	
+	
+</body>
+</html>
