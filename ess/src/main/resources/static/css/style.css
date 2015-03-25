@@ -151,7 +151,7 @@ p strong {
 }
 
 .page-content p {
-	margin-bottom: 15px;
+	margin-bottom: 0px;
 }
 
 .wite-text {
@@ -555,6 +555,14 @@ ul.social-list li:last-child a i {
 	border-right: 1px solid #f2f2f2;
 }
 
+.nav-pills li a{
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 700;
+    margin-left: 3px;
+	color: #999;
+}
+
 .navbar {
 	margin-bottom: 0;
 	background: #fff;
@@ -567,7 +575,7 @@ ul.social-list li:last-child a i {
 
 .navbar-brand {
 	position: relative;
-	padding: 27px 0;
+	padding: 18px 0;
 	margin: 0!important;
 	transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
@@ -1070,7 +1078,7 @@ ul.breadcrumbs li a {
 label {
 	font-size: 13px;
 	color: #aaa;
-	font-weight: 300;
+	font-weight: 700;
 	cursor: pointer;
 }
 
@@ -2007,7 +2015,17 @@ ul.icons-list li i {
   	-webkit-box-shadow: 0 0 0 rgba(0,0,0,.1) inset;
 }
 
-.tab-content {
+
+.pills-tab .tab-content {
+	border: none;
+}
+
+.normal-tab {
+	border: none;
+	box-shadow: none;
+}
+
+.normal-tab .tab-content {
 	border: 1px solid #eee;
 	border-top: none;
 	padding: 12px 16px;

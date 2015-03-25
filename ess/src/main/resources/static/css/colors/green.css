@@ -144,7 +144,18 @@ ul.icons-list li i {
 	color: #94c523;
 }
 
+.nav-pills > li > a:hover, .nav-pills > li > a:focus {
+	color: #fff;
+	background-color: #94c523;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+	color: #fff;
+	background-color: #94c523;
+}
+
 .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+	color: #fff;
 	background-color: #94c523;
 }
 

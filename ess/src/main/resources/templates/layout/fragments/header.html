@@ -76,7 +76,7 @@
 		<div class="hidden-header"></div>
 		<header class="clearfix" th:fragment="header">
 						<!-- Start Top Bar -->
-			<div class="top-bar">
+			<div class="top-bar dark-bar">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-6">
@@ -91,8 +91,11 @@
                             </ul>
 							<!-- End Contact Info -->
 						</div>
-						<div class="col-md-6">
-
+						<div class="col-md-6" style="text-align: right;color: #94c523;">
+							<ul class="contact-details">
+								<li><b>Current User: Somchai</b></li>
+								<li><a href="#">Log out</a></li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -108,7 +111,7 @@
 							<i class="fa fa-bars"></i>
 						</button>
 						<!-- End Toggle Nav Link For Mobiles -->
-						<a class="navbar-brand" href="index.html"><img alt="" th:src="@{/static/images/progress.png}"></a>
+						<a class="navbar-brand" href="index.html" th:href="@{/web/}"><img alt="" th:src="@{/static/images/psc/Progress-logo.png}"></a>
 					</div>
 					<div class="navbar-collapse collapse">
 						<!-- Start Navigation List -->
@@ -139,11 +142,11 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<h2 layout:fragment="banner">Right Sidebar</h2>
+						<h2>Right Sidebar</h2>
 					</div>
 					<div class="col-md-6">
-						<ul class="breadcrumbs">
-							<li><a th:href="@{/static/web/}">Home</a></li>
+						<ul class="breadcrumbs" >
+							<li><a th:href="@{/static/web/}">Home111</a></li>
 						</ul>
 					</div>
 				</div>
