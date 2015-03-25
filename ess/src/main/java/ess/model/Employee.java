@@ -36,12 +36,16 @@ public class Employee implements Serializable {
 		return id;
 	}
 	
+	@Column(name="thfirstname")
 	private String thFirstName;
 	
+	@Column(name="thlastname")
 	private String thLastName;
 	
+	@Column(name="enfirstname")
 	private String enFirstName;
 	
+	@Column(name="enlastname")
 	private String enLastName;
 	
 	

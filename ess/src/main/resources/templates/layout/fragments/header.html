@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><html lang="en" class="no-js"> <![endif]-->
 <head>
@@ -75,7 +76,7 @@
 		<!-- Start Header -->
 		<div class="hidden-header"></div>
 		<header class="clearfix" th:fragment="header">
-<form name="f" th:action="@{/login}" method="post">               
+<form id="_logoutForm" th:action="@{/logout}" method="post" style="visibility: hidden">               
     	<input id="_csrf" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 </form>	
 			<!-- Start Top Bar -->
@@ -95,9 +96,9 @@
 							<!-- End Contact Info -->
 						</div>
 						<div class="col-md-6" style="text-align: right;color: #94c523;">
-							<ul class="contact-details">
-								<li><b>Current User: Somchai</b></li>
-								<li><a href="#">Log out</a></li>
+							<ul class="contact-details" sec:authorize="isAuthenticated()">
+								<li><b>Welcome: <span sec:authentication="name">Somchadafi</span></b></li>
+								<li><a href="/logout" th:href="@{#}" onclick="$('#_logoutForm').submit();">Logout</a></li>
 							</ul>
 						</div>
 					</div>
@@ -122,13 +123,13 @@
 							<li>
 								<a class="active" th:class="${indexPage} ? 'active': 'inactive'" th:href="@{/web/}">Home</a>
 							</li>
-							<li>
+							<li sec:authorize="isAuthenticated()">
 								<a th:href="@{/web/personal}" th:class="${personalPage} ? 'active' : 'inactive'" href="portfolio-3.html">ข้อมูลส่วนบุคคล</a>
 							</li>
-							<li>
+							<li sec:authorize="isAuthenticated()">
 								<a th:href="@{/web/form}" th:class="${formPage} ? 'active' : 'inactive'">แบบฟอร์มออนไลน์</a>
 							</li>
-							<li>
+							<li sec:authorize="isAuthenticated()">
 								<a th:href="@{web/calender}" th:class="${calendarPage} ? 'active' : 'inactive'">ปฏิทินกิจกรรม</a>
 							</li>
 						</ul>

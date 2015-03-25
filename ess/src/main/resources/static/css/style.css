@@ -1078,7 +1078,7 @@ ul.breadcrumbs li a {
 label {
 	font-size: 13px;
 	color: #aaa;
-	font-weight: 700;
+	font-weight: 300;
 	cursor: pointer;
 }
 
@@ -1093,6 +1093,7 @@ input[type="submit"] {
 
 .widget-search input[type="search"],
 #contact-form input[type="text"],
+#contact-form input[type="password"],
 #contact-form textarea,
 #respond input[type="text"],
 #respond textarea {
@@ -1117,6 +1118,7 @@ input[type="submit"] {
 
 .widget-search input[type="search"]:focus,
 #contact-form input[type="text"]:focus,
+#contact-form input[type="password"]:focus,
 #contact-form textarea:focus,
 #respond input[type="text"]:focus,
 #respond textarea:focus {

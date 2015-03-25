@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><html lang="en" class="no-js"> <![endif]-->
 <head>
@@ -113,11 +114,26 @@
 					<div class="col-md-3 sidebar right-sidebar">
 						
 						<!-- Search Widget -->
-						<div class="widget widget-search">
-							<form action="#">
-								<input type="search" placeholder="Enter Keywords..." />
-								<button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
+						<div class="widget widget-login" sec:authorize="!isAuthenticated()">
+							
+							<h4>Log in <span class="head-line"></span></h4>
+							<div class="row" id="contact-form">
+							<form class="contactForm" action="#" th:action="@{/login}" method="POST">
+								<div class="col-md-12">
+									<label for="login_userNameTxt">UserName<span class="required">*</span></label>
+									<span class="name-missing">Please enter your name</span>
+									<input id="login_userNameTxt" type="text" size="30" value="" name="username">
+								</div>
+								<div class="col-md-12">
+									<label for="login_passwordTxt">Password<span class="required">*</span></label>
+									<span class="name-missing">Please enter your name</span>
+									<input id="login_passwordTxt" type="password" size="30" value="" name="password">
+								</div>
+								<div class="col-md-12" style="text-align: right;">
+									<input id="login_submitBtn" class="button" type="submit" value="Login" name="submit">
+								</div>
 							</form>
+							</div>
 						</div>
 
 						<!-- Categories Widget -->
