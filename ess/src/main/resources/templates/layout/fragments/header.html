@@ -68,14 +68,17 @@
 	
 </head>
 <body>
-
+	
 	<!-- Container -->
 	<div id="container" class="boxed-page">
 
 		<!-- Start Header -->
 		<div class="hidden-header"></div>
 		<header class="clearfix" th:fragment="header">
-						<!-- Start Top Bar -->
+<form name="f" th:action="@{/login}" method="post">               
+    	<input id="_csrf" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+</form>	
+			<!-- Start Top Bar -->
 			<div class="top-bar dark-bar">
 				<div class="container">
 					<div class="row">

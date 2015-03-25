@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	protected void configure(HttpSecurity http) throws Exception {
 	    http
-			.authorizeRequests()
+	    	.authorizeRequests()
 				.antMatchers("/static/**").permitAll()
 				.antMatchers("/webjars/**").permitAll()
 				.antMatchers("/landing-login**").permitAll()
@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/")
 				.and()
 			.logout().logoutUrl("/logout");
+			
 			
 	}
 	
