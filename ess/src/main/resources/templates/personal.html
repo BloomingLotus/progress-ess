@@ -12,7 +12,7 @@
 	<ul layout:fragment="breadcrumbs">	</ul>
 	<div layout:fragment="content">
 		<form class="form-horizontal">
-		<div class="row">
+		<div class="row" id="mainEmployeeDiv">
 			<div class="col-md-2">
 				<img class="img-thumbnail" style="margin-left: 40px;" alt="" src="xxx.jpg" th:src="@{/static/images/headshot.jpg}"/>
 			</div>
@@ -529,5 +529,55 @@
 		</div>
 		</form>
 	</div>
+	
+<div layout:fragment="pageScripts">
+<script type="text/javascript" src="../../static/pagejs/personal.js"
+			th:src="@{/static/pagejs/personal.js}"></script>
+
+<script  id="mainEmployeeDivTemplate" type="text/x-handlebars-template">
+			<div class="col-md-2">
+				<img class="img-thumbnail" style="margin-left: 40px;" alt="" src="xxx.jpg" th:src="@{/static/images/headshot.jpg}"/>
+			</div>
+			<div class="col-md-5">
+				{{txtInput model "thTitle" "คำนำหน้าชื่อ (TH):" 7 4 "static"}}
+				{{txtInput model "thFirstName" "ชื่อ (TH):" 7 4 "static"}}
+				{{txtInput model "thLastName" "นามสกุล (TH):" 7 4 "static"}}
+				{{txtInput model "thNickName" "ชื่อเล่น (TH):" 7 4 "static"}}
+				{{txtInput model "status" "สถานภาพ:" 7 4 "static"}}
+				{{txtInput model "homePhoneNo" "เบอร์โทรศัพท์บ้าน:" 7 4 "static"}}
+				{{txtInput model "nationalityName" "สัญชาติ:" 7 4 "static"}}
+				{{txtInput model "bankAccount" "เลขที่บัญชีธนาคาร:" 7 4 "static"}}
+			</div>
+			<div class="col-md-5">
+				{{txtInput model "enTitle" "คำนำหน้าชื่อ (EN):" 4 8 "static"}}	
+				{{txtInput model "enFirstName" "ชื่อ (EN):" 4 8 "static"}}
+				{{txtInput model "enLastName" "นามสกุล (EN):" 4 8 "static"}}
+				{{txtInput model "enNickName" "ชื่อเล่น (EN):" 4 8 "static"}}
+				{{txtInput model "mobilePhone" "เบอร์โทรศัพท์มือถือ:" 4 8 "static"}}
+				{{txtInput model "email" "อีเมล์:" 4 8 "static"}}
+				{{txtInput model "religious" "ศาสนา:" 4 8 "static"}}
+			</div>
+			<div class="col-md-4 col-md-offset-6">
+				<a class="btn-system btn-large" href="#"><i class="fa fa-pencil-square-o"></i> แก้ไขข้อมูลพนักงาน</a>
+			</div>
+</script>
+
+
+<script type="text/javascript" th:inline="javascript">
+//<!--
+var appRouter;
+
+var mainEmployeeView = new MainEmployeeView({el: "#mainEmployeeDiv"});
+
+$(document).ready(function() {
+	appRouter = new AppRouter({
+		
+	});
+	Backbone.history.start();
+});
+//-->
+</script>
+	
+</div>
 </body>
 </html>

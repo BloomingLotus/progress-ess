@@ -63,6 +63,12 @@
 	<script type="text/javascript" th:src="@{/static/js/jquery.parallax.js}"></script>
 	<script type="text/javascript" th:src="@{/static/js/script.js}"></script>
 	
+	<script type="text/javascript" th:src="@{/webjars/underscorejs/1.6.0/underscore-min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/backbonejs/1.1.2/backbone-min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/handlebars/3.0.0-1/handlebars.min.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/static/js/appUtil.js}"></script>
+	
 	<!--[if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	
@@ -118,6 +124,8 @@
 	<!-- Go To Top Link -->
 	<a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
 	
+	<div layout:fragment="pageScripts">
 	
+	</div>
 </body>
 </html>
