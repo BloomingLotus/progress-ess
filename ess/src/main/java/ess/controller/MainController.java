@@ -6,6 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import ess.security.model.CurrentUser;
+import ess.security.model.EssUserDetails;
+import ess.security.model.User;
+
 
 @Controller
 public class MainController {
@@ -22,8 +26,10 @@ public class MainController {
 	
 	
 	@RequestMapping("/web/personal")
-	public String personal(Model model) {
-		log.debug("Entering : /");
+	public String personal(Model model, 
+			@CurrentUser EssUserDetails userDetails) {
+		log.debug("Entering : /web/personal ");
+		log.debug("User: " + userDetails.getUsername() + userDetails.getAuthorities());
 		
 		model.addAttribute("personalPage", true);
 		return "personal";
