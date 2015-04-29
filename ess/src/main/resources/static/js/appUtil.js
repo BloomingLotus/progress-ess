@@ -28,7 +28,7 @@ Handlebars.registerHelper('txtInput', function(model, field, label, labelSize, f
 	var aValue = "";
 	
 	if(model[field] != null) {
-		aValue = model;
+		aValue = model[field];
 	}
 	
 	var readOnlyTxt = ""; 

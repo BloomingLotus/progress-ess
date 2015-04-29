@@ -11,108 +11,46 @@
 	<h2 layout:fragment="bannerTitle">Personal Information</h2>
 	<ul layout:fragment="breadcrumbs">	</ul>
 	<div layout:fragment="content">
+	
+	<div class="modal fade" id="employeeBasicModal">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>One fine body&hellip;</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default modalCloseBtn">Close</button>
+	        <button type="button" class="btn btn-primary modalSaveBtn">Save changes</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div class="modal fade" id="educationTabModal">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>One fine body&hellip;</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default modalCloseBtn">Close</button>
+	        <button type="button" class="btn btn-primary modalSaveBtn">Save changes</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 		<form class="form-horizontal">
 		<div class="row" id="mainEmployeeDiv">
-			<div class="col-md-2">
-				<img class="img-thumbnail" style="margin-left: 40px;" alt="" src="xxx.jpg" th:src="@{/static/images/headshot.jpg}"/>
-			</div>
-			<div class="col-md-5">
-				<div class="form-group">
-					<label for="THTitle" class="col-sm-7 control-label">คำนำหน้าชื่อ (TH):</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="THFirstName" class="col-sm-7 control-label">ชื่อ (TH):</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="THLastName" class="col-sm-7 control-label">นามสกุล (TH):</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="THLastName" class="col-sm-7 control-label">ชื่อเล่น (TH):</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="THLastName" class="col-sm-7 control-label">สถานภาพ:</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="HomePhoneNo" class="col-sm-7 control-label">เบอร์โทรศัพท์บ้าน:</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="NationalityName" class="col-sm-7 control-label">สัญชาติ:</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="BankAccount" class="col-sm-7 control-label">เลขที่บัญชีธนาคาร:</label>
-					<div class="col-sm-4">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-5">
-				<div class="form-group">
-					<label for="ENTitle" class="col-sm-4 control-label">คำนำหน้าชื่อ (EN):</label>
-					<div class="col-sm-8">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="ENFirstName" class="col-sm-4 control-label">ชื่อ (EN):</label>
-					<div class="col-sm-8">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="ENLastName" class="col-sm-4 control-label">นามสกุล (EN):</label>
-					<div class="col-sm-8">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="ENNickName" class="col-sm-4 control-label">ชื่อเล่น (EN):</label>
-					<div class="col-sm-8">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="mobilePhone" class="col-sm-4 control-label">เบอร์โทรศัพท์มือถือ:</label>
-					<div class="col-sm-8">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="email" class="col-sm-4 control-label">อีเมล์:</label>
-					<div class="col-sm-8">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="religious" class="col-sm-4 control-label">ศาสนา:</label>
-					<div class="col-sm-8">
-						<p class="form-control-static">email@example.com</p>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4 col-md-offset-6">
-				<a class="btn-system btn-large" href="#"><i class="fa fa-pencil-square-o"></i> แก้ไขข้อมูลพนักงาน</a>
-			</div>
+			
 		</div>
 		<div class="row">
 			<div class="col-md-12" style="margin-top: 14px;">
@@ -121,7 +59,7 @@
 				</h4>
 			</div>	
 			<div class="col-md-12">
-				<div role="tabpanel" class="pills-tab">
+				<div role="tabpanel" class="pills-tab" id="mainTab">
 			
 				<ul class="nav nav-pills" id="detail-nav">
     				<li class="active"><a href="#educationTab" aria-controls="educationTab" data-toggle="pill"><i class="fa fa-university"></i> การศึกษา</a></li>
@@ -135,45 +73,7 @@
 				</ul>
 				
 				 <div class="tab-content">
-				 	<div role="tabpanel" class="tab-pane active" id="educationTab">
-				 		<div class="row" style="margin-top: 14px;">
-				 			<div class="col-md-12">
-				 				<a href="#" class="btn-system btn-small border-btn"><i class="fa fa-plus"></i> เพิ่มข้อมูลการศึกษา</a>
-				 			</div>
-				 		</div>
-				 		<div class="panel panel-default" style="margin-top: 4px;">
-				 			<!-- Table -->
-							<table class="table">
-								<thead>
-									<tr>
-										<th style="width: 100px">ปีที่เริ่มเรียน</th>
-										<th style="width: 100px">ปีที่จบ</th>
-										<th>ชื่อสถาบัน</th>
-										<th style="width: 150px">วุฒิการศึกษา</th>
-										<th style="width: 150px">คณะ</th>
-										<th style="width: 180px">สาขา</th>
-										<th style="width: 80px">เกรดเฉลี่ย</th>
-										<th style="width: 60px;"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>2535</td>
-										<td>2542</td>
-										<td>มหาวิทยาลัยราชภัฎอุตรดิตถ์</td>
-										<td>ปริญญาตรี</td>
-										<td>บริหาร</td>
-										<td>บริหารคอมพิวเตอร์</td>
-										<td>2.92</td>
-										<td><a href="#"><i class="fa fa-pencil-square-o"></i></a> 
-											<a href="#" style="padding-left: 3px;"><i class="fa fa-times-circle"></i></a>
-										</td>
-									</tr>
-								</tbody> 
-							</table>
-						</div>
-				 	
-				 	</div>
+				 	<div role="tabpanel" class="tab-pane active" id="educationTab"></div>				 	
 				 
 				 	<div role="tabpanel" class="tab-pane" id="computerTab">
 				 		<div class="row" style="margin-top: 14px;">
@@ -656,8 +556,98 @@
 				{{txtInput model "religious" "ศาสนา:" 4 8 "static"}}
 			</div>
 			<div class="col-md-4 col-md-offset-6">
-				<a class="btn-system btn-large" href="#"><i class="fa fa-pencil-square-o"></i> แก้ไขข้อมูลพนักงาน</a>
+				<a class="btn-system btn-large" href="#" id="employeeInfoBtn"><i class="fa fa-pencil-square-o"></i> แก้ไขข้อมูลพนักงาน</a>
 			</div>
+</script>
+
+
+
+<script id="educationTabTemplate" type="text/x-handlebars-template">
+	<div class="row" style="margin-top: 14px;">
+		<div class="col-md-12">
+			<a href="#" class="btn-system btn-small border-btn" id="addEducationBtn"><i class="fa fa-plus"></i> เพิ่มข้อมูลการศึกษา</a>
+		</div>
+	</div>
+	<div class="panel panel-default" style="margin-top: 4px;">
+		<!-- Table -->
+	<table class="table">
+		<thead>
+			<tr>
+				<th style="width: 100px">ปีที่เริ่มเรียน</th>
+				<th style="width: 100px">ปีที่จบ</th>
+				<th>ชื่อสถาบัน</th>
+				<th style="width: 150px">วุฒิการศึกษา</th>
+				<th style="width: 150px">คณะ</th>
+				<th style="width: 180px">สาขา</th>
+				<th style="width: 80px">เกรดเฉลี่ย</th>
+				<th style="width: 60px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each collection}}
+			<tr>
+				<td>{{yearBegin}}</td>
+				<td>{{yearEnd}}</td>
+				<td>{{instituteName}}</td>
+				<td>{{degree}}</td>
+				<td>{{faculty}}</td>
+				<td>{{major}}</td>
+				<td>{{gpa}}</td>
+				<td><a href="#" data-id="{{id}}" id="editEducationBtn"><i class="fa fa-pencil-square-o"></i></a> 
+					<a href="#" data-id="{{id}}" id="deleteEducationBtn" style="padding-left: 3px;"><i class="fa fa-times-circle"></i></a>
+				</td>
+			</tr>
+			{{/each}}
+		</tbody> 
+	</table>
+</div>
+</script>
+<script  id="educationModalTemplate" type="text/x-handlebars-template">
+<div class="container-fluid">
+	<div class="row">
+		<form class="form-horizontal">		
+			<div class="col-md-6">
+				{{txtInput model "yearBegin" "ปีที่เริ่มเรียน:" 4 8  }}
+				{{txtInput model "instituteName" "ชื่อสถาบัน:" 4 8  }}
+				{{txtInput model "faculty" "คณะ:" 4 8  }}
+				{{txtInput model "gpa" "เกรดเฉลี่ย:" 4 8  }}
+			</div>
+			<div class="col-md-6">
+				{{txtInput model "yearEnd" "ปีที่เรียนจบ:" 4 8  }}	
+				{{txtInput model "degree" "วุฒิการศึกษา:" 4 8  }}
+				{{txtInput model "major" "สาขา:" 4 8  }}
+			</div>
+		</form>
+	</div>
+</div>
+</script>
+
+<script  id="employeeBasicInfoModalTemplate" type="text/x-handlebars-template">
+<div class="container-fluid">
+	<div class="row">
+		<form class="form-horizontal">		
+			<div class="col-md-6">
+				{{txtInput model "thTitle" "คำนำหน้าชื่อ (TH):" 4 8  }}
+				{{txtInput model "thFirstName" "ชื่อ (TH):" 4 8  }}
+				{{txtInput model "thLastName" "นามสกุล (TH):" 4 8  }}
+				{{txtInput model "thNickName" "ชื่อเล่น (TH):" 4 8  }}
+				{{txtInput model "status" "สถานภาพ:" 4 8  }}
+				{{txtInput model "homePhoneNo" "เบอร์โทรศัพท์บ้าน:" 4 8  }}
+				{{txtInput model "nationalityName" "สัญชาติ:" 4 8  }}
+				{{txtInput model "bankAccount" "เลขที่บัญชีธนาคาร:" 4 8  }}
+			</div>
+			<div class="col-md-6">
+				{{txtInput model "enTitle" "คำนำหน้าชื่อ (EN):" 4 8  }}	
+				{{txtInput model "enFirstName" "ชื่อ (EN):" 4 8  }}
+				{{txtInput model "enLastName" "นามสกุล (EN):" 4 8  }}
+				{{txtInput model "enNickName" "ชื่อเล่น (EN):" 4 8  }}
+				{{txtInput model "mobilePhone" "โทรศัพท์มือถือ:" 4 8  }}
+				{{txtInput model "email" "อีเมล์:" 4 8  }}
+				{{txtInput model "religious" "ศาสนา:" 4 8  }}
+			</div>
+		</form>
+	</div>
+</div>
 </script>
 
 
@@ -665,14 +655,21 @@
 //<!--
 var appRouter;
 
-var mainEmployeeView = new MainEmployeeView({el: "#mainEmployeeDiv"});
+var empId = /*[[${empId}]]*/ 'value';
 
 $(document).ready(function() {
-	appRouter = new AppRouter({
-		
+	
+	var employee = ess.Model.Employee.findOrCreate({id: empId});
+	
+	$.when(employee.fetch()).done(function(x) {
+		var mainEmployeeView = new MainEmployeeView({el: "#mainEmployeeDiv", model : employee});
+			
+		appRouter = new AppRouter({
+			mainEmployeeView: mainEmployeeView,
+		});
+		Backbone.history.start();
 	});
-	Backbone.history.start();
-});
+})
 //-->
 </script>
 	

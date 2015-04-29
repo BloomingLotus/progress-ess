@@ -1,12 +1,16 @@
 package ess.model;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -22,7 +26,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope=Employee.class)
 public class Employee implements Serializable {
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private static Log log = LogFactory.getLog(Employee.class);
 	
 	/**
 	 * 
@@ -36,25 +40,73 @@ public class Employee implements Serializable {
 		return id;
 	}
 	
+	@Basic
+	@Column(name="thtitle")
+	private String thTitle;
+	
+	@Basic
+	@Column(name="entitle")
+	private String enTitle;
+	
+	
+	@Basic
 	@Column(name="thfirstname")
 	private String thFirstName;
 	
+	@Basic
 	@Column(name="thlastname")
 	private String thLastName;
 	
+	@Basic
 	@Column(name="enfirstname")
 	private String enFirstName;
 	
+	@Basic
 	@Column(name="enlastname")
 	private String enLastName;
 	
+	@Basic
+	@Column(name="thnickname")
+	private String thNickName;
+	
+	@Basic
+	@Column(name="ennickname")
+	private String enNickName;
+	
+	@Basic
+	@Column(name="status")
+	private String status;
+	
+	@Basic
+	@Column(name="homephoneno")
+	private String homePhoneNo;
+	
+	@Basic
+	@Column(name="mobilephone")
+	private String mobilePhone;
+	
+	@Basic
+	@Column(name="email")
+	private String email;
+
+	@Basic
+	@Column(name="religious")
+	private String religious;
+	
+	@Basic
+	@Column(name="nationalityname")
+	private String nationalityName;
+	
+	@Basic
+	@Column(name="bankaccount")
+	private String bankAccount;
 	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
 	private Long id;
-
+	
 	public String getThFirstName() {
 		return thFirstName;
 	}
@@ -86,9 +138,93 @@ public class Employee implements Serializable {
 	public void setEnLastName(String enLastName) {
 		this.enLastName = enLastName;
 	}
-	
-	
-	
 
-	
+	public String getThNickName() {
+		return thNickName;
+	}
+
+	public void setThNickName(String thNickName) {
+		this.thNickName = thNickName;
+	}
+
+	public String getEnNickName() {
+		return enNickName;
+	}
+
+	public void setEnNickName(String enNickName) {
+		this.enNickName = enNickName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getHomePhoneNo() {
+		return homePhoneNo;
+	}
+
+	public void setHomePhoneNo(String homePhoneNo) {
+		this.homePhoneNo = homePhoneNo;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getReligious() {
+		return religious;
+	}
+
+	public void setReligious(String religious) {
+		this.religious = religious;
+	}
+
+	public String getNationalityName() {
+		return nationalityName;
+	}
+
+	public void setNationalityName(String nationalityName) {
+		this.nationalityName = nationalityName;
+	}
+
+	public String getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(String bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public String getThTitle() {
+		return thTitle;
+	}
+
+	public void setThTitle(String thTitle) {
+		this.thTitle = thTitle;
+	}
+
+	public String getEnTitle() {
+		return enTitle;
+	}
+
+	public void setEnTitle(String enTitle) {
+		this.enTitle = enTitle;
+	}
+
 }

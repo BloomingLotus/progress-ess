@@ -1,10 +1,11 @@
 package ess.security.model;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import ess.model.Employee;
 
 public class EssUserDetails implements UserDetails {
 
@@ -57,6 +58,10 @@ public class EssUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	public Employee getEmployee() {
+		return user.getEmployee();
 	}
 
 }

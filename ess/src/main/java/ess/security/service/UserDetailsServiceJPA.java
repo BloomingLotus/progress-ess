@@ -40,6 +40,8 @@ public class UserDetailsServiceJPA implements UserDetailsService {
 		if(user != null) {
 			
 			log.debug("user: " + user.getUsername());
+			user.getEmployee().getId();
+			
 			List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
 			AUTHORITIES.add(new SimpleGrantedAuthority("USER"));
 			
