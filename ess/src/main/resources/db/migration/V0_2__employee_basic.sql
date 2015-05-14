@@ -1,6 +1,6 @@
 -- start with employee 
 
-alter table employee add (
+alter table employee add
 	thnickname 			varchar(100),
 	ennickname 			varchar(100),
 	status 				varchar(100),
@@ -9,6 +9,5 @@ alter table employee add (
 	email 				varchar(100),
 	religious 			varchar(20),
 	nationalityname 	varchar(20),
-	bankaccount 		varchar(20)
-);
+	bankaccount 		varchar(20);
 
