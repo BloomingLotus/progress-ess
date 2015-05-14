@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="Employee")
-@SequenceGenerator(name="EMPLOYEE_SEQ", sequenceName="EMPLOYEE_SEQ", allocationSize=1)
+//@SequenceGenerator(name="EMPLOYEE_SEQ", sequenceName="EMPLOYEE_SEQ", allocationSize=1)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope=Employee.class)
 public class Employee implements Serializable {
 
@@ -34,7 +34,8 @@ public class Employee implements Serializable {
 	private static final long serialVersionUID = -1816360620786306754L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE ,generator="EMPLOYEE_SEQ")
+	//@GeneratedValue(strategy=GenerationType.SEQUENCE ,generator="EMPLOYEE_SEQ")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="ID")
 	public Long getId() {
 		return id;

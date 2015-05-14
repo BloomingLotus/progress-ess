@@ -30,7 +30,7 @@ import ess.model.Employee;
  */
 @Entity
 @Table(name="SEC_USER")
-@SequenceGenerator(name="SEC_USER_SEQ", sequenceName="SEC_USER_SEQ", allocationSize=1)
+//@SequenceGenerator(name="SEC_USER_SEQ", sequenceName="SEC_USER_SEQ", allocationSize=1)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = User.class)
 public class User implements Serializable {
 
@@ -40,7 +40,8 @@ public class User implements Serializable {
 	private static final long serialVersionUID = -8516557587173147799L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEC_USER_SEQ")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEC_USER_SEQ")
 	private Long id;
 	
 	@Basic
