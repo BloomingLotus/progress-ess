@@ -68,7 +68,7 @@ public class Education implements Serializable {
 	private String major;
 	
 	@Basic
-	@Column(name="gpa")
+	@Column(name="gpa", columnDefinition="decimal", precision=4, scale=3)
 	private BigDecimal gpa;
 	
 	@ManyToOne
