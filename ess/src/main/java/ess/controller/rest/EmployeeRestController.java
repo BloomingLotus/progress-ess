@@ -13,8 +13,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ess.controller.service.EntityService;
+import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.Employee;
+import ess.model.ProjectOnHand;
 import ess.webUI.ResponseJSend;
 
 @RestController
@@ -29,6 +31,16 @@ public class EmployeeRestController {
 			@PathVariable Long id) throws JsonMappingException {
 		return entityService.findEmployeeById(id);
 	}
+	
+
+	
+	@RequestMapping(value= "/{id}", method = {RequestMethod.PUT})
+	public ResponseJSend<Employee> updateEmployeeById(@RequestBody JsonNode node) throws JsonMappingException {
+		return entityService.saveEmployee(node);
+	}
+	
+	// ==== Education 
+	
 	
 	@RequestMapping(value= "/{id}/Educations", method = {RequestMethod.GET})
 	public Iterable<Education> findEmployeeEducationsById(
@@ -51,8 +63,53 @@ public class EmployeeRestController {
 		return entityService.saveEmployeeEducationsByEmpId(id, node);
 	}
 	
-	@RequestMapping(value= "/{id}", method = {RequestMethod.PUT})
-	public ResponseJSend<Employee> updateEmployeeById(@RequestBody JsonNode node) throws JsonMappingException {
-		return entityService.saveEmployee(node);
+	// ==== ComputerExperience 
+	
+	
+	@RequestMapping(value= "/{id}/ComputerExperiences", method = {RequestMethod.GET})
+	public Iterable<ComputerExperience> findEmployeeComputerExperiencesById(
+			@PathVariable Long id) throws JsonMappingException {
+		return entityService.findEmployeeComputerExperiencesByEmpId(id);
 	}
+	
+	@RequestMapping(value= "/{id}/ComputerExperience", method = {RequestMethod.POST})
+	public ResponseJSend<ComputerExperience> saveEmployeeComputerExperienceById(
+			@PathVariable Long id,
+			@RequestBody JsonNode node) throws JsonMappingException {
+		return entityService.saveEmployeeComputerExperienceByEmpId(id, node);
+	}
+	
+	@RequestMapping(value= "/{id}/ComputerExperience/{compExpId}", method = {RequestMethod.PUT})
+	public ResponseJSend<ComputerExperience> updateEmployeeComputerExperienceByEduId(
+			@PathVariable Long id,
+			@PathVariable Long compExpId,
+			@RequestBody JsonNode node) throws JsonMappingException {
+		return entityService.saveEmployeeComputerExperienceByEmpId(id, node);
+	}
+	
+	// ==== ProjectOnHand 
+	
+	
+		@RequestMapping(value= "/{id}/ProjectOnHands", method = {RequestMethod.GET})
+		public Iterable<ProjectOnHand> findProjectOnHandsById(
+				@PathVariable Long id) throws JsonMappingException {
+			return entityService.findEmployeeProjectOnHandsByEmpId(id);
+		}
+		
+		@RequestMapping(value= "/{id}/ProjectOnHand", method = {RequestMethod.POST})
+		public ResponseJSend<ProjectOnHand> saveEmployeeProjectOnHandById(
+				@PathVariable Long id,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeProjectOnHandByEmpId(id, node);
+		}
+		
+		@RequestMapping(value= "/{id}/ProjectOnHand/{compExpId}", method = {RequestMethod.PUT})
+		public ResponseJSend<ProjectOnHand> updateEmployeeProjectOnHandByEduId(
+				@PathVariable Long id,
+				@PathVariable Long compExpId,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeProjectOnHandByEmpId(id, node);
+		}
+
+	
 }

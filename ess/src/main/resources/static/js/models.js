@@ -43,7 +43,24 @@ ess.Collection.Educations = Backbone.Collection.extend({
 	model: ess.Model.Education,
 	url: appUrl('Education/findAllEducation')
 });
-;
+
+ess.Model.ComputerExperience = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('ComputerExperience')
+})
+
+ess.Collection.ComputerExperiences = Backbone.Collection.extend({
+	model: ess.Model.ComputerExperience,
+	url: appUrl('ComputerExperience/findAllComputerExperience')
+});
+
+ess.Model.ProjectOnHand = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('ProjectOnHand')
+})
+
+ess.Collection.ProjectOnHands = Backbone.Collection.extend({
+	model: ess.Model.ProjectOnHand,
+	url: appUrl('ProjectOnHand/findAllProjectOnHand')
+});
 
 ess.Model.Employee = Backbone.RelationalModel.extend({
 	relations: [{

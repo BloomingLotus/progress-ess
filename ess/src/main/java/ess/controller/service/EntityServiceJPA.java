@@ -3,6 +3,8 @@ package ess.controller.service;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 
 
@@ -11,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +25,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mysema.query.BooleanBuilder;
 
+import ess.controller.repository.ComputerExperienceRepo;
 import ess.controller.repository.EducationRepo;
 import ess.controller.repository.EmployeeRepo;
+import ess.controller.repository.ProjectOnHandRepo;
+import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.Employee;
+import ess.model.ProjectOnHand;
+import ess.model.QComputerExperience;
 import ess.model.QEducation;
+import ess.model.QProjectOnHand;
 import ess.webUI.ResponseJSend;
 import ess.webUI.ResponseStatus;
 
 @Service
 @Transactional
 public class EntityServiceJPA implements EntityService {
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	@Autowired
 	private EmployeeRepo employeeRepo;
 
 	@Autowired
 	private EducationRepo educationRepo;
+	
+	@Autowired
+	private ComputerExperienceRepo computerExperienceRepo;
+
+	@Autowired
+	private ProjectOnHandRepo projectOnHandRepo;
 	
 	@Override
 	public ResponseJSend<Employee> saveEmployee(JsonNode node) throws JsonMappingException {
@@ -147,6 +163,8 @@ public class EntityServiceJPA implements EntityService {
 		
 	}
 
+
+	
 	@Override
 	public ResponseJSend<Education> saveEmployeeEducationsByEmpId(Long id,
 			JsonNode node) throws JsonMappingException {
@@ -185,4 +203,159 @@ public class EntityServiceJPA implements EntityService {
 		response.data = dbModel; 
 		return response;
 	}
+
+	@Override
+	public ComputerExperience findComputerExperienceById(Long id) {
+		ComputerExperience compExp = computerExperienceRepo.findOne(id);
+		return compExp;
+	}
+
+	
+	@Override
+	public Iterable<ComputerExperience> findEmployeeComputerExperiencesByEmpId(
+			Long id) {
+		
+		QComputerExperience q = QComputerExperience.computerExperience;
+		
+		Iterable<ComputerExperience> compexps = computerExperienceRepo.findAll(q.employee.id.eq(id));
+		
+		return compexps;
+	}
+
+	@Override
+	public ResponseJSend<ComputerExperience> saveEmployeeComputerExperienceByEmpId(
+			Long id, JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		ComputerExperience webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, ComputerExperience.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		ComputerExperience dbModel = null;
+				
+		
+		
+		if(webModel.getId() == null) {
+			dbModel = new ComputerExperience();
+			
+		} else {
+			dbModel = computerExperienceRepo.findOne(webModel.getId());
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel, "employee");
+		
+		dbModel.setProgramingLanguage(webModel.getProgrammingLanguage());
+				
+		Employee emp = employeeRepo.findOne(id);
+		dbModel.setEmployee(emp);
+		
+		computerExperienceRepo.save(dbModel);
+		
+		ResponseJSend<ComputerExperience> response = new ResponseJSend<ComputerExperience>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+
+	@Override
+	public ResponseJSend<ComputerExperience> deleteComputerExperience(Long id) {
+		ComputerExperience compExp = computerExperienceRepo.findOne(id);
+		
+		if(compExp != null) {
+			computerExperienceRepo.delete(compExp);
+		}
+		
+		ResponseJSend<ComputerExperience> response = new ResponseJSend<ComputerExperience>();
+		response.data = compExp;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	}
+
+	
+	
+	@Override
+	public ResponseJSend<ProjectOnHand> saveEmployeeProjectOnHandByEmpId(
+			Long id, JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		ProjectOnHand webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, ProjectOnHand.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		ProjectOnHand dbModel = null;
+				
+		
+		
+		if(webModel.getId() == null) {
+			dbModel = new ProjectOnHand();
+			
+		} else {
+			dbModel = projectOnHandRepo.findOne(webModel.getId());
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel, "employee");
+		
+		
+		Employee emp = employeeRepo.findOne(id);
+		dbModel.setEmployee(emp);
+		
+		projectOnHandRepo.save(dbModel);
+		
+		ResponseJSend<ProjectOnHand> response = new ResponseJSend<ProjectOnHand>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+
+	@Override
+	public Iterable<ProjectOnHand> findEmployeeProjectOnHandsByEmpId(Long id) {
+		QProjectOnHand q = QProjectOnHand.projectOnHand;
+		
+		Iterable<ProjectOnHand> projects = projectOnHandRepo.findAll(q.employee.id.eq(id));
+		
+		return projects;
+	}
+
+	@Override
+	public ProjectOnHand findProjectOnHandById(Long id) {
+		ProjectOnHand proj = projectOnHandRepo.findOne(id);
+		return proj;
+	}
+
+	@Override
+	public ResponseJSend<ProjectOnHand> deleteProjectOnHand(Long id) {
+		ProjectOnHand project = projectOnHandRepo.findOne(id);
+		
+		if(project != null) {
+			projectOnHandRepo.delete(project);
+		}
+		
+		ResponseJSend<ProjectOnHand> response = new ResponseJSend<ProjectOnHand>();
+		response.data = project;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	}
+	
+	
 }

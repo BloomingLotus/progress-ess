@@ -5,8 +5,10 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.Employee;
+import ess.model.ProjectOnHand;
 import ess.webUI.ResponseJSend;
 
 public interface EntityService {
@@ -24,5 +26,23 @@ public interface EntityService {
 	Iterable<Education> findEmployeeEducationsByEmpId(Long id);
 
 	ResponseJSend<Education> saveEmployeeEducationsByEmpId(Long id, JsonNode node) throws JsonMappingException;
+
+	ComputerExperience findComputerExperienceById(Long id);
+
+	ResponseJSend<ComputerExperience> deleteComputerExperience(Long id);
+
+	Iterable<ComputerExperience> findEmployeeComputerExperiencesByEmpId(Long id);
+
+	ResponseJSend<ComputerExperience> saveEmployeeComputerExperienceByEmpId(Long id,
+			JsonNode node) throws JsonMappingException;
+
+	ProjectOnHand findProjectOnHandById(Long id);
+
+	ResponseJSend<ProjectOnHand> deleteProjectOnHand(Long id);
+
+	ResponseJSend<ProjectOnHand> saveEmployeeProjectOnHandByEmpId(Long id,
+			JsonNode node) throws JsonMappingException;
+
+	Iterable<ProjectOnHand> findEmployeeProjectOnHandsByEmpId(Long id);
  
 }
