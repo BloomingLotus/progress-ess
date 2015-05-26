@@ -84,6 +84,25 @@
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 	
+	
+	<div class="modal fade" id="TrainingTabModal">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>One fine body&hellip;</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default modalCloseBtn">Close</button>
+	        <button type="button" class="btn btn-primary modalSaveBtn">Save changes</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 		<form class="form-horizontal">
 		<div class="row" id="mainEmployeeDiv">
 			
@@ -100,7 +119,7 @@
 				<ul class="nav nav-pills" id="mainTab">
     				<li class="active"><a href="#EducationTab" aria-controls="EducationTab" data-toggle="pill"><i class="fa fa-university"></i> การศึกษา</a></li>
     				<li><a href="#ComputerExperienceTab" aria-controls="ComputerExperienceTab" data-toggle="pill"><i class="fa fa-desktop"></i> ความสามารถด้านคอมพิวเตอร์</a></li>
-    				<li><a href="#trainingTab" aria-controls="trainingTab" data-toggle="pill"><i class="fa fa-leanpub"></i> Training</a></li>
+    				<li><a href="#TrainingTab" aria-controls="TrainingTab" data-toggle="pill"><i class="fa fa-leanpub"></i> Training</a></li>
     				<li><a href="#certificateTab" aria-controls="certificateTab" data-toggle="pill"><i class="fa fa-graduation-cap"></i> Certified</a></li>
     				<li><a href="#familyTab" aria-controls="familyTab" data-toggle="pill"><i class="fa fa-users"></i> ครอบครัว</a></li>
     				<li><a href="#contactTab" aria-controls="contactTab" data-toggle="pill"><i class="fa fa-info-circle"></i> ข้อมูลเพื่อการติดต่อ</a></li>
@@ -114,44 +133,7 @@
 				 	<div role="tabpanel" class="tab-pane" id="ComputerExperienceTab"></div>
 
 
-				 	<div role="tabpanel" class="tab-pane" id="trainingTab">
-				 		<div class="row" style="margin-top: 14px;">
-				 			<div class="col-md-12">
-				 				<a href="#" class="btn-system btn-small border-btn"><i class="fa fa-plus"></i> เพิ่มข้อมูลการ Training</a>
-				 			</div>
-				 		</div>
-					 	<div class="panel panel-default" id="trainingPanel" style="margin-top: 4px;">
-							<!-- Table -->
-							<table class="table">
-								<thead>
-									<tr>
-										<th style="width: 100px">วันที่เริ่ม</th>
-										<th style="width: 100px">วันที่สิ่นสุด</th>
-										<th style="width: 150px">ชื่อหลักสูตร</th>
-										<th style="width: 150px">ชื่อสถาบัน</th>
-										<th>รายละเอียด</th>
-										<th style="width: 150px">ใบ Certificate</th>
-										<th style="width: 150px">Functional/<br/>non-Funcitonal</th>
-										<th style="width: 60px;"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>15 มิ.ย. 57</td>
-										<td>30 มิ.ย. 57</td>
-										<td>การพัฒนาบุคลิกภาพ</td>
-										<td>สถาบันบริหารบัณฑิตพัฒนาศาสตร์</td>
-										<td>อบรมด้านการพัฒนาบุคลิกภาพบริหาร</td>
-										<td>ไม่มี</td>
-										<td>non-Functional</td>
-										<td><a href="#"><i class="fa fa-pencil-square-o"></i></a> 
-											<a href="#" style="padding-left: 3px;"><i class="fa fa-times-circle"></i></a>
-										</td>
-									</tr>
-								</tbody> 
-							</table>
-						</div>
-				 	</div>
+				 	<div role="tabpanel" class="tab-pane" id="TrainingTab">	</div>
 
 
 				 	<div role="tabpanel" class="tab-pane" id="certificateTab">
@@ -454,43 +436,7 @@
 				 	
 				 	</div>
 				 
-				 	<div role="tabpanel" class="tab-pane" id="experienceTab">
-				 		<div class="row" style="margin-top: 14px;">
-				 			<div class="col-md-12">
-				 				<a href="#" class="btn-system btn-small border-btn"><i class="fa fa-plus"></i> เพิ่มข้อมูลประสบการณ์การทำงาน</a>
-				 			</div>
-				 		</div>
-				 		<div class="panel panel-default" style="margin-top: 4px;">
-							<!-- Table -->
-							<table class="table">
-								<thead>
-									<tr>
-										<th style="width: 200px">ชื่อสถานประกอบการ</th>
-										<th style="width: 100px">วันที่เริ่มทำงาน</th>
-										<th style="width: 100px">วันที่เริ่มทำงาน</th>
-										<th style="width: 80px">อายุงาน</th>	
-										<th style="width: 150px">ตำแหน่ง</th>									
-										<th>รายละเอียดเกี่ยวกับงาน</th>
-										<th style="width: 60px;"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>บริษัท ซอร์ฟแวร์ไทย จำกัด</td>
-										<td>16 ม.ค. 52</td>
-										<td>30 ธ.ค. 54</td>
-										<td>2 ปี</td>
-										<td>โปรแกรมเมอร์</td>
-										<td>พัฒนาระบบงานขนาดใหญ่</td>
-										<td><a href="#"><i class="fa fa-pencil-square-o"></i></a> 
-											<a href="#" style="padding-left: 3px;"><i class="fa fa-times-circle"></i></a>
-										</td>
-									</tr>
-								</tbody> 
-							</table>
-						</div>
-				 	
-				 	</div>
+				 	<div role="tabpanel" class="tab-pane" id="WorkExperienceTab"></div>
 				 	
 				 	<div role="tabpanel" class="tab-pane" id="ProjectOnHandTab"></div>
 				 	
@@ -539,6 +485,124 @@
 			</div>
 </script>
 
+<script id="WorkExperienceTabTemplate" type="text/x-handlebars-template">
+				 		<div class="row" style="margin-top: 14px;">
+				 			<div class="col-md-12">
+				 				<a href="#" class="btn-system btn-small border-btn" id="addBtn"><i class="fa fa-plus"></i> เพิ่มข้อมูลประสบการณ์การทำงาน</a>
+				 			</div>
+				 		</div>
+				 		<div class="panel panel-default" style="margin-top: 4px;">
+							<!-- Table -->
+							<table class="table">
+								<thead>
+									<tr>
+										<th style="width: 200px">ชื่อสถานประกอบการ</th>
+										<th style="width: 100px">วันที่เริ่มทำงาน</th>
+										<th style="width: 100px">วันที่เริ่มทำงาน</th>
+										<th style="width: 80px">อายุงาน</th>	
+										<th style="width: 150px">ตำแหน่ง</th>									
+										<th>รายละเอียดเกี่ยวกับงาน</th>
+										<th style="width: 60px;"></th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#each collection}}
+									<tr>
+										<td>{{workplaceName}}</td>
+										<td>{{beginDate}}</td>
+										<td>{{endDate}}</td>
+										<td>{{length}}</td>
+										<td>{{title}}</td>
+										<td>{{detail}}</td>
+										<td><a href="#"  data-id="{{id}}" id="editBtn"><i class="fa fa-pencil-square-o"></i></a> 
+											<a href="#"  data-id="{{id}}" id="deleteBtn" style="padding-left: 3px;"><i class="fa fa-times-circle"></i></a>
+										</td>
+									</tr>
+									{{/each}}
+								</tbody> 
+							</table>
+						</div>
+				 	
+</script>
+
+<script  id="WorkExperienceModalTemplate" type="text/x-handlebars-template">
+<div class="container-fluid">
+
+	<form class="form-horizontal">	
+		<div class="row">
+			<div class="col-md-6">
+				{{txtInput model "beginDate" "วันที่เริ่ม:" 4 8  }}
+			</div>
+			<div class="col-md-6">
+				{{txtInput model "endDate" "วันที่สิ้นสุด:" 4 8  }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{txtInput model "workplaceName" "ชื่อสถานประกอบการ:" 2 10  }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{txtInput model "length" "อายุงาน:" 2 10  }}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				{{txtInput model "title" "ตำแหน่ง:" 2 10  }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{txtInput model "detail" "ราายละเอียด:" 2 10  }}
+			</div>
+		</div>
+	</form>
+</div>
+</script>
+
+
+<script id="TrainingTabTemplate" type="text/x-handlebars-template">
+				 		<div class="row" style="margin-top: 14px;">
+				 			<div class="col-md-12">
+				 				<a href="#" class="btn-system btn-small border-btn" id="addBtn"><i class="fa fa-plus"></i> เพิ่มข้อมูลการ Training</a>
+				 			</div>
+				 		</div>
+					 	<div class="panel panel-default" id="trainingPanel" style="margin-top: 4px;">
+							<!-- Table -->
+							<table class="table">
+								<thead>
+									<tr>
+										<th style="width: 100px">วันที่เริ่ม</th>
+										<th style="width: 100px">วันที่สิ่นสุด</th>
+										<th style="width: 150px">ชื่อหลักสูตร</th>
+										<th style="width: 150px">ชื่อสถาบัน</th>
+										<th>รายละเอียด</th>
+										<th style="width: 150px">ใบ Certificate</th>
+										<th style="width: 150px">Functional/<br/>non-Funcitonal</th>
+										<th style="width: 60px;"></th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#each collection}}
+									<tr>
+										<td>{{beginDate}}</td>
+										<td>{{endDate}}</td>
+										<td>{{courseName}}</td>
+										<td>{{instituteName}}</td>
+										<td{{detail}}</td>
+										<td>ไม่มี</td>
+										<td>non-Functional</td>
+										<td><a href="#"  data-id="{{id}}" id="editBtn"><i class="fa fa-pencil-square-o"></i></a> 
+											<a href="#"  data-id="{{id}}" id="deleteBtn" style="padding-left: 3px;"><i class="fa fa-times-circle"></i></a>
+										</td>
+									</tr>
+									{{/each}}
+								</tbody> 
+							</table>
+						</div>
+</script>
 
 <script id="ProjectOnHandTabTemplate" type="text/x-handlebars-template">
 				 		<div class="row" style="margin-top: 14px;">
@@ -588,7 +652,37 @@
 </div>
 </script>
 
+<script  id="TrainingModalTemplate" type="text/x-handlebars-template">
+<div class="container-fluid">
 
+	<form class="form-horizontal">	
+		<div class="row">
+			<div class="col-md-6">
+				{{txtInput model "beginDate" "วันที่เริ่ม:" 4 8  }}
+			</div>
+			<div class="col-md-6">
+				{{txtInput model "endDate" "วันที่สิ้นสุด:" 4 8  }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{txtInput model "courseName" "ชื่อหลักสูตร:" 2 10  }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{txtInput model "instituteName" "ชื่อสถาบัน:" 2 10  }}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				{{txtInput model "detail" "รายละเอียด:" 2 10  }}
+			</div>
+		</div>
+	</form>
+</div>
+</script>
 
 <script id="ComputerExperienceTabTemplate" type="text/x-handlebars-template">
 				 		<div class="row" style="margin-top: 14px;">

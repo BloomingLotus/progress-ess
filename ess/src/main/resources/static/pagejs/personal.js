@@ -32,6 +32,15 @@ var AppRouter = Backbone.Router.extend({
 			modelType: ess.Model.ProjectOnHand
 		});
 		
+		this.trainingTabView = new TabView({
+			el: "#TrainingTab",
+			tabName: "Training",
+			newCollection: function() { return new ess.Collection.Trainings},
+			newModel:function() {return new ess.Model.Training},
+			modelType: ess.Model.Training,
+			datepickerField: ['beginDate', 'endDate']
+		});
+		
 	},
 	
 	routes: {
@@ -43,6 +52,7 @@ var AppRouter = Backbone.Router.extend({
 		this.educationTabView.render();
 		this.computerExperienceTabView.render();
 		this.projectOnHandTabView.render();
+		this.trainingTabView.render();
 	}
 });
 /**
@@ -112,11 +122,18 @@ var TabView = Backbone.View.extend({
 		this.newCollection = options.newCollection;
 		this.newModel = options.newModel;
 		this.modelType = options.modelType;
+		this.datepickerField = options.datepickerField;
 		
 		this.tabTemplate = Handlebars.compile($("#"+this.tabName +"TabTemplate").html());
 		this.collection = this.newCollection();
 		
-		this.modal = new TabModal({el: "#"+this.tabName+"TabModal", empId : empId, parentView: this, tabName: this.tabName});
+		this.modal = new TabModal({
+				el: "#"+this.tabName+"TabModal",
+				empId : empId,
+				parentView: this,
+				tabName: this.tabName,
+				datepickerField: this.datepickerField
+		});
 	},
 	events : {
 		"click #addBtn" : "onClickAddBtn",
@@ -176,7 +193,9 @@ var TabModal = Backbone.View.extend({
 			this.parentView = options.parentView;
 			this.empId = options.empId;
 			this.tabName = options.tabName;
+			this.datepickerField = options.datepickerField;
 			this.modalTemplate = Handlebars.compile($("#"+this.tabName+"ModalTemplate").html());
+			
 		 },
 		 events: {
 			 "click .modalCloseBtn" : "onClickModalCloseBtn",
@@ -225,6 +244,13 @@ var TabModal = Backbone.View.extend({
 			 
 			 this.$el.find('.modal-title').html("แก้ไขข้อมูล");
 			 this.$el.find('.modal-body').html(this.modalTemplate(json));
+			 
+			 if(this.datepickerField != null) {
+				 _.each(this.datepickerField,function(field){
+					 var fieldTxt = "#"+field + "Txt";
+					 $(fieldTxt).datepicker();
+				 },this);
+			 }
 			 
 			 this.$el.modal({keyboard: false, backdrop: 'static'});
 			 

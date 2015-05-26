@@ -27,6 +27,9 @@ Handlebars.registerHelper('txtInput', function(model, field, label, labelSize, f
 	
 	var aValue = "";
 	
+	console.log(model);
+	
+	
 	if(model[field] != null) {
 		aValue = model[field];
 	}

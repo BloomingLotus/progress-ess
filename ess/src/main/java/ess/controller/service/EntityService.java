@@ -1,7 +1,5 @@
 package ess.controller.service;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -9,6 +7,8 @@ import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.Employee;
 import ess.model.ProjectOnHand;
+import ess.model.Training;
+import ess.model.WorkExperience;
 import ess.webUI.ResponseJSend;
 
 public interface EntityService {
@@ -44,5 +44,22 @@ public interface EntityService {
 			JsonNode node) throws JsonMappingException;
 
 	Iterable<ProjectOnHand> findEmployeeProjectOnHandsByEmpId(Long id);
+
+	Training findTrainingById(Long id);
+
+	ResponseJSend<Training> deleteTraining(Long id);
+
+	Iterable<Training> findEmployeeTrainingByEmpId(Long id);
+
+	ResponseJSend<Training> saveEmployeeTrainingByEmpId(Long id, JsonNode node) throws JsonMappingException;
+
+	WorkExperience findWorkExperienceById(Long id);
+
+	ResponseJSend<WorkExperience> deleteWorkExperience(Long id);
+
+	Iterable<WorkExperience> findEmployeeWorkExperienceByEmpId(Long id);
+
+	ResponseJSend<WorkExperience> saveEmployeeWorkExperienceByEmpId(Long id,
+			JsonNode node) throws JsonMappingException;;
  
 }

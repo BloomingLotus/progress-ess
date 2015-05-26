@@ -2,6 +2,7 @@ package ess.config;
 
 
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -24,5 +25,37 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		    .addResourceLocations("classpath:/static/");
 	}
 	
+	public MappingJackson2HttpMessageConverter jacksonMessageConverter(){
+        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+
+        ObjectMapper mapper = new ObjectMapper();
+        
+        Hibernate4Module hm = new Hibernate4Module();
+        hm.enable(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
+        
+        // Registering Hibernate4Module to support lazy objects
+        mapper.registerModule(hm);
+
+        // Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		
+		
+		messageConverter.setObjectMapper(mapper);
+        return messageConverter;
+
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        //Here we add our custom-configured HttpMessageConverter
+        converters.add(jacksonMessageConverter());
+        super.configureMessageConverters(converters);
+    }
+    
+    @Bean
+    public StringHttpMessageConverter stringConverter() {
+    	return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+    }
 
 }

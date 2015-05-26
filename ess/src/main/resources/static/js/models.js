@@ -62,6 +62,15 @@ ess.Collection.ProjectOnHands = Backbone.Collection.extend({
 	url: appUrl('ProjectOnHand/findAllProjectOnHand')
 });
 
+ess.Model.Training = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('Training')
+})
+
+ess.Collection.Trainings = Backbone.Collection.extend({
+	model: ess.Model.Training,
+	url: appUrl('Training/findAllTraining')
+});
+
 ess.Model.Employee = Backbone.RelationalModel.extend({
 	relations: [{
 		type: Backbone.HasMany,

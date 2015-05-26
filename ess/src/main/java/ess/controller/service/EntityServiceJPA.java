@@ -1,5 +1,6 @@
 package ess.controller.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,8 @@ import ess.controller.repository.ComputerExperienceRepo;
 import ess.controller.repository.EducationRepo;
 import ess.controller.repository.EmployeeRepo;
 import ess.controller.repository.ProjectOnHandRepo;
+import ess.controller.repository.TrainingRepo;
+import ess.controller.repository.WorkExperienceRepo;
 import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.Employee;
@@ -36,6 +39,10 @@ import ess.model.ProjectOnHand;
 import ess.model.QComputerExperience;
 import ess.model.QEducation;
 import ess.model.QProjectOnHand;
+import ess.model.QTraining;
+import ess.model.QWorkExperience;
+import ess.model.Training;
+import ess.model.WorkExperience;
 import ess.webUI.ResponseJSend;
 import ess.webUI.ResponseStatus;
 
@@ -55,6 +62,12 @@ public class EntityServiceJPA implements EntityService {
 
 	@Autowired
 	private ProjectOnHandRepo projectOnHandRepo;
+	
+	@Autowired
+	private TrainingRepo trainingRepo;
+	
+	@Autowired
+	private WorkExperienceRepo workExperienceRepo;
 	
 	@Override
 	public ResponseJSend<Employee> saveEmployee(JsonNode node) throws JsonMappingException {
@@ -356,6 +369,168 @@ public class EntityServiceJPA implements EntityService {
 		
 		return response;
 	}
+
+	
+	
+	
+	@Override
+	public Iterable<Training> findEmployeeTrainingByEmpId(Long id) {
+		QTraining q = QTraining.training;
+		
+		Iterable<Training> trainings = trainingRepo.findAll(q.employee.id.eq(id));
+		
+		return trainings;
+	}
+
+	@Override
+	public ResponseJSend<Training> saveEmployeeTrainingByEmpId(Long id,
+			JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		Training webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, Training.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		Training dbModel = null;
+				
+		
+		
+		if(webModel.getId() == null) {
+			dbModel = new Training();
+			
+		} else {
+			dbModel = trainingRepo.findOne(webModel.getId());
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel, "employee");
+		
+		
+		Employee emp = employeeRepo.findOne(id);
+		dbModel.setEmployee(emp);
+		
+		trainingRepo.save(dbModel);
+		
+		ResponseJSend<Training> response = new ResponseJSend<Training>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+
+	@Override
+	public Training findTrainingById(Long id) {
+		Training training = trainingRepo.findOne(id);
+		return training;
+	}
+
+	@Override
+	public ResponseJSend<Training> deleteTraining(Long id) {
+		Training training = trainingRepo.findOne(id);
+		
+		if(training != null) {
+			trainingRepo.delete(training);
+		}
+		
+		ResponseJSend<Training> response = new ResponseJSend<Training>();
+		response.data = training;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	}
+
+	@Override
+	public WorkExperience findWorkExperienceById(Long id) {
+		WorkExperience workExp = workExperienceRepo.findOne(id);
+		return workExp;
+	}
+
+	@Override
+	public ResponseJSend<WorkExperience> deleteWorkExperience(Long id) {
+		WorkExperience workExp = workExperienceRepo.findOne(id);
+		
+		if(workExp != null) {
+			workExperienceRepo.delete(workExp);
+		}
+		
+		ResponseJSend<WorkExperience> response = new ResponseJSend<WorkExperience>();
+		response.data = workExp;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	
+	}
+
+	@Override
+	public Iterable<WorkExperience> findEmployeeWorkExperienceByEmpId(Long id) {
+		QWorkExperience q = QWorkExperience.workExperience;
+		
+		Iterable<WorkExperience> workExps = workExperienceRepo.findAll(q.employee.id.eq(id));
+		
+		return workExps;
+	}
+
+	@Override
+	public ResponseJSend<WorkExperience> saveEmployeeWorkExperienceByEmpId(
+			Long id, JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		WorkExperience webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, WorkExperience.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		WorkExperience dbModel = null;
+				
+		
+		
+		if(webModel.getId() == null) {
+			dbModel = new WorkExperience();
+			
+		} else {
+			dbModel = workExperienceRepo.findOne(webModel.getId());
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel, "employee");
+		
+		
+		Employee emp = employeeRepo.findOne(id);
+		dbModel.setEmployee(emp);
+		
+		workExperienceRepo.save(dbModel);
+		
+		ResponseJSend<WorkExperience> response = new ResponseJSend<WorkExperience>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+
+	}
+	
 	
 	
 }
