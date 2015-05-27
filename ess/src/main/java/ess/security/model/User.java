@@ -55,6 +55,9 @@ public class User implements Serializable {
 	@JoinColumn(name="EMP_ID")
 	private Employee employee;
 	
+	@Transient
+	private Integer empId;
+	
 	
 	public Long getId() {
 		return id;
@@ -88,5 +91,14 @@ public class User implements Serializable {
 		this.employee = employee;
 	}
 
+	public Integer getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(Integer empId) {
+		this.empId = empId;
+	}
+
+	
 	
 }
