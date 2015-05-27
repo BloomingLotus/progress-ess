@@ -26,18 +26,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mysema.query.BooleanBuilder;
 
+import ess.controller.repository.CertifiedRepo;
 import ess.controller.repository.ComputerExperienceRepo;
 import ess.controller.repository.EducationRepo;
 import ess.controller.repository.EmployeeRepo;
+import ess.controller.repository.FamilyRepo;
 import ess.controller.repository.ProjectOnHandRepo;
 import ess.controller.repository.TrainingRepo;
 import ess.controller.repository.WorkExperienceRepo;
+import ess.model.Certified;
 import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.Employee;
+import ess.model.Family;
 import ess.model.ProjectOnHand;
+import ess.model.QCertified;
 import ess.model.QComputerExperience;
 import ess.model.QEducation;
+import ess.model.QFamily;
 import ess.model.QProjectOnHand;
 import ess.model.QTraining;
 import ess.model.QWorkExperience;
@@ -68,6 +74,12 @@ public class EntityServiceJPA implements EntityService {
 	
 	@Autowired
 	private WorkExperienceRepo workExperienceRepo;
+	
+	@Autowired
+	private CertifiedRepo certifiedRepo;
+	
+	@Autowired
+	private FamilyRepo familyRepo;
 	
 	@Override
 	public ResponseJSend<Employee> saveEmployee(JsonNode node) throws JsonMappingException {
@@ -392,7 +404,7 @@ public class EntityServiceJPA implements EntityService {
 		mapper.setDateFormat(sdf);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		
-		
+		log.debug(node);
 		
 		ObjectNode object = (ObjectNode) node;
 		
@@ -418,12 +430,16 @@ public class EntityServiceJPA implements EntityService {
 		
 		BeanUtils.copyProperties(webModel, dbModel, "employee");
 		
+		log.debug(">>>>>>>> " + webModel.getEndDate());
+		log.debug(">>>>>>>> " + dbModel.getEndDate());
+		
 		
 		Employee emp = employeeRepo.findOne(id);
 		dbModel.setEmployee(emp);
 		
 		trainingRepo.save(dbModel);
 		
+		log.debug(">>>>>>>> " + dbModel.getEndDate());
 		ResponseJSend<Training> response = new ResponseJSend<Training>();
 		response.status = ResponseStatus.SUCCESS;
 		response.data = dbModel; 
@@ -530,7 +546,169 @@ public class EntityServiceJPA implements EntityService {
 		return response;
 
 	}
+
+	@Override
+	public ResponseJSend<Certified> deleteCertified(Long id) {
+		Certified certified = certifiedRepo.findOne(id);
+		
+		if(certified != null) {
+			certifiedRepo.delete(certified);
+		}
+		
+		ResponseJSend<Certified> response = new ResponseJSend<Certified>();
+		response.data = certified;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	
+	}
+
+	@Override
+	public Certified findCertifiedById(Long id) {
+		return certifiedRepo.findOne(id);
+	}
+
+	@Override
+	public Iterable<Certified> findCertifiedByEmpId(Long id) {
+		QCertified q = QCertified.certified;
+		
+		Iterable<Certified> certifieds = certifiedRepo.findAll(q.employee.id.eq(id));
+		
+		return certifieds;
+	}
+
+	@Override
+	public ResponseJSend<Certified> saveEmployeeCertifiedByEmpId(Long id,
+			JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		Certified webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, Certified.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		Certified dbModel = null;
+				
+		
+		
+		if(webModel.getId() == null) {
+			dbModel = new Certified();
+			
+		} else {
+			dbModel = certifiedRepo.findOne(webModel.getId());
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel, "employee");
+		
+		
+		Employee emp = employeeRepo.findOne(id);
+		dbModel.setEmployee(emp);
+		
+		certifiedRepo.save(dbModel);
+		
+		ResponseJSend<Certified> response = new ResponseJSend<Certified>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+
+	@Override
+	public Family findFamilyById(Long id) {
+		
+		return familyRepo.findOne(id);
+	}
+
+	@Override
+	public ResponseJSend<Family> deleteFamily(Long id) {
+		Family family = familyRepo.findOne(id);
+		
+		if(family != null) {
+			familyRepo.delete(family);
+		}
+		
+		ResponseJSend<Family> response = new ResponseJSend<Family>();
+		response.data = family;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	
+	}
+
+	@Override
+	public Iterable<Family> findFamilyByEmpId(Long id) {
+		QFamily q = QFamily.family;
+		
+		Iterable<Family> familys = familyRepo.findAll(q.employee.id.eq(id));
+		
+		return familys;
+	}
+
+	@Override
+	public ResponseJSend<Family> saveEmployeeFamilyByEmpId(Long id,
+			JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		Family webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, Family.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		Family dbModel = null;
+				
+		
+		
+		if(webModel.getId() == null) {
+			dbModel = new Family();
+			
+		} else {
+			dbModel = familyRepo.findOne(webModel.getId());
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel, "employee");
+		
+		
+		Employee emp = employeeRepo.findOne(id);
+		dbModel.setEmployee(emp);
+		
+		familyRepo.save(dbModel);
+		
+		ResponseJSend<Family> response = new ResponseJSend<Family>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+	
+	
+	
 	
 	
 	
 }
+
+

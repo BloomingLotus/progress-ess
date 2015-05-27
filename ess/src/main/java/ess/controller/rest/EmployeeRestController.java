@@ -13,9 +13,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ess.controller.service.EntityService;
+import ess.model.Certified;
 import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.Employee;
+import ess.model.Family;
 import ess.model.ProjectOnHand;
 import ess.model.Training;
 import ess.model.WorkExperience;
@@ -161,5 +163,52 @@ public class EmployeeRestController {
 		return entityService.saveEmployeeWorkExperienceByEmpId(id, node);
 	}	
 
+	// ==== Certifed
+
+
+		@RequestMapping(value= "/{id}/Certifieds", method = {RequestMethod.GET})
+		public Iterable<Certified> findCertifiedById(
+				@PathVariable Long id) throws JsonMappingException {
+			return entityService.findCertifiedByEmpId(id);
+		}
+		
+		@RequestMapping(value= "/{id}/Certified", method = {RequestMethod.POST})
+		public ResponseJSend<Certified> saveCertifiedById(
+				@PathVariable Long id,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeCertifiedByEmpId(id, node);
+		}
+		
+		@RequestMapping(value= "/{id}/Certified/{compExpId}", method = {RequestMethod.PUT})
+		public ResponseJSend<Certified> updateEmployeeCertifiedByEduId(
+				@PathVariable Long id,
+				@PathVariable Long compExpId,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeCertifiedByEmpId(id, node);
+		}	
+
+		// ==== Family
+
+
+		@RequestMapping(value= "/{id}/Familys", method = {RequestMethod.GET})
+		public Iterable<Family> findFmamliyById(
+				@PathVariable Long id) throws JsonMappingException {
+			return entityService.findFamilyByEmpId(id);
+		}
+		
+		@RequestMapping(value= "/{id}/Family", method = {RequestMethod.POST})
+		public ResponseJSend<Family> saveFamilyById(
+				@PathVariable Long id,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeFamilyByEmpId(id, node);
+		}
+		
+		@RequestMapping(value= "/{id}/Family/{compExpId}", method = {RequestMethod.PUT})
+		public ResponseJSend<Family> updateEmployeeFamilyEduId(
+				@PathVariable Long id,
+				@PathVariable Long compExpId,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeFamilyByEmpId(id, node);
+		}	
 	
 }

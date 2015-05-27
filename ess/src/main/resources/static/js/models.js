@@ -44,6 +44,15 @@ ess.Collection.Educations = Backbone.Collection.extend({
 	url: appUrl('Education/findAllEducation')
 });
 
+ess.Model.WorkExperience = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('WorkExperience')
+})
+
+ess.Collection.WorkExperiences = Backbone.Collection.extend({
+	model: ess.Model.WorkExperience,
+	url: appUrl('WorkExperience/findAllWorkExperience')
+});
+
 ess.Model.ComputerExperience = Backbone.RelationalModel.extend({
 	urlRoot: appUrl('ComputerExperience')
 })
@@ -69,6 +78,24 @@ ess.Model.Training = Backbone.RelationalModel.extend({
 ess.Collection.Trainings = Backbone.Collection.extend({
 	model: ess.Model.Training,
 	url: appUrl('Training/findAllTraining')
+});
+
+ess.Model.Certified = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('Certified')
+})
+
+ess.Collection.Certifieds = Backbone.Collection.extend({
+	model: ess.Model.Certified,
+	url: appUrl('Certified/findAllCertified')
+});
+
+ess.Model.Family = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('Family')
+})
+
+ess.Collection.Familys = Backbone.Collection.extend({
+	model: ess.Model.Family,
+	url: appUrl('Family/findAllFamily')
 });
 
 ess.Model.Employee = Backbone.RelationalModel.extend({

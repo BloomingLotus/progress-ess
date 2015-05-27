@@ -41,6 +41,31 @@ var AppRouter = Backbone.Router.extend({
 			datepickerField: ['beginDate', 'endDate']
 		});
 		
+		this.workExperienceTabView = new TabView({
+			el: "#WorkExperienceTab",
+			tabName: "WorkExperience",
+			newCollection: function() { return new ess.Collection.WorkExperiences},
+			newModel:function() {return new ess.Model.WorkExperience},
+			modelType: ess.Model.WorkExperience,
+			datepickerField: ['beginDate', 'endDate']
+		});
+		
+		this.certifiedTabView = new TabView({
+			el: "#CertifiedTab",
+			tabName: "Certified",
+			newCollection: function() { return new ess.Collection.Certifieds},
+			newModel:function() {return new ess.Model.Certified},
+			modelType: ess.Model.Certified,
+			datepickerField: ['certifiedDate', 'certifiedExpired']
+		});
+		
+		this.familyTabView = new TabView({
+			el: "#FamilyTab",
+			tabName: "Family",
+			newCollection: function() { return new ess.Collection.Familys},
+			newModel:function() {return new ess.Model.Family},
+			modelType: ess.Model.Family
+		});
 	},
 	
 	routes: {
@@ -53,6 +78,9 @@ var AppRouter = Backbone.Router.extend({
 		this.computerExperienceTabView.render();
 		this.projectOnHandTabView.render();
 		this.trainingTabView.render();
+		this.workExperienceTabView.render();
+		this.certifiedTabView.render();
+		this.familyTabView.render();
 	}
 });
 /**
@@ -138,9 +166,25 @@ var TabView = Backbone.View.extend({
 	events : {
 		"click #addBtn" : "onClickAddBtn",
 		"click #editBtn" : "onClickEditBtn",
-		"click #deleteBtn" : "onClickDeleteBtn"
+		"click #deleteBtn" : "onClickDeleteBtn",
+		"click #addOrUpdateBtn" : "onClickAddOrUpdateBtn"
+			
+			
 	},
-	onClickAddBtn: function() {
+	onClickAddOrUpdateBtn : function(e) {
+		var id=$(e.currentTarget).attr('data-id'); 
+		if(id == null || id.length == 0) {
+			this.modal.setModel(this.newModel());
+			this.modal.render();
+		} else {
+			var model = this.modelType.findOrCreate({id: id});
+			this.modal.setModel(model);
+			this.modal.render();
+		}
+		
+	},
+	
+	onClickAddBtn: function(e) {
 		this.modal.setModel(this.newModel());
 		this.modal.render();
 	},
@@ -248,7 +292,14 @@ var TabModal = Backbone.View.extend({
 			 if(this.datepickerField != null) {
 				 _.each(this.datepickerField,function(field){
 					 var fieldTxt = "#"+field + "Txt";
-					 $(fieldTxt).datepicker();
+					 $(fieldTxt).datepicker({
+								format: 'dd/mm/yyyy',
+								todayBtn: 'linked',
+								autoclose : true,
+								language: "th",
+								orientation: "top left"
+					 });
+					 
 				 },this);
 			 }
 			 

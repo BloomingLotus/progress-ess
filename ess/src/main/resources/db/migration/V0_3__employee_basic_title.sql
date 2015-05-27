@@ -1,7 +1,7 @@
 -- start with employee 
 
-alter table employee add (
-	thtitle 			varchar(50),
-	entitle 			varchar(50)
-);
+alter table employee add 
+	thtitle 			nvarchar(50),
+	entitle 			nvarchar(50)
+;
 

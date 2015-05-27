@@ -1,14 +1,14 @@
 -- start with employee 
 
-alter table employee add (
-	thnickname 			varchar(100),
-	ennickname 			varchar(100),
-	status 				varchar(100),
-	homephoneno 		varchar(100),
-	mobilephone 		varchar(100),
-	email 				varchar(100),
-	religious 			varchar(20),
-	nationalityname 	varchar(20),
-	bankaccount 		varchar(20)
-);
+alter table employee add 
+	thnickname 			nvarchar(100),
+	ennickname 			nvarchar(100),
+	status 				nvarchar(100),
+	homephoneno 		nvarchar(100),
+	mobilephone 		nvarchar(100),
+	email 				nvarchar(100),
+	religious 			nvarchar(20),
+	nationalityname 	nvarchar(20),
+	bankaccount 		nvarchar(20)
+;
 
