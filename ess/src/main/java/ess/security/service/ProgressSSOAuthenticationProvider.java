@@ -34,26 +34,32 @@ public class ProgressSSOAuthenticationProvider implements AuthenticationProvider
 		String userName = authentication.getName();
 		String password = authentication.getCredentials().toString();
 		
-		LoginResponse  response = progressSSOClient.getLogin(userName, password);
+		//LoginResponse  response = progressSSOClient.getLogin(userName, password);
 		
-		log.debug(response);
+		//log.debug(response);
 		
-		if(response.getLoginResult().getObject().getTicketID() != null) {
+		//if(response.getLoginResult().getObject().getTicketID() != null) {
+		if(password != null) {
+		
+			//GetStaffProfileByNameResponse staffProfile = progressSSOClient.getStaffProfileByName(userName);
 			
-			GetStaffProfileByNameResponse staffProfile = progressSSOClient.getStaffProfileByName(userName);
-			
-			log.debug("empID: " + staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
+			//log.debug("empID: " + staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
 			
 			User user = new User();
-			user.setEmpId(staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
+			//user.setEmpId(staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
+			user.setEmpId(5817);
 			user.setUsername(userName);
 			user.setId(null);
 			user.setPassword(password);
 			
+			
+			
 			List<GrantedAuthority> grantedAuths = new ArrayList<>();
 			grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
 				
-			Authentication auth = new UsernamePasswordAuthenticationToken(user, password, grantedAuths );
+			EssUserDetails userDetail = new EssUserDetails(user, grantedAuths);
+			
+			Authentication auth = new UsernamePasswordAuthenticationToken(userDetail, password, grantedAuths );
 			
 			return auth;
 		

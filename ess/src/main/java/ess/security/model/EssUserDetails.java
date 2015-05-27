@@ -63,5 +63,9 @@ public class EssUserDetails implements UserDetails {
 	public Employee getEmployee() {
 		return user.getEmployee();
 	}
+	
+	public Integer getEmpId() {
+		return user.getEmpId();
+	}
 
 }

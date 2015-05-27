@@ -32,7 +32,7 @@ public class MainController {
 		log.debug("User: " + userDetails.getUsername() + userDetails.getAuthorities());
 		
 		model.addAttribute("personalPage", true);
-		model.addAttribute("empId", userDetails.getEmployee().getId());
+		model.addAttribute("empId", userDetails.getEmpId());
 		return "personal";
 	}
 	
