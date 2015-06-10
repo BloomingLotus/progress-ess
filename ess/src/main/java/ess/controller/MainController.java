@@ -30,12 +30,20 @@ public class MainController {
 			@CurrentUser EssUserDetails userDetails) {
 		log.debug("Entering : /web/personal ");
 		log.debug("User: " + userDetails.getUsername() + userDetails.getAuthorities());
+		log.debug("empId: " + userDetails.getEmpId());
 		
 		model.addAttribute("personalPage", true);
-		model.addAttribute("empId", userDetails.getEmpId());
+		model.addAttribute("empId", userDetails.getEmployee().getId());
 		return "personal";
 	}
 	
+	@RequestMapping("/web/hrForm")
+	public String hrForm(Model model) {
+		log.debug("Entering : /hrForm");
+		
+		model.addAttribute("formPage", true);
+		return "hrForm";
+	}
 
 	@RequestMapping("/web/form")
 	public String form(Model model) {

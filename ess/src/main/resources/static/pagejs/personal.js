@@ -66,6 +66,30 @@ var AppRouter = Backbone.Router.extend({
 			newModel:function() {return new ess.Model.Family},
 			modelType: ess.Model.Family
 		});
+		
+		this.emergencyContactTabView = new TabView({
+			el: "#EmergencyContactTab",
+			tabName: "EmergencyContact",
+			newCollection: function() { return new ess.Collection.EmergencyContacts},
+			newModel:function() {return new ess.Model.EmergencyContact},
+			modelType: ess.Model.EmergencyContact
+		});
+		
+		this.registeredAddressTabView = new TabView({
+			el: "#RegisteredAddressTab",
+			tabName: "RegisteredAddress",
+			newCollection: function() { return new ess.Collection.Addresses},
+			newModel:function() {return new ess.Model.Address},
+			modelType: ess.Model.Address
+		});
+		
+		this.currentAddressTabView = new TabView({
+			el: "#CurrentAddressTab",
+			tabName: "CurrentAddress",
+			newCollection: function() { return new ess.Collection.Addresses},
+			newModel:function() {return new ess.Model.Address},
+			modelType: ess.Model.Address
+		});
 	},
 	
 	routes: {
@@ -81,6 +105,9 @@ var AppRouter = Backbone.Router.extend({
 		this.workExperienceTabView.render();
 		this.certifiedTabView.render();
 		this.familyTabView.render();
+		this.emergencyContactTabView.render();
+		this.currentAddressTabView.render();
+		this.registeredAddressTabView.render();
 	}
 });
 /**

@@ -11,22 +11,23 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import ess.security.service.ProgressSSOAuthenticationProvider;
+import ess.security.service.UserDetailsServiceJPA;
 
 @Configuration
 @EnableWebMvcSecurity
 @SpringBootApplication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private ProgressSSOAuthenticationProvider progressSSOProvider;
-	
-	
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth)
-			throws Exception {
-		auth.authenticationProvider(progressSSOProvider);
-	}
+//	@Autowired
+//	private ProgressSSOAuthenticationProvider progressSSOProvider;
+//	
+//	
+//	
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth)
+//			throws Exception {
+//		auth.authenticationProvider(progressSSOProvider);
+//	}
 
 
 	
@@ -54,6 +55,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logout().logoutUrl("/logout");
 			
 			
+	}
+	
+	@Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth        	
+        	.userDetailsService(userDetailService());
+    }
+	
+	@Bean 
+	public UserDetailsService userDetailService() {
+		return new UserDetailsServiceJPA();
 	}
 	
 }

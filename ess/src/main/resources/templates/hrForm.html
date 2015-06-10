@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/full-page">
+<head>
+<title>ESS | Progress</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h2 layout:fragment="bannerTitle">Online Form</h2>
+	<ul layout:fragment="breadcrumbs">
+		<li class="active"><b>Forms</b></li>		
+	</ul>
+	<div layout:fragment="content">
+		<div id="mainContent">
+			<div id="searchView">
+			</div>
+			
+			<div class="row" id="tableResultView">
+
+			</div>
+			<div class="row" id="formView">
+		
+			</div>
+		</div>
+	</div>
+	
+	<div layout:fragment="pageScripts">
+<script type="text/javascript" src="../../static/pagejs/personal.js"
+			th:src="@{/static/pagejs/hrForm.js}"></script>
+			
+<script  id="searchViewTemplate" type="text/x-handlebars-template"  th:inline="text">
+<div class="panel panel-default">
+
+		<div class="panel-body">
+	<form class="form-horizontal" role="form" id="searchForm">
+		
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+				    <label for="inputEmail3" class="col-sm-2 control-label">ชื่อ (ภาษาไทย)</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control formTxt" id="nameThTxt" 
+							placeholder="..." data-field="nameTh" value="{{searchModel.nameTh}}"/>
+				    </div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+				    <label for="inputEmail3" class="col-sm-2 control-label">ชื่อ (ภาษาอังกฤษ)</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control formTxt" id="nameEnTxt" 
+							placeholder="..." data-field="nameEn" value="{{searchModel.nameEn}}"/>
+				    </div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" style="text-align: center;">
+					<button type="button" class="btn btn-default" id="searchBtn">
+						<span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+					<button type="button" class="btn btn-default" id="clearFormBtn">
+						<i class="fa fa-times-circle"></i> ล้างข้อมูลค้นหา</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</script>			
+<script id="tableResultViewTemplate" type="text/x-handlebars-template" th:inline="text">
+<div class="panel panel-default">
+	<div class="panel-body">
+		<b>ผลการค้นหา</b>
+	</div>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<td style="width: 25px;text-align:center;"></td>
+				<td style="width: 200px;text-align:center;" class=""><b>ชื่อ[[${typeTxt}]] (ภาษาไทย)</b></td>
+				<td style="width: 200px;text-align:center;" class=""><b>ชื่อ[[${typeTxt}]] (ภาษาอังกฤษ)</b></td>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each content}}
+			<tr data-id="{{id}}">
+				<td> <button type="button" class="btn btn-danger btn-xs removeResearchBtn"><i class="fa fa-trash"> </i></button> 
+					 <button type="button" class="btn btn-info btn-xs editResearchBtn"><i class="fa fa-edit"> </i></button>
+				</td>
+				<td style="text-align:center;">{{nameTh}}</td>
+				<td style="text-align:center;">{{nameEn}}</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+	<form class="form-inline">
+	<div class="panel-footer">
+		<div class="row">
+			<div class="col-md-6">
+				1-15 จาก {{page.totalElements}} รายการ  
+			</div>
+			<div class="col-md-6" style="text-align: right;">
+				{{#unless page.first}}<button class="btn btn-default btn-sm btnPageNav" data-targetPage="{{page.prevPage}}" type="button"><i class="fa fa-chevron-left"></i></button>{{/unless}}
+				หน้าที่ <input class="form-control input-sm" size="2" type="text" id="pageNavTxt" data-value="{{page.pageNumber}}" value="{{page.pageNumber}}"></input> จาก {{page.totalPages}} หน้า
+				{{#unless page.last}}<button class="btn btn-default btn-sm btnPageNav" data-targetPage="{{page.nextPage}}" type="button"><i class="fa fa-chevron-right"></i></button>{{/unless}}
+			</div>
+		</div>
+	</div>
+	</form>
+</div>
+</script>
+<script type="text/javascript" th:inline="javascript">
+//<!--
+
+var appRouter;
+$( document ).ready(function() {
+	
+	//initialize things
+			
+		searchView = new SearchView({
+			el: "#searchView"
+		});
+		
+		tableResultView = new TableResultView({
+			el: "#tableResultView"
+		});
+		
+		appRouter = new AppRouter({
+			searchView: searchView,
+			tableResultView: tableResultView,
+		});
+		Backbone.history.start();
+
+	});
+
+
+//-->
+</script>	
+	</div>
+	
+</body>
+</html>

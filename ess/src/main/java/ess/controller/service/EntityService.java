@@ -3,9 +3,11 @@ package ess.controller.service;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import ess.model.Address;
 import ess.model.Certified;
 import ess.model.ComputerExperience;
 import ess.model.Education;
+import ess.model.EmergencyContact;
 import ess.model.Employee;
 import ess.model.Family;
 import ess.model.ProjectOnHand;
@@ -79,5 +81,28 @@ public interface EntityService {
 	Iterable<Family> findFamilyByEmpId(Long id);
 
 	ResponseJSend<Family> saveEmployeeFamilyByEmpId(Long id, JsonNode node) throws JsonMappingException;
+
+	EmergencyContact findEmergencyContactById(Long id);
+
+	ResponseJSend<EmergencyContact> deleteEmergencyContact(Long id);
+
+	Iterable<EmergencyContact> findEmergencyContactByEmpId(Long id);
+
+	ResponseJSend<EmergencyContact> saveEmployeeEmergencyContactByEmpId(
+			Long id, JsonNode node) throws JsonMappingException;
+
+	Address findAddressById(Long id);
+
+	ResponseJSend<Address> deleteAddress(Long id);
+
+	Iterable<Address> findRegisteredAddressByEmpId(Long id);
+
+	ResponseJSend<Address> saveEmployeeRegisteredAddressByEmpId(Long id,
+			JsonNode node) throws JsonMappingException;
+
+	Iterable<Address> findCurrentAddressByEmpId(Long id);
+
+	ResponseJSend<Address> saveEmployeeCurrentAddressByEmpId(Long id,
+			JsonNode node) throws JsonMappingException;
  
 }

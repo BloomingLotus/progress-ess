@@ -13,9 +13,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ess.controller.service.EntityService;
+import ess.model.Address;
 import ess.model.Certified;
 import ess.model.ComputerExperience;
 import ess.model.Education;
+import ess.model.EmergencyContact;
 import ess.model.Employee;
 import ess.model.Family;
 import ess.model.ProjectOnHand;
@@ -211,4 +213,73 @@ public class EmployeeRestController {
 			return entityService.saveEmployeeFamilyByEmpId(id, node);
 		}	
 	
+		
+		// ==== Emergency Contact
+
+
+		@RequestMapping(value= "/{id}/EmergencyContacts", method = {RequestMethod.GET})
+		public Iterable<EmergencyContact> findEmergencyContactById(
+				@PathVariable Long id) throws JsonMappingException {
+			return entityService.findEmergencyContactByEmpId(id);
+		}
+		
+		@RequestMapping(value= "/{id}/EmergencyContact", method = {RequestMethod.POST})
+		public ResponseJSend<EmergencyContact> saveEmergencyContactById(
+				@PathVariable Long id,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeEmergencyContactByEmpId(id, node);
+		}
+		
+		@RequestMapping(value= "/{id}/EmergencyContact/{compExpId}", method = {RequestMethod.PUT})
+		public ResponseJSend<EmergencyContact> updateEmployeeEmergencyContactById(
+				@PathVariable Long id,
+				@PathVariable Long compExpId,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeEmergencyContactByEmpId(id, node);
+		}	
+		
+		
+		// ==== Address
+
+		@RequestMapping(value= "/{id}/RegisteredAddresss", method = {RequestMethod.GET})
+		public Iterable<Address> findRegisteredAddress(
+				@PathVariable Long id) throws JsonMappingException {
+			return entityService.findRegisteredAddressByEmpId(id);
+		}
+		
+		@RequestMapping(value= "/{id}/RegisteredAddress", method = {RequestMethod.POST})
+		public ResponseJSend<Address> saveRegisteredAddressById(
+				@PathVariable Long id,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeRegisteredAddressByEmpId(id, node);
+		}
+		
+		@RequestMapping(value= "/{id}/RegisteredAddress/{compExpId}", method = {RequestMethod.PUT})
+		public ResponseJSend<Address> updateEmployeeRegisteredAddressById(
+				@PathVariable Long id,
+				@PathVariable Long compExpId,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeRegisteredAddressByEmpId(id, node);
+		}	
+		
+		@RequestMapping(value= "/{id}/CurrentAddresss", method = {RequestMethod.GET})
+		public Iterable<Address> findCurrentAddress(
+				@PathVariable Long id) throws JsonMappingException {
+			return entityService.findCurrentAddressByEmpId(id);
+		}
+		
+		@RequestMapping(value= "/{id}/CurrentAddress", method = {RequestMethod.POST})
+		public ResponseJSend<Address> saveCurrentAddressById(
+				@PathVariable Long id,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeCurrentAddressByEmpId(id, node);
+		}
+		
+		@RequestMapping(value= "/{id}/CurrentAddress/{compExpId}", method = {RequestMethod.PUT})
+		public ResponseJSend<Address> updateEmployeeCurrentAddressById(
+				@PathVariable Long id,
+				@PathVariable Long compExpId,
+				@RequestBody JsonNode node) throws JsonMappingException {
+			return entityService.saveEmployeeCurrentAddressByEmpId(id, node);
+		}	
 }

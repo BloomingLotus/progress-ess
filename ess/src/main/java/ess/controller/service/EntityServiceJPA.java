@@ -26,23 +26,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mysema.query.BooleanBuilder;
 
+import ess.controller.repository.AddressRepo;
 import ess.controller.repository.CertifiedRepo;
 import ess.controller.repository.ComputerExperienceRepo;
 import ess.controller.repository.EducationRepo;
+import ess.controller.repository.EmergencyContactRepo;
 import ess.controller.repository.EmployeeRepo;
 import ess.controller.repository.FamilyRepo;
 import ess.controller.repository.ProjectOnHandRepo;
 import ess.controller.repository.TrainingRepo;
 import ess.controller.repository.WorkExperienceRepo;
+import ess.model.Address;
 import ess.model.Certified;
 import ess.model.ComputerExperience;
 import ess.model.Education;
+import ess.model.EmergencyContact;
 import ess.model.Employee;
 import ess.model.Family;
 import ess.model.ProjectOnHand;
+import ess.model.QAddress;
 import ess.model.QCertified;
 import ess.model.QComputerExperience;
 import ess.model.QEducation;
+import ess.model.QEmergencyContact;
 import ess.model.QFamily;
 import ess.model.QProjectOnHand;
 import ess.model.QTraining;
@@ -80,6 +86,13 @@ public class EntityServiceJPA implements EntityService {
 	
 	@Autowired
 	private FamilyRepo familyRepo;
+	
+	@Autowired
+	private EmergencyContactRepo emergencyContactRepo;
+	
+	@Autowired
+	private AddressRepo addressRepo;
+	
 	
 	@Override
 	public ResponseJSend<Employee> saveEmployee(JsonNode node) throws JsonMappingException {
@@ -699,6 +712,221 @@ public class EntityServiceJPA implements EntityService {
 		familyRepo.save(dbModel);
 		
 		ResponseJSend<Family> response = new ResponseJSend<Family>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+
+	@Override
+	public EmergencyContact findEmergencyContactById(Long id) {
+		
+		return emergencyContactRepo.findOne(id);
+	}
+
+	@Override
+	public ResponseJSend<EmergencyContact> deleteEmergencyContact(Long id) {
+		EmergencyContact emerContact = emergencyContactRepo.findOne(id);
+		
+		if(emerContact != null) {
+			emergencyContactRepo.delete(emerContact);
+		}
+		
+		ResponseJSend<EmergencyContact> response = new ResponseJSend<EmergencyContact>();
+		response.data = emerContact;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	}
+
+	@Override
+	public Iterable<EmergencyContact> findEmergencyContactByEmpId(Long id) {
+		QEmergencyContact q = QEmergencyContact.emergencyContact;
+		
+		Iterable<EmergencyContact> emergencyContacts = emergencyContactRepo.findAll(q.employee.id.eq(id));
+		
+		return emergencyContacts;
+	}
+
+	@Override
+	public ResponseJSend<EmergencyContact> saveEmployeeEmergencyContactByEmpId(
+			Long id, JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		EmergencyContact webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, EmergencyContact.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		EmergencyContact dbModel = null;
+				
+		
+		
+		if(webModel.getId() == null) {
+			dbModel = new EmergencyContact();
+			
+		} else {
+			dbModel = emergencyContactRepo.findOne(webModel.getId());
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel, "employee");
+		
+		
+		Employee emp = employeeRepo.findOne(id);
+		dbModel.setEmployee(emp);
+		
+		emergencyContactRepo.save(dbModel);
+		
+		ResponseJSend<EmergencyContact> response = new ResponseJSend<EmergencyContact>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+
+	@Override
+	public Address findAddressById(Long id) {
+		return addressRepo.findOne(id);
+	}
+
+	@Override
+	public ResponseJSend<Address> deleteAddress(Long id) {
+		Address address = addressRepo.findOne(id);
+		
+		if(address != null) {
+			addressRepo.delete(address);
+		}
+		
+		ResponseJSend<Address> response = new ResponseJSend<Address>();
+		response.data = address;
+		response.status = ResponseStatus.SUCCESS;
+		
+		return response;
+	}
+
+	@Override
+	public Iterable<Address> findRegisteredAddressByEmpId(Long id) {
+		QAddress q = QAddress.address;
+		
+		Employee emp = findEmployeeById(id);
+		if(emp != null && emp.getRegisteredAddress() != null) {
+			Iterable<Address> address = addressRepo.findAll(q.eq(emp.getRegisteredAddress()));
+			
+			return address;// TODO Auto-generated method stub
+		}
+		
+		return null;
+	}
+
+	@Override
+	public ResponseJSend<Address> saveEmployeeRegisteredAddressByEmpId(Long id,
+			JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		Address webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, Address.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		Address dbModel = null;
+				
+		
+		
+		Employee emp = findEmployeeById(id);
+		if(emp.getRegisteredAddress() == null) {
+			dbModel = new Address();
+		} else {
+			dbModel = emp.getRegisteredAddress();
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel);
+		
+		addressRepo.save(dbModel);
+		emp.setRegisteredAddress(dbModel);
+		employeeRepo.save(emp);
+		
+		ResponseJSend<Address> response = new ResponseJSend<Address>();
+		response.status = ResponseStatus.SUCCESS;
+		response.data = dbModel; 
+		return response;
+	}
+
+	@Override
+	public Iterable<Address> findCurrentAddressByEmpId(Long id) {
+		QAddress q = QAddress.address;
+		
+		Employee emp = findEmployeeById(id);
+		if(emp != null && emp.getCurrentAddress() != null) {
+			Iterable<Address> address = addressRepo.findAll(q.eq(emp.getCurrentAddress()));
+			
+			return address;// TODO Auto-generated method stub
+		}
+		
+		return null;
+	}
+
+	@Override
+	public ResponseJSend<Address> saveEmployeeCurrentAddressByEmpId(Long id,
+			JsonNode node) throws JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		// Register default dateformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		mapper.setDateFormat(sdf);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		
+		ObjectNode object = (ObjectNode) node;
+		
+		Address webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, Address.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		Address dbModel = null;
+				
+		
+		
+		Employee emp = findEmployeeById(id);
+		if(emp.getCurrentAddress() == null) {
+			dbModel = new Address();
+		} else {
+			dbModel = emp.getCurrentAddress();
+		}
+		
+		BeanUtils.copyProperties(webModel, dbModel);
+		
+		addressRepo.save(dbModel);
+		emp.setCurrentAddress(dbModel);
+		employeeRepo.save(emp);
+		
+		ResponseJSend<Address> response = new ResponseJSend<Address>();
 		response.status = ResponseStatus.SUCCESS;
 		response.data = dbModel; 
 		return response;

@@ -98,6 +98,24 @@ ess.Collection.Familys = Backbone.Collection.extend({
 	url: appUrl('Family/findAllFamily')
 });
 
+ess.Model.EmergencyContact = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('EmergencyContact')
+})
+
+ess.Collection.EmergencyContacts = Backbone.Collection.extend({
+	model: ess.Model.EmergencyContact,
+	url: appUrl('EmergencyContact/findAllEmergencyContact')
+});
+
+ess.Model.Address = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('Address')
+})
+
+ess.Collection.Addresses = Backbone.Collection.extend({
+	model: ess.Model.Address,
+	url: appUrl('EmergencyContact/Address')
+});
+
 ess.Model.Employee = Backbone.RelationalModel.extend({
 	relations: [{
 		type: Backbone.HasMany,
@@ -105,6 +123,10 @@ ess.Model.Employee = Backbone.RelationalModel.extend({
 		relatedModel: 'ess.Model.Education'
 	}],
 	urlRoot: appUrl('Employee')
+});
+ess.Page.Employees = Backbone.PageCollection.extend({
+	model: ess.Model.Employee,
+	url: appUrl('Employee/search')
 });
 
 })();
