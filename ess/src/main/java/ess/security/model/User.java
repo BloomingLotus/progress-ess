@@ -58,6 +58,9 @@ public class User implements Serializable {
 	@Transient
 	private Integer empId;
 	
+	@Transient
+	private String ticketId;
+	
 	
 	public Long getId() {
 		return id;
@@ -97,6 +100,15 @@ public class User implements Serializable {
 
 	public void setEmpId(Integer empId) {
 		this.empId = empId;
+	}
+
+	public void setTicketId(String ticketId) {
+		// TODO Auto-generated method stub
+		this.ticketId = ticketId;
+	}
+	
+	public String getTicketId() {
+		return ticketId;
 	}
 
 	

@@ -20,6 +20,8 @@ import javax.persistence.TemporalType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import progress.hrEmployeeInfo.wsdl.ListEmployeeCertificationInfo;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -63,6 +65,17 @@ public class Certified implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="emp_id")
 	private Employee employee;
+
+	public Certified() {
+		super();
+	}
+	
+	public Certified(ListEmployeeCertificationInfo certInfo) {
+		this.certificateName = certInfo.getCertificationName();
+		this.certifiedDate = certInfo.getObtainedDate().toGregorianCalendar().getTime();
+		this.instituteName = certInfo.getInstituteName();
+		this.id = certInfo.getCertificationID().longValue();
+	}
 
 	public Long getId() {
 		return id;

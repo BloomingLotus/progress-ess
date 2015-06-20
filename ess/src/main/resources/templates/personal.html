@@ -284,10 +284,10 @@
 			th:src="@{/static/pagejs/personal.js}"></script>
 
 <script  id="mainEmployeeDivTemplate" type="text/x-handlebars-template">
-			<div class="col-md-2">
-				<img class="img-thumbnail" style="margin-left: 40px;" alt="" src="xxx.jpg" th:src="@{/static/images/headshot.jpg}"/>
+			<div class="col-md-3">
+				<img class="img-thumbnail" style="margin-left: 40px;" alt="" src="/ess/service/Employee/{{model.id}}/Picture"/>
 			</div>
-			<div class="col-md-5">
+			<div class="col-md-4">
 				{{txtInput model "thTitle" "คำนำหน้าชื่อ (TH):" 7 4 "static"}}
 				{{txtInput model "thFirstName" "ชื่อ (TH):" 7 4 "static"}}
 				{{txtInput model "thLastName" "นามสกุล (TH):" 7 4 "static"}}

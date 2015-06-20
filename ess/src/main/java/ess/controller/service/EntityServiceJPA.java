@@ -1,8 +1,7 @@
 package ess.controller.service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,9 +13,16 @@ import org.springframework.beans.BeanUtils;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import progress.hrEmployeeInfo.wsdl.GetListEmployeeCertificationInfoResponse;
+import progress.hrEmployeeInfo.wsdl.GetListEmployeeEducationInfo;
+import progress.hrEmployeeInfo.wsdl.GetListEmployeeEducationInfoResponse;
+import progress.hrEmployeeInfo.wsdl.ListEmployeeCertificationInfo;
+import progress.hrEmployeeInfo.wsdl.ListEmployeeEducationInfo;
+import progress.hrStaffGeneral.wsdl.GetItemGeneralDetailDataResponse;
+import scala.Array;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -24,7 +30,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mysema.query.BooleanBuilder;
 
 import ess.controller.repository.AddressRepo;
 import ess.controller.repository.CertifiedRepo;
@@ -93,6 +98,15 @@ public class EntityServiceJPA implements EntityService {
 	@Autowired
 	private AddressRepo addressRepo;
 	
+	@Autowired
+	private ProgressSSOClient progressSSOClient;
+	
+	@Autowired
+	private ProgressHRGeneralClient progressHrGeneralClient;
+	
+	@Autowired
+	private ProgressHREmpInfoClient hrEmpInfoClient;
+	
 	
 	@Override
 	public ResponseJSend<Employee> saveEmployee(JsonNode node) throws JsonMappingException {
@@ -132,7 +146,11 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Employee findEmployeeById(Long id) {
-		return employeeRepo.findOne(id);
+		GetItemGeneralDetailDataResponse response = progressHrGeneralClient.getItemDetailDataResponse(id);
+		
+		Employee emp = new Employee(response.getGetItemGeneralDetailDataResult().getObj());
+		
+		return emp;
 	}
 
 	@Override
@@ -193,11 +211,21 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Iterable<Education> findEmployeeEducationsByEmpId(Long id) {
-		QEducation q = QEducation.education;
+//		QEducation q = QEducation.education;
 		
-		Iterable<Education> educations = educationRepo.findAll(q.employee.id.eq(id));
+//		Iterable<Education> educations = educationRepo.findAll(q.employee.id.eq(id));
 		
-		return educations;
+		GetListEmployeeEducationInfoResponse eduInfoResponse = hrEmpInfoClient.getListEmployeeEducationInfo(id);
+		
+		ArrayList<Education> eduList = new ArrayList<Education>();
+		
+		for(ListEmployeeEducationInfo eduInfo : eduInfoResponse.getGetListEmployeeEducationInfoResult().getObj().getListEmployeeEducationInfo()) {
+			Education edu = new Education(eduInfo);
+			eduList.add(edu);
+	}
+		
+		
+		return eduList;
 		
 	}
 
@@ -583,11 +611,19 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Iterable<Certified> findCertifiedByEmpId(Long id) {
-		QCertified q = QCertified.certified;
+//		QCertified q = QCertified.certified;
+//		
+//		Iterable<Certified> certifieds = certifiedRepo.findAll(q.employee.id.eq(id));
+		GetListEmployeeCertificationInfoResponse response = hrEmpInfoClient.getListEmployeeCeritficationInfo(id);
+		ArrayList<Certified> certList = new ArrayList<Certified>();
 		
-		Iterable<Certified> certifieds = certifiedRepo.findAll(q.employee.id.eq(id));
+		for(ListEmployeeCertificationInfo certInfo : response.getGetListEmployeeCertificationInfoResult().getObj().getListEmployeeCertificationInfo()) {
+			Certified cert = new Certified(certInfo);
+			certList.add(cert);
+		}
 		
-		return certifieds;
+		
+		return certList;
 	}
 
 	@Override

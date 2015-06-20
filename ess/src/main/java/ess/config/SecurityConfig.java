@@ -18,16 +18,16 @@ import ess.security.service.UserDetailsServiceJPA;
 @SpringBootApplication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//	@Autowired
-//	private ProgressSSOAuthenticationProvider progressSSOProvider;
-//	
-//	
-//	
-//	@Override
-//	protected void configure(AuthenticationManagerBuilder auth)
-//			throws Exception {
-//		auth.authenticationProvider(progressSSOProvider);
-//	}
+	@Autowired
+	private ProgressSSOAuthenticationProvider progressSSOProvider;
+	
+	
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth)
+			throws Exception {
+		auth.authenticationProvider(progressSSOProvider);
+	}
 
 
 	
@@ -57,11 +57,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			
 	}
 	
-	@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth        	
-        	.userDetailsService(userDetailService());
-    }
+//	@Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth        	
+//        	.userDetailsService(userDetailService());
+//    }
 	
 	@Bean 
 	public UserDetailsService userDetailService() {

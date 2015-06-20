@@ -34,20 +34,24 @@ public class ProgressSSOAuthenticationProvider implements AuthenticationProvider
 		String userName = authentication.getName();
 		String password = authentication.getCredentials().toString();
 		
-		//LoginResponse  response = progressSSOClient.getLogin(userName, password);
+		log.debug("trying to login with: " + userName + " and passowrd: " + password);
 		
-		//log.debug(response);
+		LoginResponse  response = progressSSOClient.getLogin(userName, password);
 		
-		//if(response.getLoginResult().getObject().getTicketID() != null) {
-		if(password != null) {
+		log.debug(response.getLoginResult().getObject().getTicketID());
 		
-			//GetStaffProfileByNameResponse staffProfile = progressSSOClient.getStaffProfileByName(userName);
+		if(response.getLoginResult().getObject().getTicketID() != null) {
+		//if(password != null) {
+		
+			GetStaffProfileByNameResponse staffProfile = progressSSOClient.getStaffProfileByName(userName);
+			log.debug(staffProfile.getGetStaffProfileByNameResult().getObject().toString());
 			
-			//log.debug("empID: " + staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
+			log.debug("empID: " + staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
 			
 			User user = new User();
-			//user.setEmpId(staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
-			user.setEmpId(5817);
+			user.setEmpId(staffProfile.getGetStaffProfileByNameResult().getObject().getEmployeeID());
+			user.setTicketId(response.getLoginResult().getObject().getTicketID());
+			//user.setEmpId(5817);
 			user.setUsername(userName);
 			user.setId(null);
 			user.setPassword(password);

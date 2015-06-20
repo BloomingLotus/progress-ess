@@ -1,8 +1,11 @@
 package ess.controller.rest;
 
-import java.util.List;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +43,21 @@ public class EmployeeRestController {
 	
 
 	
+	@RequestMapping(value="/{id}/Picture", method = {RequestMethod.GET})
+	public void getPicture(@PathVariable Long id, HttpServletResponse response) throws IOException {
+		Employee emp;
+		try {
+			emp = this.findEmployeeById(id);
+			response.setCharacterEncoding("UTF-8");
+	        response.setContentType("image/jpeg");
+			FileCopyUtils.copy(emp.getPicture(), response.getOutputStream());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	@RequestMapping(value= "/{id}", method = {RequestMethod.PUT})
 	public ResponseJSend<Employee> updateEmployeeById(@RequestBody JsonNode node) throws JsonMappingException {
 		return entityService.saveEmployee(node);
@@ -51,6 +69,9 @@ public class EmployeeRestController {
 	@RequestMapping(value= "/{id}/Educations", method = {RequestMethod.GET})
 	public Iterable<Education> findEmployeeEducationsById(
 			@PathVariable Long id) throws JsonMappingException {
+		
+		
+		
 		return entityService.findEmployeeEducationsByEmpId(id);
 	}
 	

@@ -11,11 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import progress.hrEmployeeInfo.wsdl.ListEmployeeEducationInfo;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -75,6 +76,19 @@ public class Education implements Serializable {
 	@JoinColumn(name="emp_id")
 	private Employee employee;
 	
+	public Education() {
+		super();
+	}
+	
+	public Education(ListEmployeeEducationInfo eduInfo) {
+		this.degree = eduInfo.getDegreeName();
+		this.faculty = eduInfo.getFaculty();
+		this.gpa = eduInfo.getGPA();
+		this.instituteName = eduInfo.getInstituteNameTH();
+		this.major = eduInfo.getMajor();
+		this.yearEnd = eduInfo.getGraduatedYear();
+		this.yearBegin = eduInfo.getEntryYear();
+	}
 	public Long getId() {
 		return id;
 	}

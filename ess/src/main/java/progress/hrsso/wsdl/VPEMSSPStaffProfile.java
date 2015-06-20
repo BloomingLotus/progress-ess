@@ -813,4 +813,28 @@ public class VPEMSSPStaffProfile {
         this.positionName = value;
     }
 
+	@Override
+	public String toString() {
+		return "VPEMSSPStaffProfile [employeeID=" + employeeID + ", staffCode="
+				+ staffCode + ", citizenIDNumber=" + citizenIDNumber
+				+ ", thaiPrefix=" + thaiPrefix + ", thaiName=" + thaiName
+				+ ", thaiSurname=" + thaiSurname + ", englishPrefix="
+				+ englishPrefix + ", englishName=" + englishName
+				+ ", englishSurname=" + englishSurname + ", sex=" + sex
+				+ ", birthDate=" + birthDate + ", effectiveDate="
+				+ effectiveDate + ", resignDate=" + resignDate
+				+ ", workingPhoneNumber=" + workingPhoneNumber + ", email="
+				+ email + ", homeAddress=" + homeAddress + ", homePhoneNumber="
+				+ homePhoneNumber + ", mobilePhoneNumber=" + mobilePhoneNumber
+				+ ", probationEndDate=" + probationEndDate
+				+ ", endContractDate=" + endContractDate + ", userName="
+				+ userName + ", isDeleted=" + isDeleted + ", staffProfileID="
+				+ staffProfileID + ", departmentCode=" + departmentCode
+				+ ", departmentID=" + departmentID + ", staffPositionID="
+				+ staffPositionID + ", positionCode=" + positionCode
+				+ ", positionName=" + positionName + "]";
+	}
+
+    
+    
 }

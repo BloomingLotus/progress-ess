@@ -1,9 +1,14 @@
 package ess.model;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +26,8 @@ import javax.persistence.Transient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import progress.hrStaffGeneral.wsdl.ListEmployeeInfoGeneralDetail;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -36,6 +43,30 @@ public class Employee implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1816360620786306754L;
+
+	public Employee() {
+		super();
+	}
+
+	public Employee(ListEmployeeInfoGeneralDetail empDetail) {
+		this.id = Long.valueOf(empDetail.getEmployeeID());
+		
+		this.thFirstName = empDetail.getTHFirstName();
+		this.thLastName = empDetail.getTHLastName();
+		this.thTitle = empDetail.getTHTitleName();
+		
+		this.enFirstName = empDetail.getENFirstName();
+		this.enLastName = empDetail.getENLastName();
+		this.enTitle = empDetail.getENTitleName();
+		
+		this.enNickName = empDetail.getNickName();
+		this.thNickName = empDetail.getNickName();
+		
+		this.status = empDetail.getMaritalStatusName();
+		this.mobilePhone = empDetail.getMobilePhoneNo();
+		this.email = empDetail.getOfficeEmail1();
+		this.picture = empDetail.getAttachmentSource();
+	}
 
 	@Id
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE ,generator="EMPLOYEE_SEQ")
@@ -105,6 +136,9 @@ public class Employee implements Serializable {
 	@Basic
 	@Column(name="bankaccount")
 	private String bankAccount;
+	
+	@Transient
+	private byte[] picture;
 	
 
 	private Address registeredAddress;
@@ -260,4 +294,15 @@ public class Employee implements Serializable {
 		this.currentAddress = currentAddress;
 	}
 
+	public byte[] getPicture() {
+		return picture;
+	}
+
+	public void setPicture(byte[] picture) {
+		this.picture = picture;
+	}
+	
+	
+
+	
 }

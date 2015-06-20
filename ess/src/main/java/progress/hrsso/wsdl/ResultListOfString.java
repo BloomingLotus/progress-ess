@@ -88,4 +88,11 @@ public class ResultListOfString
         this.totalRows = value;
     }
 
+	@Override
+	public String toString() {
+		return "ResultListOfString [objectList=" + objectList + ", totalRows="
+				+ totalRows + "]";
+	}
+
+    
 }

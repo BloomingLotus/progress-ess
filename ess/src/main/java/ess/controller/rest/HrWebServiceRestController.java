@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import progress.hrinfo.wsdl.GetItemByEmployeeIDResponse;
 import progress.hrsso.wsdl.GetStaffProfileByName;
 import progress.hrsso.wsdl.GetStaffProfileByNameResponse;
 import progress.hrsso.wsdl.LoginResponse;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import ess.controller.service.ProgressHRClient;
+import ess.controller.service.ProgressHRGeneralClient;
 import ess.controller.service.ProgressSSOClient;
 
 @RestController
@@ -26,15 +25,15 @@ public class HrWebServiceRestController {
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	@Autowired
-	ProgressHRClient progressHrClient;
+	ProgressHRGeneralClient progressHrClient;
 	
 	@Autowired
 	ProgressSSOClient progressClient;
 	
-	@RequestMapping(value= "/{id}", method = {RequestMethod.GET})
-	public GetItemByEmployeeIDResponse getItemById(@PathVariable Integer id) throws JsonMappingException {
-		return progressHrClient.getItemByEmployeeId(id);
-	}
+//	@RequestMapping(value= "/{id}", method = {RequestMethod.GET})
+//	public GetItemByEmployeeIDResponse getItemById(@PathVariable Long id) throws JsonMappingException {
+//		return progressHrClient.getItemByEmployeeId(id);
+//	}
 	
 	@RequestMapping(value= "/sso/{username}/{password}", method = {RequestMethod.GET})
 	public @ResponseBody LoginResponse login(@PathVariable String username, @PathVariable String password) throws JsonMappingException {
