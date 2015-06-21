@@ -55,6 +55,15 @@ public class MainController {
 		return "hrForm";
 	}
 
+	@RequestMapping("/admin/changeRequest")
+	public String adminChangeRequest(Model model) {
+		log.debug("Entering : /admin/changeRequest");
+		
+		model.addAttribute("adminPage", true);
+		return "admin/changeRequest";
+		
+	}
+	
 	@RequestMapping("/web/form")
 	public String form(Model model) {
 		log.debug("Entering : /");

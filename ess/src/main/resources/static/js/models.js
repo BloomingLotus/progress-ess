@@ -2,6 +2,10 @@ function appUrl(url) {
 	return '/ess/service/'+url;
 }
 
+function appStaticUrl(url) {
+	return '/ess/static/'+url;
+}
+
 (function(){
 
 window.ess = {
@@ -127,6 +131,39 @@ ess.Model.Employee = Backbone.RelationalModel.extend({
 ess.Page.Employees = Backbone.PageCollection.extend({
 	model: ess.Model.Employee,
 	url: appUrl('Employee/search')
+});
+
+
+
+ess.Model.ChangeRequest = Backbone.RelationalModel.extend({
+	relations: [{
+		type: Backbone.HasOne,
+		key: 'createdBy',
+		relatedModel: 'ess.Model.Employee'
+	},{
+		type: Backbone.HasOne,
+		key: 'lastUpdatedBy',
+		relatedModel: 'ess.Model.Employee'
+	}],
+	urlRoot: appUrl('ChangeRequest')
+});
+
+ess.Model.ChangeRequestLog = Backbone.RelationalModel.extend({
+	relations: [{
+		type: Backbone.HasOne,
+		key: 'actor',
+		relatedModel: 'ess.Model.Employee'
+	},{
+		type: Backbone.HasOne,
+		key: 'changeRequest',
+		relatedModel: 'ess.Model.ChangeRequest'
+	}],
+	urlRoot: appUrl('ChangeRequestLog')
+});
+
+ess.Page.ChangeRequests = Backbone.PageCollection.extend({
+	model: ess.Model.ChangeRequest,
+	url: appUrl('ChangeRequest/search')
 });
 
 })();

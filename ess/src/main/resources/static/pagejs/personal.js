@@ -246,9 +246,10 @@ var TabView = Backbone.View.extend({
 				 if(this.collection != null) {
 					
 				 	json.collection=this.collection.toJSON();
-				 	console.log(json);
+				 	json.model = json.collection[0];
 				 } else {
 					 json.collection ={};
+					 json.model = {};
 				 }
 				 
 				 this.$el.html(this.tabTemplate(json));
@@ -456,7 +457,7 @@ var EmployeeBasicInfoModal = Backbone.View.extend({
 				if(response.status != 'SUCCESS') {
 					alert(response.status + " :" + response.message);
 				}
-				alert("บันทึกข้อมูลแล้ว");
+				alert("ส่งเรื่องขอแก้ไขข้อมูลแล้ว");
 		},this)});
 	 },
 	 render: function() {

@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import progress.hrEmployeeInfo.wsdl.ListEmployeeAddressInfo;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -85,6 +87,26 @@ public class Address implements Serializable {
 	@Basic
 	@Column(name="country")
 	private String country;
+
+	public Address() {
+		super();
+	}
+	
+	public Address(ListEmployeeAddressInfo addrInfo) {
+		this.addressNo = addrInfo.getAddressNo();
+		this.amphur = addrInfo.getAmphurName();
+		this.province = addrInfo.getProvinceName();
+		this.buildingName = addrInfo.getBuildingName();
+		this.country = addrInfo.getCountryName();
+		this.roadName = addrInfo.getRoadName();
+		this.roomNo = addrInfo.getRoomNo();
+		this.floor = addrInfo.getFloor();
+		this.moo = addrInfo.getMooNo();
+		this.postCode = addrInfo.getPostCode();
+		this.soiName = addrInfo.getSoiName();
+		this.villageName = addrInfo.getVillageName();
+		this.tambon = addrInfo.getTumbolName();
+	}
 
 	public Long getId() {
 		return id;

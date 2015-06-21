@@ -1,7 +1,7 @@
 -- start with employee 
 
 create table employee (
-	id				BIGINT IDENTITY(1, 1) not null,
+	id				BIGINT not null,
 	thFirstName 	nvarchar(100),
 	thLastName 		nvarchar(100),
 	enFirstName 	nvarchar(100),

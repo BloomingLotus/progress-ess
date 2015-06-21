@@ -64,9 +64,9 @@ public class ObjectFactory {
      * Create an instance of {@link ReturnObjectOfEmployeeWorkInfo }
      * 
      */
-    public ReturnObjectOfEmployeeWorkInfo createReturnObjectOfEmployeeWorkInfo() {
-        return new ReturnObjectOfEmployeeWorkInfo();
-    }
+//    public ReturnObjectOfEmployeeWorkInfo createReturnObjectOfEmployeeWorkInfo() {
+//        return new ReturnObjectOfEmployeeWorkInfo();
+//    }
 
     /**
      * Create an instance of {@link GetItemEmployeeWorkingInfoForm }
@@ -88,9 +88,9 @@ public class ObjectFactory {
      * Create an instance of {@link ReturnObjectOfListEmployeeWorkInfoForm }
      * 
      */
-    public ReturnObjectOfListEmployeeWorkInfoForm createReturnObjectOfListEmployeeWorkInfoForm() {
-        return new ReturnObjectOfListEmployeeWorkInfoForm();
-    }
+//    public ReturnObjectOfListEmployeeWorkInfoForm createReturnObjectOfListEmployeeWorkInfoForm() {
+//        return new ReturnObjectOfListEmployeeWorkInfoForm();
+//    }
 
     /**
      * Create an instance of {@link GetItemLockedState }
@@ -112,9 +112,9 @@ public class ObjectFactory {
      * Create an instance of {@link ReturnLockState }
      * 
      */
-    public ReturnLockState createReturnLockState() {
-        return new ReturnLockState();
-    }
+//    public ReturnLockState createReturnLockState() {
+//        return new ReturnLockState();
+//    }
 
     /**
      * Create an instance of {@link LockedItem }
@@ -160,9 +160,9 @@ public class ObjectFactory {
      * Create an instance of {@link ReturnEmployeeStatus }
      * 
      */
-    public ReturnEmployeeStatus createReturnEmployeeStatus() {
-        return new ReturnEmployeeStatus();
-    }
+//    public ReturnEmployeeStatus createReturnEmployeeStatus() {
+//        return new ReturnEmployeeStatus();
+//    }
 
     /**
      * Create an instance of {@link ArrayOfString }
@@ -192,28 +192,28 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link ReturnObjectOfEmployeeWorkInfo }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnObjectOfEmployeeWorkInfo")
-    public JAXBElement<ReturnObjectOfEmployeeWorkInfo> createReturnObjectOfEmployeeWorkInfo(ReturnObjectOfEmployeeWorkInfo value) {
-        return new JAXBElement<ReturnObjectOfEmployeeWorkInfo>(_ReturnObjectOfEmployeeWorkInfo_QNAME, ReturnObjectOfEmployeeWorkInfo.class, null, value);
-    }
+//    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnObjectOfEmployeeWorkInfo")
+//    public JAXBElement<ReturnObjectOfEmployeeWorkInfo> createReturnObjectOfEmployeeWorkInfo(ReturnObjectOfEmployeeWorkInfo value) {
+//        return new JAXBElement<ReturnObjectOfEmployeeWorkInfo>(_ReturnObjectOfEmployeeWorkInfo_QNAME, ReturnObjectOfEmployeeWorkInfo.class, null, value);
+//    }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ReturnObjectOfListEmployeeWorkInfoForm }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnObjectOfList_EmployeeWorkInfo_Form")
-    public JAXBElement<ReturnObjectOfListEmployeeWorkInfoForm> createReturnObjectOfListEmployeeWorkInfoForm(ReturnObjectOfListEmployeeWorkInfoForm value) {
-        return new JAXBElement<ReturnObjectOfListEmployeeWorkInfoForm>(_ReturnObjectOfListEmployeeWorkInfoForm_QNAME, ReturnObjectOfListEmployeeWorkInfoForm.class, null, value);
-    }
+//    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnObjectOfList_EmployeeWorkInfo_Form")
+//    public JAXBElement<ReturnObjectOfListEmployeeWorkInfoForm> createReturnObjectOfListEmployeeWorkInfoForm(ReturnObjectOfListEmployeeWorkInfoForm value) {
+//        return new JAXBElement<ReturnObjectOfListEmployeeWorkInfoForm>(_ReturnObjectOfListEmployeeWorkInfoForm_QNAME, ReturnObjectOfListEmployeeWorkInfoForm.class, null, value);
+//    }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ReturnLockState }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnLockState")
-    public JAXBElement<ReturnLockState> createReturnLockState(ReturnLockState value) {
-        return new JAXBElement<ReturnLockState>(_ReturnLockState_QNAME, ReturnLockState.class, null, value);
-    }
+//    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnLockState")
+//    public JAXBElement<ReturnLockState> createReturnLockState(ReturnLockState value) {
+//        return new JAXBElement<ReturnLockState>(_ReturnLockState_QNAME, ReturnLockState.class, null, value);
+//    }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ReturnMessage }{@code >}}
@@ -228,9 +228,9 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link ReturnEmployeeStatus }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnEmployeeStatus")
-    public JAXBElement<ReturnEmployeeStatus> createReturnEmployeeStatus(ReturnEmployeeStatus value) {
-        return new JAXBElement<ReturnEmployeeStatus>(_ReturnEmployeeStatus_QNAME, ReturnEmployeeStatus.class, null, value);
-    }
+//    @XmlElementDecl(namespace = "http://tempuri.org/", name = "ReturnEmployeeStatus")
+//    public JAXBElement<ReturnEmployeeStatus> createReturnEmployeeStatus(ReturnEmployeeStatus value) {
+//        return new JAXBElement<ReturnEmployeeStatus>(_ReturnEmployeeStatus_QNAME, ReturnEmployeeStatus.class, null, value);
+//    }
 
 }

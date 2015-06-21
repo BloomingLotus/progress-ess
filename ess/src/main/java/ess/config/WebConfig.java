@@ -37,8 +37,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         mapper.registerModule(hm);
 
         // Register default dateformat
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		mapper.setDateFormat(sdf);
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//		mapper.setDateFormat(sdf);
 		
 		
 		messageConverter.setObjectMapper(mapper);

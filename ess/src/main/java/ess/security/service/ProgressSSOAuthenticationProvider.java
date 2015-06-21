@@ -17,7 +17,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import progress.hrsso.wsdl.GetStaffProfileByName;
 import progress.hrsso.wsdl.GetStaffProfileByNameResponse;
 import progress.hrsso.wsdl.LoginResponse;
+import ess.controller.service.EntityService;
 import ess.controller.service.ProgressSSOClient;
+import ess.model.Employee;
 import ess.security.model.EssUserDetails;
 import ess.security.model.User;
 
@@ -27,6 +29,9 @@ public class ProgressSSOAuthenticationProvider implements AuthenticationProvider
 	
 	@Autowired
 	private ProgressSSOClient progressSSOClient;
+	
+	@Autowired
+	private EntityService entityService;
 	
 	@Override
 	public Authentication authenticate(Authentication authentication)
@@ -55,6 +60,26 @@ public class ProgressSSOAuthenticationProvider implements AuthenticationProvider
 			user.setUsername(userName);
 			user.setId(null);
 			user.setPassword(password);
+			
+			// now see if this emp has record in our database;
+			Employee emp = entityService.findEmployeeFromDB(user.getEmpId().longValue());
+			if(emp == null) {
+				log.debug("employee is null ");
+				emp = new Employee();
+				emp.setId(user.getEmpId().longValue());
+				emp.setThTitle(staffProfile.getGetStaffProfileByNameResult().getObject().getThaiPrefix());
+				emp.setThFirstName(staffProfile.getGetStaffProfileByNameResult().getObject().getThaiName());
+				emp.setThLastName(staffProfile.getGetStaffProfileByNameResult().getObject().getThaiSurname());
+				
+				emp.setEnTitle(staffProfile.getGetStaffProfileByNameResult().getObject().getEnglishPrefix());
+				emp.setEnFirstName(staffProfile.getGetStaffProfileByNameResult().getObject().getEnglishName());
+				emp.setEnLastName(staffProfile.getGetStaffProfileByNameResult().getObject().getEnglishSurname());
+				
+				log.debug("saving...");
+				entityService.saveEmployee(emp);	
+			} else {
+				log.debug(" found : " + emp.getId());
+			}
 			
 			
 			

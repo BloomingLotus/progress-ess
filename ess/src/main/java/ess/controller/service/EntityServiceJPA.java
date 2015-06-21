@@ -2,9 +2,13 @@ package ess.controller.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.h2.message.DbException;
 import org.springframework.beans.BeanUtils;
 
 
@@ -12,17 +16,24 @@ import org.springframework.beans.BeanUtils;
 
 
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import progress.hrEmployeeInfo.wsdl.GetListEmployeeAddressInfoResponse;
 import progress.hrEmployeeInfo.wsdl.GetListEmployeeCertificationInfoResponse;
-import progress.hrEmployeeInfo.wsdl.GetListEmployeeEducationInfo;
 import progress.hrEmployeeInfo.wsdl.GetListEmployeeEducationInfoResponse;
+import progress.hrEmployeeInfo.wsdl.ListEmployeeAddressInfo;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeCertificationInfo;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeEducationInfo;
 import progress.hrStaffGeneral.wsdl.GetItemGeneralDetailDataResponse;
-import scala.Array;
+import progress.hrStaffPersonal.wsdl.EmployeePersonalInfo;
+import progress.hrStaffPersonal.wsdl.GetItemEmployeePersonalResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -30,9 +41,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mysema.query.BooleanBuilder;
 
 import ess.controller.repository.AddressRepo;
 import ess.controller.repository.CertifiedRepo;
+import ess.controller.repository.ChangeRequestLogRepo;
+import ess.controller.repository.ChangeRequestRepo;
 import ess.controller.repository.ComputerExperienceRepo;
 import ess.controller.repository.EducationRepo;
 import ess.controller.repository.EmergencyContactRepo;
@@ -43,6 +57,9 @@ import ess.controller.repository.TrainingRepo;
 import ess.controller.repository.WorkExperienceRepo;
 import ess.model.Address;
 import ess.model.Certified;
+import ess.model.ChangeRequest;
+import ess.model.ChangeRequestLog;
+import ess.model.ChangeState;
 import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.EmergencyContact;
@@ -50,9 +67,8 @@ import ess.model.Employee;
 import ess.model.Family;
 import ess.model.ProjectOnHand;
 import ess.model.QAddress;
-import ess.model.QCertified;
+import ess.model.QChangeRequest;
 import ess.model.QComputerExperience;
-import ess.model.QEducation;
 import ess.model.QEmergencyContact;
 import ess.model.QFamily;
 import ess.model.QProjectOnHand;
@@ -60,6 +76,7 @@ import ess.model.QTraining;
 import ess.model.QWorkExperience;
 import ess.model.Training;
 import ess.model.WorkExperience;
+import ess.webUI.DefaultProperty;
 import ess.webUI.ResponseJSend;
 import ess.webUI.ResponseStatus;
 
@@ -99,10 +116,20 @@ public class EntityServiceJPA implements EntityService {
 	private AddressRepo addressRepo;
 	
 	@Autowired
+	private ChangeRequestRepo changeRequestRepo;
+	
+	@Autowired
+	private ChangeRequestLogRepo changeRequestLogRepo;
+	
+	@Autowired
 	private ProgressSSOClient progressSSOClient;
 	
 	@Autowired
 	private ProgressHRGeneralClient progressHrGeneralClient;
+	
+	
+	@Autowired
+	private ProgressHRPersonalClient hrPersonalClient;
 	
 	@Autowired
 	private ProgressHREmpInfoClient hrEmpInfoClient;
@@ -133,8 +160,56 @@ public class EntityServiceJPA implements EntityService {
 			dbModel = employeeRepo.findOne(webModel.getId());
 		}
 		
-		BeanUtils.copyProperties(webModel, dbModel);
+		Employee hrModel = findEmployeeById(webModel.getId());
+		
+		ArrayList<String> properties = new ArrayList<String>();
+		BeanWrapper webSrc = new BeanWrapperImpl(webModel);
+		BeanWrapper hrSrc = new BeanWrapperImpl(hrModel);
+		BeanWrapper dbSrc = new BeanWrapperImpl(dbModel);
+		// find diferences!
+		
+		String[] prop = {"mobilePhone", "bankAccount"};
+		
+		Map<String,Object> newChangeSet = new HashMap<String, Object>();
+		Map<String,Object> oldChangeSet = new HashMap<String, Object>();
+		
+		for(String p : prop) {
+			if(!webSrc.getPropertyValue(p).equals(hrSrc.getPropertyValue(p))) {
+				properties.add(p);
+				dbSrc.setPropertyValue(p, webSrc.getPropertyValue(p));
+				newChangeSet.put(p, webSrc.getPropertyValue(p));
+				oldChangeSet.put(p, hrSrc.getPropertyValue(p));
+			}
+		}
+		try {
+			ChangeRequest request = new ChangeRequest();
+			request.setNewChangeSet(mapper.writeValueAsString(newChangeSet));
+			request.setOldChangeSet(mapper.writeValueAsString(oldChangeSet));
+			request.setDomain(Employee.class.getSimpleName());
+			request.setCreatedBy(dbModel);
+			request.setCreatedTime(new Date());
+			request.setCurrentState(ChangeState.REQUESTED_CHANGE);
+			
+			changeRequestRepo.save(request);
+			
+			ChangeRequestLog reqLog = new ChangeRequestLog();
+			reqLog.setTimestamp(request.getCreatedTime());
+			reqLog.setActor(dbModel);
+			reqLog.setChangeRequest(request);
+			reqLog.setToState(request.getCurrentState());
+			reqLog.setRemark(null);
+			changeRequestLogRepo.save(reqLog);
+			
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		//BeanUtils.copyProperties(webModel, dbModel);
 
+		
 	
 		employeeRepo.save(dbModel);
 		
@@ -148,7 +223,15 @@ public class EntityServiceJPA implements EntityService {
 	public Employee findEmployeeById(Long id) {
 		GetItemGeneralDetailDataResponse response = progressHrGeneralClient.getItemDetailDataResponse(id);
 		
+		GetItemEmployeePersonalResponse personalResponse = hrPersonalClient.getItemEmployeePersonal(id);
+		
 		Employee emp = new Employee(response.getGetItemGeneralDetailDataResult().getObj());
+		
+		EmployeePersonalInfo info = personalResponse.getGetItemEmployeePersonalResult().getObj();
+		
+		emp.setNationalityName(info.getNationalityName());
+		emp.setBankAccount(info.getSalaryAccountNo());
+		emp.setReligious(info.getReligionName());
 		
 		return emp;
 	}
@@ -614,7 +697,7 @@ public class EntityServiceJPA implements EntityService {
 //		QCertified q = QCertified.certified;
 //		
 //		Iterable<Certified> certifieds = certifiedRepo.findAll(q.employee.id.eq(id));
-		GetListEmployeeCertificationInfoResponse response = hrEmpInfoClient.getListEmployeeCeritficationInfo(id);
+	GetListEmployeeCertificationInfoResponse response = hrEmpInfoClient.getListEmployeeCeritficationInfo(id);	
 		ArrayList<Certified> certList = new ArrayList<Certified>();
 		
 		for(ListEmployeeCertificationInfo certInfo : response.getGetListEmployeeCertificationInfoResult().getObj().getListEmployeeCertificationInfo()) {
@@ -698,11 +781,21 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Iterable<Family> findFamilyByEmpId(Long id) {
-		QFamily q = QFamily.family;
+//		QFamily q = QFamily.family;
+//		
+//		Iterable<Family> familys = familyRepo.findAll(q.employee.id.eq(id));
+//		
+//		return familys;
 		
-		Iterable<Family> familys = familyRepo.findAll(q.employee.id.eq(id));
+		GetItemGeneralDetailDataResponse response = progressHrGeneralClient.getItemDetailDataResponse(id);
 		
-		return familys;
+		ArrayList<Family> familyList = new ArrayList<Family>();
+		if(response.getGetItemGeneralDetailDataResult().getObj() != null) {
+			Family family = new Family(response.getGetItemGeneralDetailDataResult().getObj());
+			familyList.add(family);
+		}
+		
+		return familyList;
 	}
 
 	@Override
@@ -776,11 +869,25 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Iterable<EmergencyContact> findEmergencyContactByEmpId(Long id) {
-		QEmergencyContact q = QEmergencyContact.emergencyContact;
 		
-		Iterable<EmergencyContact> emergencyContacts = emergencyContactRepo.findAll(q.employee.id.eq(id));
 		
-		return emergencyContacts;
+		
+//		QEmergencyContact q = QEmergencyContact.emergencyContact;
+//		
+//		Iterable<EmergencyContact> emergencyContacts = emergencyContactRepo.findAll(q.employee.id.eq(id));
+//		
+//		return emergencyContacts;
+		
+		ArrayList<EmergencyContact> contacts = new  ArrayList<EmergencyContact>();
+		
+		GetItemGeneralDetailDataResponse response = progressHrGeneralClient.getItemDetailDataResponse(id);
+		if(response.getGetItemGeneralDetailDataResult().getObj() != null) {
+			EmergencyContact contact = new EmergencyContact(response.getGetItemGeneralDetailDataResult().getObj());
+			contacts.add(contact);
+		}
+		
+		return contacts;
+	
 	}
 
 	@Override
@@ -852,16 +959,29 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Iterable<Address> findRegisteredAddressByEmpId(Long id) {
-		QAddress q = QAddress.address;
+//		QAddress q = QAddress.address;
+//		
+//		Employee emp = findEmployeeById(id);
+//		if(emp != null && emp.getRegisteredAddress() != null) {
+//			Iterable<Address> address = addressRepo.findAll(q.eq(emp.getRegisteredAddress()));
+//			
+//			return address;// TODO Auto-generated method stub
+//		}
+//		
+//		return null;
 		
-		Employee emp = findEmployeeById(id);
-		if(emp != null && emp.getRegisteredAddress() != null) {
-			Iterable<Address> address = addressRepo.findAll(q.eq(emp.getRegisteredAddress()));
-			
-			return address;// TODO Auto-generated method stub
+		ArrayList<Address> addrList = new ArrayList<Address>();
+		
+		GetListEmployeeAddressInfoResponse response = hrEmpInfoClient.getListEmployeeAddressInfo(id);
+		for(ListEmployeeAddressInfo addrInfo : response.getGetListEmployeeAddressInfoResult().getObj().getListEmployeeAddressInfo()) {
+			if(addrInfo.getAddressType().equals("Registered")){
+				Address addr = new Address(addrInfo);
+				addrList.add(addr);
+			} 
 		}
 		
-		return null;
+		
+		return addrList;
 	}
 
 	@Override
@@ -911,16 +1031,28 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Iterable<Address> findCurrentAddressByEmpId(Long id) {
-		QAddress q = QAddress.address;
+//		QAddress q = QAddress.address;
+//		
+//		Employee emp = findEmployeeById(id);
+//		if(emp != null && emp.getCurrentAddress() != null) {
+//			Iterable<Address> address = addressRepo.findAll(q.eq(emp.getCurrentAddress()));
+//			
+//			return address;// TODO Auto-generated method stub
+//		}
+
+		ArrayList<Address> addrList = new ArrayList<Address>();
 		
-		Employee emp = findEmployeeById(id);
-		if(emp != null && emp.getCurrentAddress() != null) {
-			Iterable<Address> address = addressRepo.findAll(q.eq(emp.getCurrentAddress()));
-			
-			return address;// TODO Auto-generated method stub
+		GetListEmployeeAddressInfoResponse response = hrEmpInfoClient.getListEmployeeAddressInfo(id);
+		for(ListEmployeeAddressInfo addrInfo : response.getGetListEmployeeAddressInfoResult().getObj().getListEmployeeAddressInfo()) {
+			if(addrInfo.getAddressType().equals("Current")){
+				Address addr = new Address(addrInfo);
+				addrList.add(addr);
+			} 
 		}
 		
-		return null;
+		
+		return addrList;
+
 	}
 
 	@Override
@@ -966,6 +1098,55 @@ public class EntityServiceJPA implements EntityService {
 		response.status = ResponseStatus.SUCCESS;
 		response.data = dbModel; 
 		return response;
+	}
+
+	@Override
+	public void saveEmployee(Employee emp) {
+		employeeRepo.save(emp);
+	}
+
+	@Override
+	public Employee findEmployeeFromDB(Long id) {
+		return employeeRepo.findOne(id);
+	}
+
+	@Override
+	public ChangeRequest findChangeRequestById(Long id) {
+		return changeRequestRepo.findOne(id);
+	}
+
+	@Override
+	public ResponseJSend<Page<ChangeRequest>> findChangeRequestByExample(
+			JsonNode node, Integer pageNum) throws JsonMappingException {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		ObjectNode object = (ObjectNode) node;
+		ChangeRequest webModel;
+		
+		try {
+			webModel = mapper.treeToValue(object, ChangeRequest.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
+		}
+		
+		QChangeRequest q = QChangeRequest.changeRequest;
+		
+		BooleanBuilder p = new BooleanBuilder();
+		
+		PageRequest pageRequest =
+	            new PageRequest(pageNum -1, DefaultProperty.NUMBER_OF_ELEMENT_PER_PAGE, Sort.Direction.ASC, "createdTime");
+		
+		Page<ChangeRequest> requests = changeRequestRepo.findAll(p, pageRequest); 
+		
+		ResponseJSend<Page<ChangeRequest>> response = new ResponseJSend<Page<ChangeRequest>>();
+		response.data=requests;
+		response.status=ResponseStatus.SUCCESS;
+		
+		return response;
+
 	}
 	
 	

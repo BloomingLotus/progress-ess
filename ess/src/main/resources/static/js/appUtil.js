@@ -1,6 +1,14 @@
 /**
  * 
  */
+//Globally register moment 
+moment.locale("th");
+
+// Global variable
+__domainName = {
+		"Employee" : "ข้อมูลทั่วไป"
+}
+
 //Globally register console
 if (typeof console === 'undefined') {
     console = { log: function() {} };
@@ -23,15 +31,23 @@ Handlebars.registerHelper('formatNumber', function(number) {
 	return addCommas(number);
 });
 
+Handlebars.registerHelper('formatTimeStamp', function(number) {
+	return moment(1434874655430).format('DD MMMM YYYY HH:MM.ss');
+});
+
+Handlebars.registerHelper('formatDomain', function(domainName) {
+	return __domainName[domainName];
+});
+
 Handlebars.registerHelper('txtInput', function(model, field, label, labelSize, fieldSize, state) {
 	
-	var aValue = "";
-	
-	console.log(model);
-	
-	
-	if(model[field] != null) {
+	var aValue = "-";
+		
+	if(model != null && typeof model[field] != "undefined" && model[field] != null 
+		&& ((typeof model[field] == "string" && model[field].length > 0) ||  typeof model[field] == "number")) {
 		aValue = model[field];
+	} else {
+		aValue = '-';
 	}
 	
 	var readOnlyTxt = ""; 
@@ -78,7 +94,7 @@ function __addCommas(nStr)
 }
 
 function __loaderHtml() {
-	return "<div class='loader-center'><div class='loader'></div>";
+	return "<div style='text-align: center; padding: 20px;'><img src='"+ appStaticUrl('images/loading.gif') +"'/></div>";
 }
 
 function __loaderInEl($el) {

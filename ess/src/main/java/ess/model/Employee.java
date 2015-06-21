@@ -64,13 +64,13 @@ public class Employee implements Serializable {
 		
 		this.status = empDetail.getMaritalStatusName();
 		this.mobilePhone = empDetail.getMobilePhoneNo();
+		this.homePhoneNo = empDetail.getHomePhoneNo();
 		this.email = empDetail.getOfficeEmail1();
 		this.picture = empDetail.getAttachmentSource();
 	}
 
 	@Id
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE ,generator="EMPLOYEE_SEQ")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="ID")
 	public Long getId() {
 		return id;
@@ -137,7 +137,7 @@ public class Employee implements Serializable {
 	@Column(name="bankaccount")
 	private String bankAccount;
 	
-	@Transient
+
 	private byte[] picture;
 	
 
@@ -294,6 +294,7 @@ public class Employee implements Serializable {
 		this.currentAddress = currentAddress;
 	}
 
+	@Transient
 	public byte[] getPicture() {
 		return picture;
 	}

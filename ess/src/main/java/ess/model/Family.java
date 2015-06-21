@@ -20,6 +20,8 @@ import javax.persistence.TemporalType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import progress.hrStaffGeneral.wsdl.ListEmployeeInfoGeneralDetail;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -63,6 +65,17 @@ public class Family implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="emp_id")
 	private Employee employee;
+
+	public Family() {
+		super();
+	}
+
+	public Family(ListEmployeeInfoGeneralDetail detail) {
+		this.spouseFirstName = detail.getSpouseTHFirstName();
+		this.spouseLastName = detail.getSpouseTHLastName();
+		this.totalChildren = detail.getChildren();
+		this.totalChidrenInEdu = detail.getChildrenStudy();
+	}
 
 	public Long getId() {
 		return id;

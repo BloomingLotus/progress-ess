@@ -1,10 +1,13 @@
 package ess.controller.service;
 
+import org.springframework.data.domain.Page;
+
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ess.model.Address;
 import ess.model.Certified;
+import ess.model.ChangeRequest;
 import ess.model.ComputerExperience;
 import ess.model.Education;
 import ess.model.EmergencyContact;
@@ -104,5 +107,12 @@ public interface EntityService {
 
 	ResponseJSend<Address> saveEmployeeCurrentAddressByEmpId(Long id,
 			JsonNode node) throws JsonMappingException;
- 
+
+	void saveEmployee(Employee emp);
+	Employee findEmployeeFromDB(Long id);
+
+	ChangeRequest findChangeRequestById(Long id);
+
+	ResponseJSend<Page<ChangeRequest>> findChangeRequestByExample(
+			JsonNode node, Integer pageNum) throws JsonMappingException;
 }

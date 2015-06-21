@@ -20,6 +20,8 @@ import javax.persistence.TemporalType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import progress.hrStaffGeneral.wsdl.ListEmployeeInfoGeneralDetail;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -61,6 +63,18 @@ public class EmergencyContact implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="emp_id")
 	private Employee employee;
+
+	
+	public EmergencyContact() {
+		super();
+	}
+
+	public EmergencyContact(ListEmployeeInfoGeneralDetail obj) {
+		this.firstName = obj.getContactName();
+		this.laatName = null;
+		this.relationship = obj.getContactRelationship();
+		this.telephone = obj.getContactNo();
+	}
 
 	public Long getId() {
 		return id;

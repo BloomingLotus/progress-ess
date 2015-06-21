@@ -6,6 +6,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import ess.controller.service.ProgressHREmpInfoClient;
 import ess.controller.service.ProgressHRGeneralClient;
+import ess.controller.service.ProgressHRPersonalClient;
 import ess.controller.service.ProgressSSOClient;
 
 @Configuration
@@ -55,6 +56,17 @@ public class WebServiceConfig {
 		ProgressHREmpInfoClient client = new ProgressHREmpInfoClient();
 		                      
 		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/EmployeeInfoWS.asmx");
+		
+		client.setMarshaller(marshaller);
+		client.setUnmarshaller(marshaller);
+		return client;
+	}
+	
+	@Bean
+	public ProgressHRPersonalClient hrPersonalClient(Jaxb2Marshaller marshaller) {
+		ProgressHRPersonalClient client = new ProgressHRPersonalClient();
+		                      
+		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_PersonalWS.asmx");
 		
 		client.setMarshaller(marshaller);
 		client.setUnmarshaller(marshaller);
