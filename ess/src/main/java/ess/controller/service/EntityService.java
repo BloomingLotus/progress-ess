@@ -1,7 +1,10 @@
 package ess.controller.service;
 
+import java.io.IOException;
+
 import org.springframework.data.domain.Page;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -16,6 +19,8 @@ import ess.model.Family;
 import ess.model.ProjectOnHand;
 import ess.model.Training;
 import ess.model.WorkExperience;
+import ess.security.model.EssUserDetails;
+import ess.security.model.User;
 import ess.webUI.ResponseJSend;
 
 public interface EntityService {
@@ -115,4 +120,8 @@ public interface EntityService {
 
 	ResponseJSend<Page<ChangeRequest>> findChangeRequestByExample(
 			JsonNode node, Integer pageNum) throws JsonMappingException;
+
+	ResponseJSend<ChangeRequest> updateChangeRequest(JsonNode node, EssUserDetails user) throws JsonProcessingException, IOException;
+
+	Iterable<ChangeRequest> findChagnerReqeustByEmployeeIdAndNotFinalState(Long empId);
 }

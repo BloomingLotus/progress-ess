@@ -137,6 +137,10 @@ public class Employee implements Serializable {
 	@Column(name="bankaccount")
 	private String bankAccount;
 	
+	@Basic
+	@Column(name="userName")
+	private String userName;
+	
 
 	private byte[] picture;
 	
@@ -302,8 +306,13 @@ public class Employee implements Serializable {
 	public void setPicture(byte[] picture) {
 		this.picture = picture;
 	}
-	
-	
 
-	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 }

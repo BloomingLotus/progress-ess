@@ -45,6 +45,9 @@ public class ChangeRequest  implements Serializable {
 	@Column(name="oldChangeSet")
 	private String oldChangeSet;
 	
+	@Column(name="lastRemark")
+	private String lastRemark;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="currentState")
 	private ChangeState currentState;
@@ -137,6 +140,21 @@ public class ChangeRequest  implements Serializable {
 		this.oldChangeSet = oldChangeSet;
 	}
 
+	public String getLastRemark() {
+		return lastRemark;
+	}
+
+	public void setLastRemark(String lastRemark) {
+		this.lastRemark = lastRemark;
+	}
+
+	public Boolean getIsFinalState() {
+		if(this.currentState == ChangeState.APPROVED || this.currentState == ChangeState.REJECTED) 
+			return true;
+		
+		return false;
+ 	}
+	
 
 	
 }

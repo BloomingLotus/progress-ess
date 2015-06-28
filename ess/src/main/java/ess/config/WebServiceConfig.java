@@ -6,7 +6,9 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import ess.controller.service.ProgressHREmpInfoClient;
 import ess.controller.service.ProgressHRGeneralClient;
+import ess.controller.service.ProgressHRGeneralFormClient;
 import ess.controller.service.ProgressHRPersonalClient;
+import ess.controller.service.ProgressHRPersonalFormClient;
 import ess.controller.service.ProgressSSOClient;
 
 @Configuration
@@ -31,6 +33,8 @@ public class WebServiceConfig {
 		return marshaller;
 	}
 
+	
+	
 	@Bean
 	public ProgressHRGeneralClient hrGeneneralClient(Jaxb2Marshaller marshaller) {
 		ProgressHRGeneralClient client = new ProgressHRGeneralClient();
@@ -40,11 +44,25 @@ public class WebServiceConfig {
 		client.setUnmarshaller(marshaller);
 		return client;
 	}
+
+	@Bean
+	public ProgressHRGeneralFormClient hrGeneneralFormClient(Jaxb2Marshaller marshaller) {
+		ProgressHRGeneralFormClient client = new ProgressHRGeneralFormClient();
+		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_GeneralFormWS.asmx");
+		
+		client.setMarshaller(marshaller);
+		client.setUnmarshaller(marshaller);
+		return client;
+	}
+	
+
 	
 	@Bean
 	public ProgressSSOClient hrSSOClient(Jaxb2Marshaller marshaller) {
 		ProgressSSOClient client = new ProgressSSOClient();
 		client.setDefaultUri("http://172.17.12.39:19014/SSOWS/AuthenticationWS.asmx");
+//		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/Authentication/SimpleSecurity.asmx");
+		
 		
 		client.setMarshaller(marshaller);
 		client.setUnmarshaller(marshaller);
@@ -65,7 +83,7 @@ public class WebServiceConfig {
 	@Bean
 	public ProgressHRPersonalClient hrPersonalClient(Jaxb2Marshaller marshaller) {
 		ProgressHRPersonalClient client = new ProgressHRPersonalClient();
-		                      
+		
 		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_PersonalWS.asmx");
 		
 		client.setMarshaller(marshaller);
@@ -73,4 +91,14 @@ public class WebServiceConfig {
 		return client;
 	}
 
+	@Bean
+	public ProgressHRPersonalFormClient hrPersonalFormClient(Jaxb2Marshaller marshaller) {
+		ProgressHRPersonalFormClient client = new ProgressHRPersonalFormClient();
+		
+		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_PersonalFormWS.asmx");
+		
+		client.setMarshaller(marshaller);
+		client.setUnmarshaller(marshaller);
+		return client;
+	}
 }

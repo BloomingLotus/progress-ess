@@ -100,7 +100,9 @@
 								<thead>
 									<tr>
 										<td style="width: 125px;text-align:center;"><b>ชื่อรายการ</b></td>	
-										<td style="width:40%;text-align:center;" class=""><b>ข้อมูลที่เดิม</b></td>									
+										{{#if model.changeState}}
+										<td style="width:40%;text-align:center;" class=""><b>ข้อมูลที่เดิม</b></td>
+										{{/if}}									
 										<td style="width:40%;text-align:center;" class=""><b>ข้อมูลที่ขอเปลี่ยน</b></td>
 									</tr>
 								</thead>
@@ -108,7 +110,9 @@
 								{{#each model.changes}}
 									<tr>
 										<td>{{key}}</td>
+										{{#if ../model.changeState}}
 										<td>{{oldValue}}</td>
+										{{/if}}
 										<td>{{newValue}}</td>
 									</tr>
 								{{/each}}
@@ -123,12 +127,16 @@
 						<div class="form-group">
 							<label for="creatdBy" class="col-sm-4 control-label">การอนุมัติ:</label>
 							<div class="col-sm-8">
+								{{#if model.action}}
+									<p class="form-control-static">{{model.action}}</p>
+								{{else}}
 								<label class="radio-inline">
- 									<input type="radio" name="actionRdo" id="actionAcceptRdo" value="accept"> อนุมัติ
+ 									<input type="radio" name="actionRdo" data-field="action" id="actionAcceptRdo" value="APPROVED"> อนุมัติ
 								</label>
 								<label class="radio-inline">
-									  <input type="radio" name="actionRdo" id="actionRejectRdo" value="reject"> ไม่อนุมัติ
+									  <input type="radio" name="actionRdo" data-field="action" id="actionRejectRdo" value="REJECTED"> ไม่อนุมัติ
 								</label>
+								{{/if}}
 							</div>
 						</div>												
 					</div>			
@@ -138,7 +146,13 @@
 						<div class="form-group">
 							<label for="createdTime" class="col-sm-2 control-label">หมายเหตุ:</label>
 							<div class="col-sm-10">
-								<input type='text' class='form-control formTxt' id='remarkTxt' data-field='remark'></input>
+								{{#if model.remark}}
+									<p class="form-control-static">{{model.remark}}</p>
+								{{else}}
+									<input type='text' class='form-control formTxt' id='remarkTxt' data-field='remark'></input>
+								{{/if}}
+
+								
 							</div>
 						</div>												
 					</div>
@@ -147,7 +161,9 @@
 		</div>
 		<div class="panel-footer">
 			<button id="backBtn" type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i> กลับหน้าเดิม</button>
+			{{#unless model.action}}
 			<button id="saveFormBtn" type="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> บันทึกข้อมูล</button>
+			{{/unless}}
 		</div>
 	</div>
 	</form>
@@ -193,7 +209,10 @@
 		<tbody>
 			{{#each content}}
 			<tr data-id="{{id}}">
-				<td> <button type="button" class="btn btn-info btn-xs editBtn"><i class="fa fa-edit"> </i></button>
+				<td>
+					{{#unless isFinalState}} 
+						<button type="button" class="btn btn-info btn-xs editBtn"><i class="fa fa-edit"> </i></button>
+					{{/unless}}
 				</td>
 				<td style="">{{createdBy.thFirstName}} {{createdBy.thLastName}}</td>
 				<td style="text-align:center;">{{formatDomain domain}}</td>

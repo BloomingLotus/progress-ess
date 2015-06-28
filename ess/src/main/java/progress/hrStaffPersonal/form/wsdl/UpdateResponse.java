@@ -68,4 +68,12 @@ public class UpdateResponse {
         this.updateResult = value;
     }
 
+	@Override
+	public String toString() {
+		return "UpdateResponse [updateResult=" + updateResult + "]";
+	}
+
+	
+
+    
 }

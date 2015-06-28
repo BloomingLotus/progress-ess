@@ -1,5 +1,7 @@
 package ess.controller.service;
 
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,12 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.h2.message.DbException;
 import org.springframework.beans.BeanUtils;
-
-
-
-
 
 
 import org.springframework.beans.BeanWrapper;
@@ -31,7 +28,11 @@ import progress.hrEmployeeInfo.wsdl.GetListEmployeeEducationInfoResponse;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeAddressInfo;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeCertificationInfo;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeEducationInfo;
+import progress.hrStaffGeneral.form.wsdl.ListEmployeeInfoGeneralForm;
+import progress.hrStaffPersonal.form.wsdl.ListEmployeePersonalInfo;
+import progress.hrStaffPersonal.form.wsdl.UpdateResponse;
 import progress.hrStaffGeneral.wsdl.GetItemGeneralDetailDataResponse;
+import progress.hrStaffGeneral.wsdl.GetItemResponse;
 import progress.hrStaffPersonal.wsdl.EmployeePersonalInfo;
 import progress.hrStaffPersonal.wsdl.GetItemEmployeePersonalResponse;
 
@@ -66,16 +67,14 @@ import ess.model.EmergencyContact;
 import ess.model.Employee;
 import ess.model.Family;
 import ess.model.ProjectOnHand;
-import ess.model.QAddress;
 import ess.model.QChangeRequest;
 import ess.model.QComputerExperience;
-import ess.model.QEmergencyContact;
-import ess.model.QFamily;
 import ess.model.QProjectOnHand;
 import ess.model.QTraining;
 import ess.model.QWorkExperience;
 import ess.model.Training;
 import ess.model.WorkExperience;
+import ess.security.model.EssUserDetails;
 import ess.webUI.DefaultProperty;
 import ess.webUI.ResponseJSend;
 import ess.webUI.ResponseStatus;
@@ -125,14 +124,20 @@ public class EntityServiceJPA implements EntityService {
 	private ProgressSSOClient progressSSOClient;
 	
 	@Autowired
-	private ProgressHRGeneralClient progressHrGeneralClient;
+	private ProgressHRGeneralClient hrGeneralClient;
 	
 	
 	@Autowired
 	private ProgressHRPersonalClient hrPersonalClient;
 	
 	@Autowired
+	private ProgressHRPersonalFormClient hrPersonalFormClient;
+	
+	@Autowired
 	private ProgressHREmpInfoClient hrEmpInfoClient;
+	
+	@Autowired
+	ProgressHRGeneralFormClient hrGeneralFormClient;
 	
 	
 	@Override
@@ -221,7 +226,7 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Employee findEmployeeById(Long id) {
-		GetItemGeneralDetailDataResponse response = progressHrGeneralClient.getItemDetailDataResponse(id);
+		GetItemGeneralDetailDataResponse response = hrGeneralClient.getItemDetailDataResponse(id);
 		
 		GetItemEmployeePersonalResponse personalResponse = hrPersonalClient.getItemEmployeePersonal(id);
 		
@@ -462,13 +467,65 @@ public class EntityServiceJPA implements EntityService {
 			dbModel = projectOnHandRepo.findOne(webModel.getId());
 		}
 		
-		BeanUtils.copyProperties(webModel, dbModel, "employee");
+//		BeanUtils.copyProperties(webModel, dbModel, "employee");
 		
 		
 		Employee emp = employeeRepo.findOne(id);
 		dbModel.setEmployee(emp);
 		
-		projectOnHandRepo.save(dbModel);
+//		projectOnHandRepo.save(dbModel);
+		ArrayList<String> properties = new ArrayList<String>();
+		BeanWrapper webSrc = new BeanWrapperImpl(webModel);
+		BeanWrapper dbSrc = new BeanWrapperImpl(dbModel);
+		String[] prop = {"id", "projectDetail", "projectName"};
+		
+		Map<String,Object> newChangeSet = new HashMap<String, Object>();
+		Map<String,Object> oldChangeSet = new HashMap<String, Object>();		
+		for(String p : prop) {
+			log.debug(p);
+			log.debug(webSrc.getPropertyValue(p));
+			log.debug(dbSrc.getPropertyValue(p));
+			if(webSrc.getPropertyValue(p) != null && p.equals("id")){
+				properties.add(p);
+				
+				log.debug("adding propoerty : " + p);
+				newChangeSet.put(p, webSrc.getPropertyValue(p));
+				oldChangeSet.put(p, dbSrc.getPropertyValue(p));
+			} else	if((webSrc.getPropertyValue(p) != null && !webSrc.getPropertyValue(p).equals(dbSrc.getPropertyValue(p))) ) {
+				properties.add(p);
+				
+				log.debug("adding propoerty : " + p);
+				newChangeSet.put(p, webSrc.getPropertyValue(p));
+				oldChangeSet.put(p, dbSrc.getPropertyValue(p));
+			}
+		}
+		try {
+			ChangeRequest request = new ChangeRequest();
+			request.setNewChangeSet(mapper.writeValueAsString(newChangeSet));
+			request.setOldChangeSet(mapper.writeValueAsString(oldChangeSet));
+			request.setDomain(ProjectOnHand.class.getSimpleName());
+			request.setCreatedBy(emp);
+			request.setCreatedTime(new Date());
+			if(dbModel.getId() == null) {
+				request.setCurrentState(ChangeState.REQUEST_NEW);
+			} else {
+				request.setCurrentState(ChangeState.REQUESTED_CHANGE);
+			}
+			changeRequestRepo.save(request);
+			
+			ChangeRequestLog reqLog = new ChangeRequestLog();
+			reqLog.setTimestamp(request.getCreatedTime());
+			reqLog.setActor(emp);
+			reqLog.setChangeRequest(request);
+			reqLog.setToState(request.getCurrentState());
+			reqLog.setRemark(null);
+			changeRequestLogRepo.save(reqLog);
+			
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		ResponseJSend<ProjectOnHand> response = new ResponseJSend<ProjectOnHand>();
 		response.status = ResponseStatus.SUCCESS;
@@ -494,9 +551,38 @@ public class EntityServiceJPA implements EntityService {
 	@Override
 	public ResponseJSend<ProjectOnHand> deleteProjectOnHand(Long id) {
 		ProjectOnHand project = projectOnHandRepo.findOne(id);
-		
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		if(project != null) {
-			projectOnHandRepo.delete(project);
+			try {
+				ChangeRequest request = new ChangeRequest();
+				ProjectOnHand projectDel = new ProjectOnHand();
+				projectDel.setProjectDetail(project.getProjectDetail());
+				projectDel.setProjectDetail(project.getProjectName());
+				projectDel.setId(project.getId());
+				request.setNewChangeSet(mapper.writeValueAsString(projectDel));
+				request.setOldChangeSet(null);
+				request.setDomain(ProjectOnHand.class.getSimpleName());
+				request.setCreatedBy(project.getEmployee());
+				
+				request.setCreatedTime(new Date());
+				
+				request.setCurrentState(ChangeState.REQUEST_DELETE);
+				
+				changeRequestRepo.save(request);
+				
+				ChangeRequestLog reqLog = new ChangeRequestLog();
+				reqLog.setTimestamp(request.getCreatedTime());
+				reqLog.setActor(project.getEmployee());
+				reqLog.setChangeRequest(request);
+				reqLog.setToState(request.getCurrentState());
+				reqLog.setRemark(null);
+				changeRequestLogRepo.save(reqLog);
+				
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		ResponseJSend<ProjectOnHand> response = new ResponseJSend<ProjectOnHand>();
@@ -787,7 +873,7 @@ public class EntityServiceJPA implements EntityService {
 //		
 //		return familys;
 		
-		GetItemGeneralDetailDataResponse response = progressHrGeneralClient.getItemDetailDataResponse(id);
+		GetItemGeneralDetailDataResponse response = hrGeneralClient.getItemDetailDataResponse(id);
 		
 		ArrayList<Family> familyList = new ArrayList<Family>();
 		if(response.getGetItemGeneralDetailDataResult().getObj() != null) {
@@ -880,7 +966,7 @@ public class EntityServiceJPA implements EntityService {
 		
 		ArrayList<EmergencyContact> contacts = new  ArrayList<EmergencyContact>();
 		
-		GetItemGeneralDetailDataResponse response = progressHrGeneralClient.getItemDetailDataResponse(id);
+		GetItemGeneralDetailDataResponse response = hrGeneralClient.getItemDetailDataResponse(id);
 		if(response.getGetItemGeneralDetailDataResult().getObj() != null) {
 			EmergencyContact contact = new EmergencyContact(response.getGetItemGeneralDetailDataResult().getObj());
 			contacts.add(contact);
@@ -1137,7 +1223,7 @@ public class EntityServiceJPA implements EntityService {
 		BooleanBuilder p = new BooleanBuilder();
 		
 		PageRequest pageRequest =
-	            new PageRequest(pageNum -1, DefaultProperty.NUMBER_OF_ELEMENT_PER_PAGE, Sort.Direction.ASC, "createdTime");
+	            new PageRequest(pageNum -1, DefaultProperty.NUMBER_OF_ELEMENT_PER_PAGE, Sort.Direction.DESC, "createdTime");
 		
 		Page<ChangeRequest> requests = changeRequestRepo.findAll(p, pageRequest); 
 		
@@ -1148,6 +1234,160 @@ public class EntityServiceJPA implements EntityService {
 		return response;
 
 	}
+
+	@Override
+	public ResponseJSend<ChangeRequest> updateChangeRequest(JsonNode node, EssUserDetails user) throws JsonProcessingException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		
+		Long crId = node.path("id").asLong();
+		ChangeRequest crDb = changeRequestRepo.findOne(crId);
+		
+		log.debug(node.path("action").asText());
+		
+		Employee currentUser = employeeRepo.findOne(user.getEmpId().longValue());
+		
+		if( node.path("action").asText().equals("REJECTED") ) {
+			// deal with reject first
+			crDb.setCurrentState(ChangeState.REJECTED);
+			crDb.setLastRemark(node.path("remark").asText());
+			crDb.setLastUpdatedBy(currentUser);
+			crDb.setLastUpdatedTime(new Date());
+			
+			ChangeRequestLog log = new ChangeRequestLog(crDb);
+			changeRequestLogRepo.save(log);
+			changeRequestRepo.save(crDb);
+		} else if(node.path("action").asText().equals("APPROVED")  ) {
+			Employee emp = findEmployeeById(node.path("createdBy").path("id").asLong());
+			String newChangeSet=crDb.getNewChangeSet();
+			JsonNode json = mapper.readTree(newChangeSet);
+			if(node.path("domain").asText().equals("Employee")) {
+					GetItemResponse itemResponse = hrGeneralClient.getItemGeneral(emp.getId());
+					progress.hrStaffGeneral.wsdl.ListEmployeeInfoGeneralForm item = itemResponse.getGetItemResult().getObj();
+					
+					GetItemEmployeePersonalResponse personalResponse = hrPersonalClient.getItemEmployeePersonal(emp.getId());
+					EmployeePersonalInfo personalInfo = personalResponse.getGetItemEmployeePersonalResult().getObj();
+					
+					ListEmployeeInfoGeneralForm form = new ListEmployeeInfoGeneralForm();
+					
+					ListEmployeePersonalInfo personalForm = new ListEmployeePersonalInfo();
+					
+					BeanWrapper src = new BeanWrapperImpl(item);
+					BeanWrapper dest = new BeanWrapperImpl(form);
+					
+					for(PropertyDescriptor pDesc : src.getPropertyDescriptors()) {
+						if(!pDesc.getName().equals("class")
+								&& !pDesc.getName().equals("isNeedProbation")
+								&& !pDesc.getName().equals("isHeadHunter")
+								&& !pDesc.getName().equals("isInitial")
+								&& !pDesc.getName().equals("isConvertedStaff")
+								&& !pDesc.getName().equals("isSalaryBaseApplied")) {
+							dest.setPropertyValue(pDesc.getName(), src.getPropertyValue(pDesc.getName()));
+						}
+					}
+					
+					BeanWrapper personalSrc = new BeanWrapperImpl(personalInfo);
+					BeanWrapper personalDest = new BeanWrapperImpl(personalForm);
+					for(PropertyDescriptor pDesc : personalSrc.getPropertyDescriptors()) {
+						if(!pDesc.getName().equals("class")
+								&& !pDesc.getName().equals("isIncludedInPerformanceIndex")
+								&& !pDesc.getName().equals("lockedByName")
+								&& !pDesc.getName().equals("lockedDate")
+								&& !pDesc.getName().equals("sourceTypeID")
+								&& !pDesc.getName().equals("lockedBy")) {
+							personalDest.setPropertyValue(pDesc.getName(), personalSrc.getPropertyValue(pDesc.getName()));
+						}
+					}
+	
+					if(json.get("mobilePhone") != null) {
+						form.setMobilePhoneNo(json.get("mobilePhone").asText());
+					}
+					
+					if(json.get("bankAccount") != null) {
+						personalForm.setBankCode(json.get("bankAccount").asText());
+					}
+					
+					UpdateResponse response = hrGeneralFormClient.update(emp.getUserName(), form);
+					UpdateResponse response2 = hrPersonalFormClient.update(emp.getUserName(), personalForm);
+					
+					log.debug(response);
+					log.debug(response2);
+					
+					if(response.getUpdateResult().isIsCompleted() == true || response2.getUpdateResult().isIsCompleted() == true) {
+						crDb.setCurrentState(ChangeState.APPROVED);
+						crDb.setLastRemark(node.path("remark").asText());
+						crDb.setLastUpdatedBy(currentUser);
+						crDb.setLastUpdatedTime(new Date());
+						
+						ChangeRequestLog log = new ChangeRequestLog(crDb);
+						changeRequestLogRepo.save(log);
+						changeRequestRepo.save(crDb);
+					}
+
+					
+			} else if(node.path("domain").asText().equals("ProjectOnHand")) {
+				ProjectOnHand project = null;
+
+				
+				if(crDb.getCurrentState() == ChangeState.REQUEST_DELETE) {
+					project = projectOnHandRepo.findOne(json.path("id").asLong());
+					projectOnHandRepo.delete(project);
+					
+				} else if(crDb.getCurrentState() == ChangeState.REQUEST_NEW) {
+					project = new ProjectOnHand();
+					ProjectOnHand changeModel = mapper.treeToValue(json, ProjectOnHand.class);
+					project.setProjectDetail(changeModel.getProjectDetail());
+					project.setProjectName(changeModel.getProjectName());
+				} else if(crDb.getCurrentState() == ChangeState.REQUESTED_CHANGE) {
+					project = projectOnHandRepo.findOne(json.path("id").asLong());
+					if(json.get("projectDetail") != null) {
+						project.setProjectDetail(json.get("projectDetail").asText());
+					}
+					if(json.get("projectName") != null) {
+						project.setProjectName(json.get("projectName").asText());
+					}
+					
+				} 
+				
+				project.setEmployee(emp);
+				
+				projectOnHandRepo.save(project);
+				crDb.setCurrentState(ChangeState.APPROVED);
+				crDb.setLastRemark(node.path("remark").asText());
+				crDb.setLastUpdatedBy(currentUser);
+				crDb.setLastUpdatedTime(new Date());
+				
+				ChangeRequestLog log = new ChangeRequestLog(crDb);
+				changeRequestLogRepo.save(log);
+				changeRequestRepo.save(crDb);
+				
+			}
+			
+			
+		}
+		
+		
+		ResponseJSend<ChangeRequest> response = new ResponseJSend<ChangeRequest>();
+		response.data=crDb;
+		response.status=ResponseStatus.SUCCESS;
+		
+		return response;
+	}
+
+	@Override
+	public Iterable<ChangeRequest> findChagnerReqeustByEmployeeIdAndNotFinalState(
+			Long empId) {
+		QChangeRequest q = QChangeRequest.changeRequest;
+		
+		BooleanBuilder p = new BooleanBuilder();
+		p = p.and(q.createdBy.id.eq(empId)).andNot(
+				q.currentState.eq(ChangeState.APPROVED).or(q.currentState.eq(ChangeState.REJECTED)));
+		
+		Iterable<ChangeRequest> requests = changeRequestRepo.findAll(p);
+		
+		return requests;
+	}
+	
 	
 	
 	

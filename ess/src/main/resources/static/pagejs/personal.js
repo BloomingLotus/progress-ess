@@ -242,6 +242,8 @@ var TabView = Backbone.View.extend({
 		this.collection.fetch({
 			url: appUrl('Employee/' + empId + '/'+this.tabName+'s'),
 			success: _.bind(function() {
+				
+				var changeSetModel =  _.where(currentRequests.toJSON(), {domain: this.tabName});
 				var json={};
 				 if(this.collection != null) {
 					
@@ -250,6 +252,39 @@ var TabView = Backbone.View.extend({
 				 } else {
 					 json.collection ={};
 					 json.model = {};
+				 }
+				 
+				 if(changeSetModel != null) {
+					 
+					 for(var i=0; i< changeSetModel.length; i++) {
+						 var changeModel = changeSetModel[i];
+						 
+						 var changeSetJson = JSON.parse(changeModel.newChangeSet);
+
+						 
+						 if(changeSetJson.id == null) {
+							 changeSetJson.hasChangeSet = true;
+							 changeSetJson.changsetIcon = 'fa-plus-circle';
+							 changeSetJson.isChangeOrAdd = true;
+							 json.collection.push(changeSetJson);
+							 
+						 } else {
+							 var jsonModel =_.findWhere(json.collection, {id: changeSetJson.id});
+							 if(jsonModel != null) {
+								jsonModel.hasChangeSet = true;
+								if(changeModel.currentState == "REQUESTED_CHANGE") {
+									jsonModel.isChangeOrAdd = true;
+									jsonModel.changsetIcon = 'fa-exclamation-circle';
+									for(var key in changeSetJson){
+									      jsonModel[key] = changeSetJson[key];
+									  }
+								} else {
+									jsonModel.changsetIcon = 'fa-times-circle';
+									jsonModel.isDeleteChangeSet = true;
+								}
+							}
+						 }
+					 }
 				 }
 				 
 				 this.$el.html(this.tabTemplate(json));
@@ -299,8 +334,17 @@ var TabModal = Backbone.View.extend({
 				success:_.bind(function(model, response, options) {
 					if(response.status != 'SUCCESS') {
 						alert(response.status + " :" + response.message);
+						
 					}
 					alert("บันทึกข้อมูลแล้ว");
+					
+					currentRequests.fetch({
+						url: currentRequestsUrl,
+						success: _.bind(function() {
+							this.parentView.render();
+							 this.$el.modal('hide');
+						}, this)
+					});
 			},this)});
 		 },
 		 setModel: function(model) {
@@ -415,15 +459,37 @@ var MainEmployeeView = Backbone.View.extend({
 	 },
 	 render: function() {
 		 var json={};
+		 var changeSetModel = currentRequests.findWhere({domain: 'Employee'});
+		 var changeSet = {};
+		 var oldChangeSet = {};
+		 if(changeSetModel != null) {
+			 changeSet = JSON.parse(changeSetModel.get('newChangeSet'));
+			 oldChangeSet = JSON.parse(changeSetModel.get('oldChangeSet'));
+		 }
 		 if(this.model != null) {
 			
-		 	json.model=this.model.toJSON();
-		 	console.log(json);
-		 } else {
+			//apply changeset to model
+			json.model=this.model.toJSON();
+			
+			if(changeSetModel != null) {
+				for(var key in changeSet){
+				      json.model[key] = changeSet[key];
+				  }
+				json.model.hasChangeSet = true;
+			}
+			 } else {
 			 json.model ={};
 		 }
 		 
 		 this.$el.html(this.mainEmployeeDivTemplate(json));
+
+		 // then change field to new Color
+		 for(var key in changeSet) {
+			 $('p[data-field='+key+']').addClass('static-form-change-request'); 
+		     $('p[data-field='+key+']').parents('.form-group').addClass('has-warning');
+		     $('p[data-field='+key+']').after("<i class='fa fa-exclamation-circle form-control-feedback'></i>");
+		     $('p[data-field='+key+']').tooltip({title: "ข้อมูลเดิม: " + oldChangeSet[key]})
+		  }
 		 
 		 return this;
 	 }
@@ -458,6 +524,13 @@ var EmployeeBasicInfoModal = Backbone.View.extend({
 					alert(response.status + " :" + response.message);
 				}
 				alert("ส่งเรื่องขอแก้ไขข้อมูลแล้ว");
+				currentRequests.fetch({
+					url: currentRequestsUrl,
+					success: _.bind(function() {
+						this.parentView.render();
+						 this.$el.modal('hide');
+					}, this)
+				});
 		},this)});
 	 },
 	 render: function() {

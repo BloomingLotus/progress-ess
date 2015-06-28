@@ -230,13 +230,20 @@ var FormView = Backbone.View.extend({
 	 events: {
 		 "change .formSlt": "onChangeFormSlt",
 		 "change .formTxt" : "onChangeTxtSlt",
+		 "change input[type=radio]": "onChangeRadio",
 		 
 		"click #saveFormBtn" : "onClickSaveFormBtn",
 		"click #backBtn" : "onClickBackBtn"
 				 
 		},
 		
-	onClickSaveFormBtn: function(e) {
+		
+	onChangeRadio: function(e) {
+		var value = $(e.currentTarget).val();
+		var field=$(e.currentTarget).attr('data-field'); 
+		this.model.set(field, value);
+	},
+ 	onClickSaveFormBtn: function(e) {
 		var validated = true;
 		
 		// we'll validate 
@@ -251,44 +258,22 @@ var FormView = Backbone.View.extend({
 			}
 		});
 		
-		this.$el.find('.formSlt').each(function(index, el){
-			if($(el).val() == 0) {
-				$(el).parents('.form-group').addClass('has-error');
-				
-				validated = false;
-				
-			}
-		});
-		
-//		if(this.model.get('organization') == null) {
-//			alert ('กรุณาเลือกหน่วยงาน');
-//			return false;
-//		}
-//		
+		if(this.model.get('action') == null) {
+			alert('กรุณาระบุการอนุมัติการแก้ไข');
+			validated = false;
+		}
 		
 		if(!validated) {
 			alert ('กรุณากรอกข้อมูลให้ครบถ้วน');
 			return false;
 		}
 		
-		// now set behaviorType
-		this.model.set('type', behaviorType);
-		
-		this.model.set('objective', CKEDITOR.instances.objectiveTxa.getData());
-		this.model.set('outputName', CKEDITOR.instances.outputNameTxa.getData());
-		this.model.set('abstractTh', CKEDITOR.instances.abstractThTxa.getData());
-		this.model.set('abstractEn', CKEDITOR.instances.abstractEnTxa.getData());
-		this.model.set('reference', CKEDITOR.instances.referenceTxa.getData());
-
-		
 		this.model.save(null, {
 			success:_.bind(function(model, response, options) {
 				if(response.status != 'SUCCESS') {
 					alert(response.status + " :" + response.message);
 				}
-				this.model.set('id', response.data);
-				this.model.set('domainName', 'RESEARCH');
-				
+
 				alert("บันทึกข้อมูลแล้ว");
 				this.render();
 		},this)});
@@ -342,9 +327,18 @@ var FormView = Backbone.View.extend({
 	render: function() {
 		var json={};
 		json.model = this.model.toJSON();
+		
+		
 		var newValues = JSON.parse(json.model.newChangeSet);
 		var oldValues = JSON.parse(json.model.oldChangeSet);
+		if(oldValues == null)
+			oldValues = {};
+		
 		json.model.changes = new Array();
+		
+		if(this.model.get("currentState") == "REQUESTED_CHANGE" ) {
+			json.model.changeState = true;
+		}
 		
 		for(var key in newValues){
 		      json.model.changes.push({key: key, newValue: newValues[key], oldValue: oldValues[key]});

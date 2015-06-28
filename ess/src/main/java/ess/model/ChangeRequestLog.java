@@ -51,6 +51,20 @@ public class ChangeRequestLog implements Serializable{
 	@Column(name="Remark")
 	private String remark;
 
+	
+	
+	public ChangeRequestLog() {
+		super();
+	}
+
+	public ChangeRequestLog(ChangeRequest request) {
+		this.actor = request.getLastUpdatedBy();
+		this.changeRequest = request;
+		this.remark = request.getLastRemark();
+		this.toState = request.getCurrentState();
+		this.timestamp = request.getLastUpdatedTime();
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -73,4 +73,10 @@ public class ArrayOfString {
         return this.string;
     }
 
+	@Override
+	public String toString() {
+		return "ArrayOfString [string=" + string + "]";
+	}
+    
+
 }

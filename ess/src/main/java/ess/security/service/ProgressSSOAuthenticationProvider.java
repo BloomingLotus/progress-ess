@@ -75,6 +75,8 @@ public class ProgressSSOAuthenticationProvider implements AuthenticationProvider
 				emp.setEnFirstName(staffProfile.getGetStaffProfileByNameResult().getObject().getEnglishName());
 				emp.setEnLastName(staffProfile.getGetStaffProfileByNameResult().getObject().getEnglishSurname());
 				
+				emp.setUserName(userName);
+				
 				log.debug("saving...");
 				entityService.saveEmployee(emp);	
 			} else {

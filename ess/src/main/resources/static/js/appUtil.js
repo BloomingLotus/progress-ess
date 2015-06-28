@@ -6,7 +6,8 @@ moment.locale("th");
 
 // Global variable
 __domainName = {
-		"Employee" : "ข้อมูลทั่วไป"
+		"Employee" : "ข้อมูลทั่วไป",
+		"ProjectOnHand" : "Project On Hand"
 }
 
 //Globally register console
@@ -32,7 +33,11 @@ Handlebars.registerHelper('formatNumber', function(number) {
 });
 
 Handlebars.registerHelper('formatTimeStamp', function(number) {
-	return moment(1434874655430).format('DD MMMM YYYY HH:MM.ss');
+	return moment(number).format('DD MMMM YYYY HH:MM.ss');
+});
+
+Handlebars.registerHelper('formatDate', function(number) {
+	return moment(number).format('DD MMMM YYYY');
 });
 
 Handlebars.registerHelper('formatDomain', function(domainName) {

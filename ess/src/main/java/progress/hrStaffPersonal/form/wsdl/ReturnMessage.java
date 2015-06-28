@@ -97,4 +97,12 @@ public class ReturnMessage {
         this.isCompleted = value;
     }
 
+	@Override
+	public String toString() {
+		return "ReturnMessage [message=" + message + ", isCompleted="
+				+ isCompleted + "]";
+	}
+
+    
+    
 }

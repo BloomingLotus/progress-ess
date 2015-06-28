@@ -161,6 +161,10 @@ ess.Model.ChangeRequestLog = Backbone.RelationalModel.extend({
 	urlRoot: appUrl('ChangeRequestLog')
 });
 
+ess.Collection.ChangeRequests = Backbone.Collection.extend({
+	model: ess.Model.ChangeRequest
+});
+
 ess.Page.ChangeRequests = Backbone.PageCollection.extend({
 	model: ess.Model.ChangeRequest,
 	url: appUrl('ChangeRequest/search')
