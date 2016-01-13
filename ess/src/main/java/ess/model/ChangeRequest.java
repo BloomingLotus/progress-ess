@@ -154,6 +154,16 @@ public class ChangeRequest  implements Serializable {
 		
 		return false;
  	}
+
+	@Override
+	public String toString() {
+		return "ChangeRequest [id=" + id + ", domain=" + domain + ", newChangeSet=" + newChangeSet + ", oldChangeSet="
+				+ oldChangeSet + ", lastRemark=" + lastRemark + ", currentState=" + currentState + ", createdBy="
+				+ createdBy + ", createdTime=" + createdTime + ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdatedTime="
+				+ lastUpdatedTime + "]";
+	}
+	
+	
 	
 
 	

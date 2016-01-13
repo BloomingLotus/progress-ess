@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 
 import ess.controller.service.EntityService;
 import ess.controller.service.EntityServiceJPA;
+import ess.controller.service.WebEntityService;
+import ess.controller.service.WebEntityServiceJPA;
 
 public class ServletInitializer extends SpringBootServletInitializer {
 
@@ -18,4 +20,9 @@ public class ServletInitializer extends SpringBootServletInitializer {
 	public EntityService entityService() {
 		return new EntityServiceJPA();
 	}
+    
+    @Bean
+    public WebEntityService webEntityService() {
+    	return new WebEntityServiceJPA();
+    }
 }

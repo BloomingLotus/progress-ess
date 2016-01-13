@@ -5,6 +5,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +19,8 @@ import javax.imageio.ImageIO;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,14 +30,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.Years;
 
 import progress.hrStaffGeneral.wsdl.ListEmployeeInfoGeneralDetail;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -54,6 +67,7 @@ public class Employee implements Serializable {
 		this.thFirstName = empDetail.getTHFirstName();
 		this.thLastName = empDetail.getTHLastName();
 		this.thTitle = empDetail.getTHTitleName();
+		this.titleId = empDetail.getTitleID();
 		
 		this.enFirstName = empDetail.getENFirstName();
 		this.enLastName = empDetail.getENLastName();
@@ -63,11 +77,19 @@ public class Employee implements Serializable {
 		this.thNickName = empDetail.getNickName();
 		
 		this.status = empDetail.getMaritalStatusName();
+		this.statusId = empDetail.getMaritalStatusID();
 		this.mobilePhone = empDetail.getMobilePhoneNo();
 		this.homePhoneNo = empDetail.getHomePhoneNo();
 		this.email = empDetail.getOfficeEmail1();
 		this.picture = empDetail.getAttachmentSource();
+		
+		this.position = empDetail.getPositionName();
+		this.positionLevel = empDetail.getPositionLevelName();
+		this.positionGroup = empDetail.getPositionGroupName();
+		this.division = empDetail.getDivisionName();
+		this.majorRoles = empDetail.getMajorRoleName();
 	}
+
 
 	@Id
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE ,generator="EMPLOYEE_SEQ")
@@ -75,6 +97,9 @@ public class Employee implements Serializable {
 	public Long getId() {
 		return id;
 	}
+
+
+	private Sex sex;
 	
 	@Basic
 	@Column(name="thtitle")
@@ -114,6 +139,10 @@ public class Employee implements Serializable {
 	private String status;
 	
 	@Basic
+	@Column(name="statusId")
+	private Integer statusId;
+	
+	@Basic
 	@Column(name="homephoneno")
 	private String homePhoneNo;
 	
@@ -126,12 +155,20 @@ public class Employee implements Serializable {
 	private String email;
 
 	@Basic
-	@Column(name="religious")
-	private String religious;
+	@Column(name="religionName")
+	private String religionName;
 	
 	@Basic
-	@Column(name="nationalityname")
+	@Column(name="religionId")
+	private Integer religionId;
+	
+	@Basic
+	@Column(name="nationalityName")
 	private String nationalityName;
+	
+	@Basic
+	@Column(name="nationalityId")
+	private Integer nationalityId;
 	
 	@Basic
 	@Column(name="bankaccount")
@@ -141,16 +178,41 @@ public class Employee implements Serializable {
 	@Column(name="userName")
 	private String userName;
 	
+	
+	@Basic
+	@Column(name="roles")
+	private String roles;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="startWorkingDate")
+	private Date startWorkingDate;
 
+	@Basic
+	@Column(name="POSITION")
+	private String position;
+	
+	@Basic
+	@Column(name="Divsion")
+	private String division;
+	
+	private String positionLevel;
+	
+	private Date birthDate;
+	
+	@JsonIgnore
 	private byte[] picture;
 	
-
 	private Address registeredAddress;
-	
-	
 
 	private Address currentAddress;
 	
+	private String majorRoles;
+	
+	private String positionGroup;
+	
+	
+
+	private Integer titleId;
 	
 	public void setId(Long id) {
 		this.id = id;
@@ -238,14 +300,6 @@ public class Employee implements Serializable {
 		this.email = email;
 	}
 
-	public String getReligious() {
-		return religious;
-	}
-
-	public void setReligious(String religious) {
-		this.religious = religious;
-	}
-
 	public String getNationalityName() {
 		return nationalityName;
 	}
@@ -315,4 +369,157 @@ public class Employee implements Serializable {
 		this.userName = userName;
 	}
 
+	@Transient
+	public Integer getTitleId() {
+		return titleId;
+	}
+
+	public void setTitleId(Integer titleId) {
+		this.titleId = titleId;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
+	public Date getStartWorkingDate() {
+		return startWorkingDate;
+	}
+
+	public void setStartWorkingDate(Date startWorkingDate) {
+		this.startWorkingDate = startWorkingDate;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		this.division = division;
+	}
+	
+	
+
+	public String getReligionName() {
+		return religionName;
+	}
+
+	public void setReligionName(String religionName) {
+		this.religionName = religionName;
+	}
+
+	public Integer getReligionId() {
+		return religionId;
+	}
+
+	public void setReligionId(Integer religionId) {
+		this.religionId = religionId;
+	}
+
+	
+	
+	public Integer getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(Integer statusId) {
+		this.statusId = statusId;
+	}
+	
+	public Integer getNationalityId() {
+		return nationalityId;
+	}
+
+	public void setNationalityId(Integer nationalityId) {
+		this.nationalityId = nationalityId;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="sex")
+	public Sex getSex() {
+		return sex;
+	}
+
+	public void setSex(Sex sex) {
+		this.sex = sex;
+	}
+
+	@Transient
+	public String getPositionLevel() {
+		return positionLevel;
+	}
+
+	public void setPositionLevel(String positionLevel) {
+		this.positionLevel = positionLevel;
+	}
+	
+	@Transient
+	public String getPositionGroup() {
+		return positionGroup;
+	}
+
+	public void setPositionGroup(String positionGroup) {
+		this.positionGroup = positionGroup;
+	}
+
+	@Transient
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+	
+	@Transient
+	public String getMajorRoles() {
+		return majorRoles;
+	}
+
+	public void setMajorRoles(String majorRoles) {
+		this.majorRoles = majorRoles;
+	}
+
+	@Transient
+	public Integer getAge() {
+		if(this.birthDate != null) {
+			log.debug("birthdate is not null : " + this.birthDate);
+			LocalDate bday = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			Period p = Period.between(bday, LocalDate.now());
+			
+			return p.getYears();
+		} else {
+			return null;
+		}
+	}
+	
+	@Transient
+	public Integer getWorkingAge() {
+		if(this.startWorkingDate != null) {
+			log.debug("startWorkingDate is not null : " + this.startWorkingDate);
+			LocalDate bday = startWorkingDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			Period p = Period.between(bday, LocalDate.now());
+			
+			return p.getYears();
+		} else {
+			return null;
+		}
+	}
+	
+	
+	
+
+	
 }

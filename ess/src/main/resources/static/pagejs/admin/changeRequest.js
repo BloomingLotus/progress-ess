@@ -271,10 +271,14 @@ var FormView = Backbone.View.extend({
 		this.model.save(null, {
 			success:_.bind(function(model, response, options) {
 				if(response.status != 'SUCCESS') {
-					alert(response.status + " :" + response.message);
-				}
+					alert(response.status + " with error: \n" + response.message);
+					
+					// undo the saving 
+					this.model.set('action', null);
+				} else {
 
-				alert("บันทึกข้อมูลแล้ว");
+					alert("บันทึกข้อมูลแล้ว");
+				}
 				this.render();
 		},this)});
 	},

@@ -501,6 +501,24 @@ var EmployeeBasicInfoModal = Backbone.View.extend({
 		this.model = options.model;
 		
 		this.employeeBasicInfoModalTemplate = Handlebars.compile($("#employeeBasicInfoModalTemplate").html());
+		
+		this.titles = new ess.Collection.Titles();
+		this.titles.fetch();
+		
+		this.religions = new ess.Collection.DomainValues();
+		this.religions.fetch({
+			url: appUrl('Employee/Religions')
+		});
+		
+		this.maritalStatus = new ess.Collection.DomainValues();
+		this.maritalStatus.fetch({
+			url: appUrl('Employee/MaritalStatus')
+		});
+		
+		this.nationality = new ess.Collection.DomainValues();
+		this.nationality.fetch({
+			url: appUrl('Employee/Nationality')
+		});
 	 },
 	 events: {
 		 "click .modalCloseBtn" : "onClickModalCloseBtn",
@@ -540,6 +558,18 @@ var EmployeeBasicInfoModal = Backbone.View.extend({
 		 } else {
 			 json.model ={};
 		 }
+		 
+		 json.model.titles = this.titles.toJSON();
+		 __setSelectById(json.model.titles, json.model.titleId);
+		 
+		 json.model.religions = this.religions.toJSON();
+		 __setSelectById(json.model.religions, json.model.religionId);
+		 
+		 json.model.maritalStatus = this.maritalStatus.toJSON();
+		 __setSelectById(json.model.maritalStatus, json.model.statusId);
+		 
+		 json.model.nationality = this.nationality.toJSON();
+		 __setSelectById(json.model.nationality, json.model.nationalityId);
 		 
 		 this.$el.find('.modal-title').html("แก้ไขประวัติส่วนบุคคล");
 		 this.$el.find('.modal-body').html(this.employeeBasicInfoModalTemplate(json));

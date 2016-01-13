@@ -51,6 +51,8 @@
 	<script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/js/bootstrap.js"
         th:src="@{/webjars/bootstrap/3.3.4/js/bootstrap.js}"></script>
         
+     <script type="text/javascript" th:src="@{/webjars/momentjs/2.10.3/min/moment-with-locales.min.js}"></script> 
+        
 	<script type="text/javascript" th:src="@{/static/js/jquery.fitvids.js}"></script>
 	<script type="text/javascript" th:src="@{/static/js/owl.carousel.min.js}"></script>
 	<script type="text/javascript" th:src="@{/static/js/nivo-lightbox.min.js}"></script>
@@ -123,6 +125,11 @@
 							<h4>Log in <span class="head-line"></span></h4>
 							<div class="row" id="contact-form">
 							<form class="contactForm" action="#" th:action="@{/login}" method="POST">
+								<div class="col-md-12 alert alert-danger"  th:if="${param.error}"
+									th:with='errorMsg=${session["SPRING_SECURITY_LAST_EXCEPTION"]}'
+									style="padding:15px 25px;">
+									<strong>Login Failed : </strong><span th:text="${errorMsg.message}"></span>
+								</div>
 								<div class="col-md-12">
 									<label for="login_userNameTxt">UserName<span class="required">*</span></label>
 									<span class="name-missing">Please enter your name</span>
@@ -141,6 +148,7 @@
 						</div>
 
 						<!-- Categories Widget -->
+<!-- 
 						<div class="widget widget-categories">
 							<h4>Useful Links <span class="head-line"></span></h4>
 							<ul>
@@ -158,15 +166,15 @@
 								</li>
 							</ul>
 						</div>
-
+ -->
 						<!-- Popular Posts widget -->
+<!-- 
 						<div class="widget widget-popular-posts">
 							<h4>Comming up <span class="head-line"></span></h4>
 							
 							<div class="latest-posts-classic">
 							<ul>
 								<li>
-									<!-- Post 1 -->
 									<div class="post-row item">
 										<div class="left-meta-post">
 											<div class="post-date"><span class="day">1</span><span class="month">Apr</span></div>
@@ -179,7 +187,6 @@
 									</div>
 								</li>
 								<li>
-									<!-- Post 2 -->
 									<div class="post-row item">
 										<div class="left-meta-post">
 											<div class="post-date"><span class="day">8</span><span class="month">Apr</span></div>
@@ -192,7 +199,6 @@
 									</div>
 								</li>
 								<li>
-									<!-- Post 3 -->
 									<div class="post-row item">
 										<div class="left-meta-post">
 											<div class="post-date"><span class="day">15</span><span class="month">Apr</span></div>
@@ -207,9 +213,10 @@
 							</ul>
 							</div>
 						</div>
-						
+-->
 						
 						<!-- Tags Widget -->
+<!-- 
 						<div class="widget widget-tags">
 							<h4>Tags <span class="head-line"></span></h4>
 							<div class="tagcloud">
@@ -220,6 +227,7 @@
 								<a href="#">ประกาศสมัครงานภายใน</a>
 							</div>
 						</div>
+ -->
 
 					</div>
 					<!--End sidebar-->

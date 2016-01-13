@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/full-page">
+<head>
+<title>ESS | Progress</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h2 layout:fragment="bannerTitle">ADMIN: Staff Profile</h2>
+	<ul layout:fragment="breadcrumbs">
+		<li class="active"><b>Staff Profile</b></li>		
+	</ul>
+	<div layout:fragment="content">
+		<div id="mainContent">
+			<div class="row" id="searchView">
+			</div>
+			
+			<div class="row" id="tableResultView">
+
+			</div>
+			<div class="row" id="formView">
+		
+			</div>
+		</div>
+		<div id="blogPostModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<span style="font-weight: bold;"></span>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger pull-right" id="impactModalCloseBtn"><i class="fa fa-times"></i>
+					ปิดหน้าต่าง</button>
+				</div>
+				</div>
+			</div>
+		</div>		
+	</div>
+	
+<div layout:fragment="pageScripts">
+	
+<script th:src="@{/static/pagejs/admin/staffProfile.js}"></script>
+
+<script id="defaultBreadCrumbTemplate" type="text/x-handlebars-template" th:inline="text">
+<li><a href="[[@{/}]]"><i class="fa fa-home"></i> Home</a></li>
+<li id="rootBreadcrumb" class="active">[[${title}]]</li>
+</script>
+
+<script id="newFormBreadCrumbTemplate" type="text/x-handlebars-template" th:inline="text">
+<li><a href="#" th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+<li id="rootBreadcrumb"><a href="#">[[${title}]]</a></li>
+<li class="active">สร้าง[[${typeTxt}]]ใหม่</li>
+</script>
+
+<script id="editFormBreadCrumbTemplate" type="text/x-handlebars-template" th:inline="text">
+<li><a href="#" th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+<li id="rootBreadcrumb"><a href="#">[[${title}]]</a></li>
+<li class="active">แก้ไข[[${typeTxt}]](#{{companyId}})</li>
+</script>			
+
+<script  id="formViewTemplate" type="text/x-handlebars-template">
+<div class="col-md-12">
+	<form class="form-horizontal" role="form">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h4 class="panel-title">ข้อมูลพนักงาน {{model.thTitle}}{{model.thFirstName}} {{model.thLastName}} / {{model.enTitle}}{{model.enFirstName}} {{model.enLastName}} </h4>
+		</div>
+		<div class="panel-body">
+			<table class="table table-bordered">
+				<tr>
+					<td class="col-sm-1 cellHeader">Age</td>
+					<td class="col-sm-2 cellHeader" >Year of Service</td>
+					<td class="col-sm-3 cellHeader" >Position</td>
+					<td class="col-sm-2 cellHeader" >Position Group (Level)</td>
+					<td class="col-sm-2 cellHeader" >Appliation Owner</td>
+					<td class="col-sm-2"  rowspan="4" style="padding:0px;"><img width="184" style="margin: 0px;" alt="" src="/ess/service/Employee/{{model.id}}/Picture"/></td>
+				</tr>
+				<tr>
+					<td>{{model.age}}</td>
+					<td>{{model.division}} - {{model.workingAge}} years</td>
+					<td>{{model.position}}</td>
+					<td>{{model.positionGroup}} ({{model.positionLevel}})</td>
+					<td rowspans="2">{{model.majorRoles}} </td>
+				</tr>
+				<tr>
+					<td colspan="4" rowspan="2"> 
+						<table>
+							{{#each model.educations}}
+								<tr>
+									<td  style="width:120px;pading-bottom: 12px;">{{degree}}<br/>{{yearBegin}} - {{yearEnd}}
+									</td>
+									<td style="width:500px;pading-bottom: 12px;">{{instituteName}}<br/>{{major}}
+									</td>
+									<td style="width:120px;pading-bottom: 12px;">GPA<br/>{{gpa}}
+									</td>
+								</tr>
+							{{/each}}
+						</table>
+					</td>
+					<td class="cellHeader">Project On Hand</td>
+				</tr>
+				<tr>
+					<td><ul>{{#each model.projectOnHands}}<li>{{projectName}}</li>{{/each}}</ul></td>
+				</tr>
+				<tr>
+					<td colspan="7"  class="cellHeader">Work Experience</td>
+				</tr>
+				{{#each model.workExperiences}}
+				<tr>
+					<td colspan="2">{{formatDate beginDate}} - {{formatDate endDate}} <br/>{{length}} years</td>
+					<td>{{workplaceName}} </td>
+					<td colspan="4"><b>{{title}}</b><br/>{{detail}}</td>
+				</tr>
+				{{/each}}
+				<tr>
+					<td colspan="2" class="cellHeader">Programing Language</td>
+					<td colspan="7"><ul>{{#each model.computerExperiences}}<li>{{programmingLanguage}}</li>{{/each}}</ul></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="cellHeader">Certification</td>
+					<td colspan="7"><ul>{{#each model.certificates}}<li>{{certificateName/instituteName}}</li>{{/each}}</ul></td>
+				</tr>
+			</table>
+		</div>
+		<div class="panel-footer">
+			<button id="backBtn" type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i> กลับหน้าเดิม</button>
+		</div>
+	</div>
+	</form>
+</div>
+</script>
+
+<script  id="searchViewTemplate" type="text/x-handlebars-template"  th:inline="text">
+<div class="panel panel-primary">
+<div class="panel-heading">
+ 			<h4 class="panel-title">ค้นหา</h4>
+		</div>
+		<div class="panel-body">
+	<form class="form-horizontal" role="form" id="searchForm">
+			<div class="row">
+					{{txtInput model "enFirstName" "ชื่อพนักงาน (ภาษาอังกฤษ):" 2 10 }}
+			</div>
+		<div class="row">
+			<div class="col-md-12" style="text-align: center;">
+					<button type="button" class="btn btn-default" id="newFormBtn">
+						<i class="fa fa-plus"></i> เพิ่มข้อมูล</button>
+					<button type="button" class="btn btn-default" id="searchBtn">
+						<span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+					<button type="button" class="btn btn-default" id="clearFormBtn">
+						<i class="fa fa-times-circle"></i> ล้างข้อมูลค้นหา</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</script>
+
+<script id="tableResultViewTemplate" type="text/x-handlebars-template" th:inline="text">
+<div class="panel panel-default">
+	<div class="panel-body">
+		<b>ผลการค้นหา</b>
+	</div>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<td style="width: 25px;text-align:center;"></td>
+				<td style="width: 200px;text-align:center;" class=""><b>ชื่อ (ภาษาอังกฤษ)</b></td>
+				<td style="width: 200px;text-align:center" class=""><b>นามสกุล (ภาษาอังกฤษ)</b></td>
+				<td style="width: 200px;text-align:center;" class=""><b>ตำแหน่ง</b></td>
+				<td style="text-align:center;" class=""><b>แผนก/ฝ่าย</b></td>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each content}}
+			<tr data-id="{{id}}">
+				<td>
+					<button type="button" class="btn btn-info btn-xs editBtn"><i class="fa fa-edit"> </i></button>
+				</td>
+				<td style="">{{enFirstName}}</td>
+				<td style="text-align:left;">{{enLastName}}</td>
+				<td style="text-align:center;">{{position}}</td>
+				<td style="text-align:center;">{{division}}</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+	<form class="form-inline" onsubmit="return false;">
+	<div class="panel-footer">
+		<div class="row">
+			<div class="col-md-6">
+				1-15 จาก {{page.totalElements}} รายการ  
+			</div>
+			<div class="col-md-6" style="text-align: right;">
+				{{#unless page.first}}<button class="btn btn-default btn-sm btnPageNav" data-targetPage="{{page.prevPage}}" type="button"><i class="fa fa-chevron-left"></i></button>{{/unless}}
+				หน้าที่ <input class="form-control input-sm" size="2" type="text" id="pageNavTxt" data-value="{{page.pageNumber}}" value="{{page.pageNumber}}"></input> จาก {{page.totalPages}} หน้า
+				{{#unless page.last}}<button class="btn btn-default btn-sm btnPageNav" data-targetPage="{{page.nextPage}}" type="button"><i class="fa fa-chevron-right"></i></button>{{/unless}}
+			</div>
+		</div>
+	</div>
+	</form>
+</div>
+</script>
+
+
+<script type="text/javascript" th:inline="javascript">
+//<!--
+
+var appRouter;
+
+$( document ).ready(function() {
+	
+	//initialize things
+		
+		searchView = new SearchView({
+			el: "#searchView"
+		});
+		
+		tableResultView = new TableResultView({
+			el: "#tableResultView"
+		});
+		
+		formView = new FormView({
+			el: "#formView"
+		})
+		
+		
+		
+		appRouter = new AppRouter({
+			searchView: searchView,
+			tableResultView: tableResultView,
+			formView: formView
+		});
+		Backbone.history.start();
+		
+		
+
+	
+	
+});
+
+
+//-->
+</script>			
+</div>	
+</body>
+</html>

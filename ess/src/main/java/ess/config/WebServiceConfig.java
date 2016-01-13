@@ -9,11 +9,25 @@ import ess.controller.service.ProgressHRGeneralClient;
 import ess.controller.service.ProgressHRGeneralFormClient;
 import ess.controller.service.ProgressHRPersonalClient;
 import ess.controller.service.ProgressHRPersonalFormClient;
+import ess.controller.service.ProgressHRStaffListInfoClient;
+import ess.controller.service.ProgressHRWorkingInfoClient;
 import ess.controller.service.ProgressSSOClient;
 
 @Configuration
 public class WebServiceConfig {
-
+	
+	private static final String webServiceUrl = "http://172.17.12.36:19008/HRMISWS/";
+	
+	
+	@Bean 
+	public Jaxb2Marshaller staffListinfomarshaller() {
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setContextPaths(
+				"progress.hrStaffListInfo.wsdl"
+		);
+		return marshaller;
+	}
+	
 	@Bean
 	public Jaxb2Marshaller marshaller() {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
@@ -40,8 +54,8 @@ public class WebServiceConfig {
 		ProgressHRGeneralClient client = new ProgressHRGeneralClient();
 		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_GeneralWS.asmx");
 		
-		client.setMarshaller(marshaller);
-		client.setUnmarshaller(marshaller);
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(marshaller());
 		return client;
 	}
 
@@ -50,8 +64,8 @@ public class WebServiceConfig {
 		ProgressHRGeneralFormClient client = new ProgressHRGeneralFormClient();
 		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_GeneralFormWS.asmx");
 		
-		client.setMarshaller(marshaller);
-		client.setUnmarshaller(marshaller);
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(marshaller());
 		return client;
 	}
 	
@@ -64,8 +78,19 @@ public class WebServiceConfig {
 //		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/Authentication/SimpleSecurity.asmx");
 		
 		
-		client.setMarshaller(marshaller);
-		client.setUnmarshaller(marshaller);
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(marshaller());
+		return client;
+	}
+	
+	@Bean
+	public ProgressHRStaffListInfoClient hrStaffListInfoClient(Jaxb2Marshaller marshaller) {
+		ProgressHRStaffListInfoClient client = new ProgressHRStaffListInfoClient();
+		                      
+		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/StaffListInfoWS.asmx");
+		
+		client.setMarshaller(staffListinfomarshaller());
+		client.setUnmarshaller(staffListinfomarshaller());
 		return client;
 	}
 	
@@ -75,8 +100,8 @@ public class WebServiceConfig {
 		                      
 		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/EmployeeInfoWS.asmx");
 		
-		client.setMarshaller(marshaller);
-		client.setUnmarshaller(marshaller);
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(marshaller());
 		return client;
 	}
 	
@@ -86,8 +111,19 @@ public class WebServiceConfig {
 		
 		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_PersonalWS.asmx");
 		
-		client.setMarshaller(marshaller);
-		client.setUnmarshaller(marshaller);
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(marshaller());
+		return client;
+	}
+	
+	@Bean
+	public ProgressHRWorkingInfoClient hrWorkingInfoClient(Jaxb2Marshaller marshaller) {
+		ProgressHRWorkingInfoClient client = new ProgressHRWorkingInfoClient();
+		
+		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_WorkingInfoWS.asmx");
+		
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(marshaller());
 		return client;
 	}
 
@@ -97,8 +133,8 @@ public class WebServiceConfig {
 		
 		client.setDefaultUri("http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_PersonalFormWS.asmx");
 		
-		client.setMarshaller(marshaller);
-		client.setUnmarshaller(marshaller);
+		client.setMarshaller(marshaller());
+		client.setUnmarshaller(marshaller());
 		return client;
 	}
 }

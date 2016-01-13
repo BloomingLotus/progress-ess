@@ -60,7 +60,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "List_EmployeeWorkInfo", propOrder = {
+@XmlType(name = "List_EmployeeWorkInfo", namespace="workingInfo", propOrder = {
     "employeeID",
     "employeeWorkTransactionID",
     "startWorkingDate",

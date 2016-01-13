@@ -23,6 +23,8 @@
 		<start-class>ess.EssApplication</start-class>
 		<java.version>1.8</java.version>
 		<querydsl.version>3.6.2</querydsl.version>
+		<jasperreport.version>6.1.0</jasperreport.version>
+		<jasperreport-fonts.version>6.0.0</jasperreport-fonts.version>
 	</properties>
 
 	<dependencies>
@@ -196,12 +198,17 @@
 		    <artifactId>momentjs</artifactId>
 		    <version>2.10.3</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>ckeditor</artifactId>
+		    <version>4.4.7-1</version>
+		</dependency>
+
 	</dependencies>
-
-
 
 	<build>
 		<plugins>
+ 
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -222,120 +229,33 @@
 			        </execution>
 			    </executions>
 			</plugin>
-			
- 
-			 			
-<!-- 		 	<plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.12.3</version>
-                <executions>
- 
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-		                    <schemaLanguage>WSDL</schemaLanguage>
-		                    <generatePackage>progress.hrStaffWorkingInfo.wsdl</generatePackage>
-		                    <schemas>
-		                        <schema>
-		                        	<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_WorkingInfoWS.asmx?WSDL</url>
-		                         </schema>
-		                    </schemas>
-		                </configuration>
-                    </execution>               
-                     <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-		                    <schemaLanguage>WSDL</schemaLanguage>
-		                    <generatePackage>progress.hrStaffPersonal.form.wsdl</generatePackage>
-		                    <schemas>
-		                        <schema>
-		                        	<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_PersonalFormWS.asmx?WSDL</url>
-		                         </schema>
-		                    </schemas>
-		                </configuration>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-		                    <schemaLanguage>WSDL</schemaLanguage>
-		                    <generatePackage>progress.hrStaffPersonal.wsdl</generatePackage>
-		                    <schemas>
-		                        <schema>
-		                        	<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_PersonalWS.asmx?WSDL</url>
-		                         </schema>
-		                    </schemas>
-		                </configuration>
-                    </execution>
 
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-		                    <schemaLanguage>WSDL</schemaLanguage>
-		                    <generatePackage>progress.hrCertification.form.wsdl</generatePackage>
-		                    <schemas>
-		                        <schema>
-		                        	<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_CertificationFormWS.asmx?WSDL</url>
-		                         </schema>
-		                    </schemas>
-		                </configuration>
-                    </execution>
+<!-- 
+	<plugin>
+		<groupId>org.jvnet.jaxb2.maven2</groupId>
+		<artifactId>maven-jaxb2-plugin</artifactId>
+		<version>0.12.3</version>
+		<executions>
 
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-		                    <schemaLanguage>WSDL</schemaLanguage>
-		                    <generatePackage>progress.hrEducation.form.wsdl</generatePackage>
-		                    <schemas>
-		                        <schema>
-		                        	<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_EducationFormWS.asmx?WSDL</url>
-		                         </schema>
-		                    </schemas>
-		                </configuration>
-                    </execution>
-                   <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-		                    <schemaLanguage>WSDL</schemaLanguage>
-		                    <generatePackage>progress.hrStaffGeneral.form.wsdl</generatePackage>
-		                    <schemas>
-		                        <schema>
-		                        	<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_GeneralFormWS.asmx?WSDL</url>
-		                         </schema>
-		                    </schemas>
-		                </configuration>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-		                    <schemaLanguage>WSDL</schemaLanguage>
-		                    <generatePackage>progress.hrStaffAddress.form.wsdl</generatePackage>
-		                    <schemas>
-		                        <schema>
-		                        	<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/Staff_AddressFormWS.asmx?WSDL</url>
-		                         </schema>
-		                    </schemas>
-		                </configuration>
-                    </execution>
+			<execution>
+				<goals>
+					<goal>generate</goal>
+				</goals>
+				<configuration>
+					<schemaLanguage>WSDL</schemaLanguage>
+					<generatePackage>progress.hrStaffListInfo.wsdl</generatePackage>
+					<schemas>
+						<schema>
+							<url>http://172.17.12.36:19008/HRMISWS/EmployeeInfo/StaffListInfoWS.asmx?WSDL</url>
+						</schema>
+					</schemas>
+				</configuration>
+			</execution>
 
-                </executions>
-                
-            </plugin>    -->  
-            
+		</executions>
+
+	</plugin>    
+    -->
 
             
 		</plugins>

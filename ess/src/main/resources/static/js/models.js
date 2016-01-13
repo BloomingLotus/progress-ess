@@ -125,6 +125,22 @@ ess.Model.Employee = Backbone.RelationalModel.extend({
 		type: Backbone.HasMany,
 		key: 'educations',
 		relatedModel: 'ess.Model.Education'
+	},{
+		type: Backbone.HasMany,
+		key: 'projectOnHands',
+		relatedModel: 'ess.Model.ProjectOnHand'
+	},{
+		type: Backbone.HasMany,
+		key: 'workExperiences',
+		relatedModel: 'ess.Model.WorkExperience'
+	},{
+		type: Backbone.HasMany,
+		key: 'computerExperiences',
+		relatedModel: 'ess.Model.ComputerExperience'
+	},{
+		type: Backbone.HasMany,
+		key: 'certificates',
+		relatedModel: 'ess.Model.Certified'
 	}],
 	urlRoot: appUrl('Employee')
 });
@@ -161,6 +177,22 @@ ess.Model.ChangeRequestLog = Backbone.RelationalModel.extend({
 	urlRoot: appUrl('ChangeRequestLog')
 });
 
+ess.Model.DomainValue = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('Employee/DomainValue')
+});
+ess.Collection.DomainValues = Backbone.Collection.extend({
+	model: ess.Model.DomainValue
+});
+
+ess.Model.Title = Backbone.RelationalModel.extend({
+	urlRoot: appUrl('Employee/Title')
+});
+
+ess.Collection.Titles =  Backbone.Collection.extend({
+	model: ess.Model.Title,
+	url: appUrl('Employee/Titles')
+});
+
 ess.Collection.ChangeRequests = Backbone.Collection.extend({
 	model: ess.Model.ChangeRequest
 });
@@ -168,6 +200,30 @@ ess.Collection.ChangeRequests = Backbone.Collection.extend({
 ess.Page.ChangeRequests = Backbone.PageCollection.extend({
 	model: ess.Model.ChangeRequest,
 	url: appUrl('ChangeRequest/search')
+});
+
+
+/** Web Entity
+ * 
+ */
+
+ess.Model.BlogPost = Backbone.RelationalModel.extend({
+	relations: [{
+		type: Backbone.HasOne,
+		key: 'createdBy',
+		relatedModel: 'ess.Model.Employee',
+		includeInJSON: 'id'
+	},{
+		type: Backbone.HasOne,
+		key: 'lastUpdatedBy',
+		relatedModel: 'ess.Model.Employee',
+		includeInJSON: 'id'
+	}],
+	urlRoot: appUrl('BlogPost')
+});
+ess.Page.BlogPosts = Backbone.PageCollection.extend({
+	model: ess.Model.BlogPost,
+	url: appUrl('BlogPost/search')
 });
 
 })();

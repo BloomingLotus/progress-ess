@@ -4,8 +4,10 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -17,6 +19,7 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -28,13 +31,24 @@ import progress.hrEmployeeInfo.wsdl.GetListEmployeeEducationInfoResponse;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeAddressInfo;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeCertificationInfo;
 import progress.hrEmployeeInfo.wsdl.ListEmployeeEducationInfo;
+import progress.hrStaffGeneral.form.wsdl.GetListMaritalStatus;
+import progress.hrStaffGeneral.form.wsdl.GetListMaritalStatusResponse;
+import progress.hrStaffGeneral.form.wsdl.GetListTitleNameResponse;
 import progress.hrStaffGeneral.form.wsdl.ListEmployeeInfoGeneralForm;
+import progress.hrStaffGeneral.form.wsdl.MTNameTitle;
+import progress.hrStaffPersonal.form.wsdl.GetListRaceResponse;
+import progress.hrStaffPersonal.form.wsdl.GetListReligionResponse;
 import progress.hrStaffPersonal.form.wsdl.ListEmployeePersonalInfo;
+import progress.hrStaffPersonal.form.wsdl.MTListOfValue;
+import progress.hrStaffPersonal.form.wsdl.MTRace;
 import progress.hrStaffPersonal.form.wsdl.UpdateResponse;
 import progress.hrStaffGeneral.wsdl.GetItemGeneralDetailDataResponse;
 import progress.hrStaffGeneral.wsdl.GetItemResponse;
+import progress.hrStaffListInfo.wsdl.GetEmployeeListResponse;
+import progress.hrStaffListInfo.wsdl.ListEmployeeList;
 import progress.hrStaffPersonal.wsdl.EmployeePersonalInfo;
 import progress.hrStaffPersonal.wsdl.GetItemEmployeePersonalResponse;
+import progress.hrStaffWorkingInfo.wsdl.GetItemEmployeeWorkingInfoResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -42,6 +56,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import com.mysema.query.BooleanBuilder;
 
 import ess.controller.repository.AddressRepo;
@@ -62,6 +77,7 @@ import ess.model.ChangeRequest;
 import ess.model.ChangeRequestLog;
 import ess.model.ChangeState;
 import ess.model.ComputerExperience;
+import ess.model.DomainValue;
 import ess.model.Education;
 import ess.model.EmergencyContact;
 import ess.model.Employee;
@@ -69,9 +85,9 @@ import ess.model.Family;
 import ess.model.ProjectOnHand;
 import ess.model.QChangeRequest;
 import ess.model.QComputerExperience;
-import ess.model.QProjectOnHand;
 import ess.model.QTraining;
 import ess.model.QWorkExperience;
+import ess.model.Title;
 import ess.model.Training;
 import ess.model.WorkExperience;
 import ess.security.model.EssUserDetails;
@@ -121,9 +137,6 @@ public class EntityServiceJPA implements EntityService {
 	private ChangeRequestLogRepo changeRequestLogRepo;
 	
 	@Autowired
-	private ProgressSSOClient progressSSOClient;
-	
-	@Autowired
 	private ProgressHRGeneralClient hrGeneralClient;
 	
 	
@@ -139,6 +152,11 @@ public class EntityServiceJPA implements EntityService {
 	@Autowired
 	ProgressHRGeneralFormClient hrGeneralFormClient;
 	
+	@Autowired
+	ProgressHRWorkingInfoClient hrWorkingInfoClient;
+	
+	@Autowired
+	ProgressHRStaffListInfoClient hrStaffListInfoClient;
 	
 	@Override
 	public ResponseJSend<Employee> saveEmployee(JsonNode node) throws JsonMappingException {
@@ -193,7 +211,7 @@ public class EntityServiceJPA implements EntityService {
 			request.setDomain(Employee.class.getSimpleName());
 			request.setCreatedBy(dbModel);
 			request.setCreatedTime(new Date());
-			request.setCurrentState(ChangeState.REQUESTED_CHANGE);
+			request.setCurrentState(ChangeState.HRMIS_REQUEST);
 			
 			changeRequestRepo.save(request);
 			
@@ -205,18 +223,181 @@ public class EntityServiceJPA implements EntityService {
 			reqLog.setRemark(null);
 			changeRequestLogRepo.save(reqLog);
 			
+			// now post to HRMIS
+
+			GetItemResponse itemResponse = hrGeneralClient.getItemGeneral(hrModel.getId());
+			progress.hrStaffGeneral.wsdl.ListEmployeeInfoGeneralForm item = itemResponse.getGetItemResult().getObj();
+					
+			GetItemEmployeePersonalResponse personalResponse = hrPersonalClient.getItemEmployeePersonal(hrModel.getId());
+			EmployeePersonalInfo personalInfo = personalResponse.getGetItemEmployeePersonalResult().getObj();
+					
+			ListEmployeeInfoGeneralForm form = new ListEmployeeInfoGeneralForm();
+			
+			ListEmployeePersonalInfo personalForm = new ListEmployeePersonalInfo();
+					
+					
+			BeanWrapper src = new BeanWrapperImpl(item);
+			BeanWrapper dest = new BeanWrapperImpl(form);
+			
+			for(PropertyDescriptor pDesc : src.getPropertyDescriptors()) {
+				if(!pDesc.getName().equals("class")
+						&& !pDesc.getName().equals("isNeedProbation")
+						&& !pDesc.getName().equals("isHeadHunter")
+						&& !pDesc.getName().equals("isInitial")
+						&& !pDesc.getName().equals("isConvertedStaff")
+						&& !pDesc.getName().equals("isSalaryBaseApplied")) {
+					dest.setPropertyValue(pDesc.getName(), src.getPropertyValue(pDesc.getName()));
+				}
+			}
+					
+			BeanWrapper personalSrc = new BeanWrapperImpl(personalInfo);
+			BeanWrapper personalDest = new BeanWrapperImpl(personalForm);
+			for(PropertyDescriptor pDesc : personalSrc.getPropertyDescriptors()) {
+				if(!pDesc.getName().equals("class")
+						&& !pDesc.getName().equals("isIncludedInPerformanceIndex")
+						&& !pDesc.getName().equals("lockedByName")
+						&& !pDesc.getName().equals("lockedDate")
+						&& !pDesc.getName().equals("sourceTypeID")
+						&& !pDesc.getName().equals("lockedBy")) {
+					personalDest.setPropertyValue(pDesc.getName(), personalSrc.getPropertyValue(pDesc.getName()));
+				}
+			}
+	
+					if(newChangeSet.get("mobilePhone") != null) {
+						form.setMobilePhoneNo((String)newChangeSet.get("mobilePhone"));
+					}
+					
+					if(newChangeSet.get("bankAccount") != null) {
+						personalForm.setSalaryAccountNo((String)newChangeSet.get("bankAccount"));
+					}
+					log.debug(personalInfo);
+					log.debug(personalForm);
+					
+					UpdateResponse response = hrGeneralFormClient.update(hrModel.getUserName(), form);
+					UpdateResponse response2 = hrPersonalFormClient.update(hrModel.getUserName(), personalForm);
+					
+					log.debug(response);
+					log.debug(response2);
+					
+//					if(response2.getUpdateResult().isIsCompleted() && response.getUpdateResult().isIsCompleted()) {
+//						crDb.setCurrentState(ChangeState.APPROVED);
+//						crDb.setLastRemark(node.path("remark").asText());
+//						crDb.setLastUpdatedBy(currentUser);
+//						crDb.setLastUpdatedTime(new Date());
+//						
+//						ChangeRequestLog log = new ChangeRequestLog(crDb);
+//						changeRequestLogRepo.save(log);
+//						changeRequestRepo.save(crDb);
+//					} else {
+//						responseWeb.status = ResponseStatus.FAIL;
+//						String s = "";
+//						responseWeb.data =  null;
+//						String responseMsg;
+//						responseMsg = response.getUpdateResult().isIsCompleted() ? "SUCCESS" : "FAILED";
+//						
+//						s += "hrGenralFormClient update: " + responseMsg + " with error message: " + response.getUpdateResult().getMessage().getString().toString();
+//						
+//						responseMsg = response2.getUpdateResult().isIsCompleted() ? "SUCCESS" : "FAILED";
+//						s += "\n hrPersonalFormClient update Failed: "  + responseMsg + " with error message: " + response2.getUpdateResult().getMessage().getString().toString();
+//						
+//						responseWeb.message = s;
+//						
+//						return responseWeb;
+//					}
+
+			
+			
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
-		
+		}	
 		//BeanUtils.copyProperties(webModel, dbModel);
-
-		
 	
 		employeeRepo.save(dbModel);
+		
+//		GetItemResponse itemResponse = hrGeneralClient.getItemGeneral(dbModel.getId());
+//		progress.hrStaffGeneral.wsdl.ListEmployeeInfoGeneralForm item = itemResponse.getGetItemResult().getObj();
+//		
+//		GetItemEmployeePersonalResponse personalResponse = hrPersonalClient.getItemEmployeePersonal(dbModel.getId());
+//		EmployeePersonalInfo personalInfo = personalResponse.getGetItemEmployeePersonalResult().getObj();
+//		
+//		ListEmployeeInfoGeneralForm form = new ListEmployeeInfoGeneralForm();
+//		
+//		ListEmployeePersonalInfo personalForm = new ListEmployeePersonalInfo();
+//		
+//		
+//		BeanWrapper src = new BeanWrapperImpl(item);
+//		BeanWrapper dest = new BeanWrapperImpl(form);
+//		
+//		for(PropertyDescriptor pDesc : src.getPropertyDescriptors()) {
+//			if(!pDesc.getName().equals("class")
+//					&& !pDesc.getName().equals("isNeedProbation")
+//					&& !pDesc.getName().equals("isHeadHunter")
+//					&& !pDesc.getName().equals("isInitial")
+//					&& !pDesc.getName().equals("isConvertedStaff")
+//					&& !pDesc.getName().equals("isSalaryBaseApplied")) {
+//				dest.setPropertyValue(pDesc.getName(), src.getPropertyValue(pDesc.getName()));
+//			}
+//		}
+//		
+//		BeanWrapper personalSrc = new BeanWrapperImpl(personalInfo);
+//		BeanWrapper personalDest = new BeanWrapperImpl(personalForm);
+//		for(PropertyDescriptor pDesc : personalSrc.getPropertyDescriptors()) {
+//			if(!pDesc.getName().equals("class")
+//					&& !pDesc.getName().equals("isIncludedInPerformanceIndex")
+//					&& !pDesc.getName().equals("lockedByName")
+//					&& !pDesc.getName().equals("lockedDate")
+//					&& !pDesc.getName().equals("sourceTypeID")
+//					&& !pDesc.getName().equals("lockedBy")) {
+//				personalDest.setPropertyValue(pDesc.getName(), personalSrc.getPropertyValue(pDesc.getName()));
+//			}
+//		}
+//
+//		for(String prop : newChangeSet.keySet()) {
+//		
+//			if(json.get("mobilePhone") != null) {
+//				form.setMobilePhoneNo(json.get("mobilePhone").asText());
+//			}
+//			
+//			if(json.get("bankAccount") != null) {
+//				personalForm.setSalaryAccountNo(json.get("bankAccount").asText());
+//			}
+//		}
+//
+//		log.debug(personalInfo);
+//		log.debug(personalForm);
+//		
+//		UpdateResponse response = hrGeneralFormClient.update(emp.getUserName(), form);
+//		UpdateResponse response2 = hrPersonalFormClient.update(emp.getUserName(), personalForm);
+//		
+//		log.debug(response);
+//		log.debug(response2);
+//		
+//		if(response2.getUpdateResult().isIsCompleted() && response.getUpdateResult().isIsCompleted()) {
+//			crDb.setCurrentState(ChangeState.APPROVED);
+//			crDb.setLastRemark(node.path("remark").asText());
+//			crDb.setLastUpdatedBy(currentUser);
+//			crDb.setLastUpdatedTime(new Date());
+//			
+//			ChangeRequestLog log = new ChangeRequestLog(crDb);
+//			changeRequestLogRepo.save(log);
+//			changeRequestRepo.save(crDb);
+//		} else {
+//			responseWeb.status = ResponseStatus.FAIL;
+//			String s = "";
+//			responseWeb.data =  null;
+//			String responseMsg;
+//			responseMsg = response.getUpdateResult().isIsCompleted() ? "SUCCESS" : "FAILED";
+//			
+//			s += "hrGenralFormClient update: " + responseMsg + " with error message: " + response.getUpdateResult().getMessage().getString().toString();
+//			
+//			responseMsg = response2.getUpdateResult().isIsCompleted() ? "SUCCESS" : "FAILED";
+//			s += "\n hrPersonalFormClient update Failed: "  + responseMsg + " with error message: " + response2.getUpdateResult().getMessage().getString().toString();
+//			
+//			responseWeb.message = s;
+//			
+//			return responseWeb;
+//		}
 		
 		ResponseJSend<Employee> response = new ResponseJSend<Employee>();
 		response.status = ResponseStatus.SUCCESS;
@@ -224,19 +405,36 @@ public class EntityServiceJPA implements EntityService {
 		return response;
 	}
 
+
+	
+
 	@Override
 	public Employee findEmployeeById(Long id) {
+		
 		GetItemGeneralDetailDataResponse response = hrGeneralClient.getItemDetailDataResponse(id);
+		GetItemEmployeeWorkingInfoResponse workingInfoResponse = hrWorkingInfoClient.getItemEmployeeWorkingInfo(id);
+		
 		
 		GetItemEmployeePersonalResponse personalResponse = hrPersonalClient.getItemEmployeePersonal(id);
+//		GetItemEmployeePersonalFormResponse personalFormResponse = hrPersonalClient.getItemEmployeePersonalForm(id);
 		
 		Employee emp = new Employee(response.getGetItemGeneralDetailDataResult().getObj());
+		
+		
 		
 		EmployeePersonalInfo info = personalResponse.getGetItemEmployeePersonalResult().getObj();
 		
 		emp.setNationalityName(info.getNationalityName());
+		emp.setNationalityId(info.getNationalityID());
 		emp.setBankAccount(info.getSalaryAccountNo());
-		emp.setReligious(info.getReligionName());
+		emp.setReligionName(info.getReligionName());
+		emp.setReligionId(info.getReligionID());
+		if(info.getBirthDate() != null) {
+			log.debug("info.getBirthDate: " + info.getBirthDate());
+			emp.setBirthDate(info.getBirthDate().toGregorianCalendar().getTime());
+		}
+		
+		emp.setStartWorkingDate(workingInfoResponse.getGetItemEmployeeWorkingInfoResult().getObj().getStartWorkingDate().toGregorianCalendar().getTime());
 		
 		return emp;
 	}
@@ -304,15 +502,19 @@ public class EntityServiceJPA implements EntityService {
 //		Iterable<Education> educations = educationRepo.findAll(q.employee.id.eq(id));
 		
 		GetListEmployeeEducationInfoResponse eduInfoResponse = hrEmpInfoClient.getListEmployeeEducationInfo(id);
+	
+		
 		
 		ArrayList<Education> eduList = new ArrayList<Education>();
+	
+		if( eduInfoResponse == null ) {
+			return eduList;
+		}
 		
 		for(ListEmployeeEducationInfo eduInfo : eduInfoResponse.getGetListEmployeeEducationInfoResult().getObj().getListEmployeeEducationInfo()) {
 			Education edu = new Education(eduInfo);
 			eduList.add(edu);
-	}
-		
-		
+		}
 		return eduList;
 		
 	}
@@ -535,9 +737,27 @@ public class EntityServiceJPA implements EntityService {
 
 	@Override
 	public Iterable<ProjectOnHand> findEmployeeProjectOnHandsByEmpId(Long id) {
-		QProjectOnHand q = QProjectOnHand.projectOnHand;
+		Employee employee = findEmployeeById(id);
 		
-		Iterable<ProjectOnHand> projects = projectOnHandRepo.findAll(q.employee.id.eq(id));
+		ArrayList<ProjectOnHand> projects = new ArrayList<ProjectOnHand>();
+		
+		GetItemEmployeeWorkingInfoResponse response = hrWorkingInfoClient.getItemEmployeeWorkingInfo(id);
+		
+		String projectNameHRMIS = response.getGetItemEmployeeWorkingInfoResult().getObj().getInitialProjectName();
+		
+		// we split 
+		String[] projectArray = projectNameHRMIS.split("/");
+		Long projId=0L;
+		for(String p : projectArray) {
+			ProjectOnHand project = new ProjectOnHand();
+			project.setEmployee(employee);
+			project.setProjectName(p);
+			project.setProjectDetail("-");
+			project.setId(projId++);
+			
+			projects.add(project);
+		}
+		
 		
 		return projects;
 	}
@@ -1209,16 +1429,12 @@ public class EntityServiceJPA implements EntityService {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		
 		ObjectNode object = (ObjectNode) node;
-		ChangeRequest webModel;
-		
 		try {
-			webModel = mapper.treeToValue(object, ChangeRequest.class);
+			mapper.treeToValue(object, ChangeRequest.class);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			throw new JsonMappingException(e.getMessage() + "\n  JSON: " + node.toString());
 		}
-		
-		QChangeRequest q = QChangeRequest.changeRequest;
 		
 		BooleanBuilder p = new BooleanBuilder();
 		
@@ -1238,7 +1454,7 @@ public class EntityServiceJPA implements EntityService {
 	@Override
 	public ResponseJSend<ChangeRequest> updateChangeRequest(JsonNode node, EssUserDetails user) throws JsonProcessingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-
+		ResponseJSend<ChangeRequest> responseWeb = new ResponseJSend<ChangeRequest>();
 		
 		Long crId = node.path("id").asLong();
 		ChangeRequest crDb = changeRequestRepo.findOne(crId);
@@ -1272,6 +1488,7 @@ public class EntityServiceJPA implements EntityService {
 					
 					ListEmployeePersonalInfo personalForm = new ListEmployeePersonalInfo();
 					
+					
 					BeanWrapper src = new BeanWrapperImpl(item);
 					BeanWrapper dest = new BeanWrapperImpl(form);
 					
@@ -1304,8 +1521,10 @@ public class EntityServiceJPA implements EntityService {
 					}
 					
 					if(json.get("bankAccount") != null) {
-						personalForm.setBankCode(json.get("bankAccount").asText());
+						personalForm.setSalaryAccountNo(json.get("bankAccount").asText());
 					}
+					log.debug(personalInfo);
+					log.debug(personalForm);
 					
 					UpdateResponse response = hrGeneralFormClient.update(emp.getUserName(), form);
 					UpdateResponse response2 = hrPersonalFormClient.update(emp.getUserName(), personalForm);
@@ -1313,7 +1532,7 @@ public class EntityServiceJPA implements EntityService {
 					log.debug(response);
 					log.debug(response2);
 					
-					if(response.getUpdateResult().isIsCompleted() == true || response2.getUpdateResult().isIsCompleted() == true) {
+					if(response2.getUpdateResult().isIsCompleted() && response.getUpdateResult().isIsCompleted()) {
 						crDb.setCurrentState(ChangeState.APPROVED);
 						crDb.setLastRemark(node.path("remark").asText());
 						crDb.setLastUpdatedBy(currentUser);
@@ -1322,6 +1541,21 @@ public class EntityServiceJPA implements EntityService {
 						ChangeRequestLog log = new ChangeRequestLog(crDb);
 						changeRequestLogRepo.save(log);
 						changeRequestRepo.save(crDb);
+					} else {
+						responseWeb.status = ResponseStatus.FAIL;
+						String s = "";
+						responseWeb.data =  null;
+						String responseMsg;
+						responseMsg = response.getUpdateResult().isIsCompleted() ? "SUCCESS" : "FAILED";
+						
+						s += "hrGenralFormClient update: " + responseMsg + " with error message: " + response.getUpdateResult().getMessage().getString().toString();
+						
+						responseMsg = response2.getUpdateResult().isIsCompleted() ? "SUCCESS" : "FAILED";
+						s += "\n hrPersonalFormClient update Failed: "  + responseMsg + " with error message: " + response2.getUpdateResult().getMessage().getString().toString();
+						
+						responseWeb.message = s;
+						
+						return responseWeb;
 					}
 
 					
@@ -1362,16 +1596,11 @@ public class EntityServiceJPA implements EntityService {
 				changeRequestRepo.save(crDb);
 				
 			}
-			
-			
 		}
+		responseWeb.data=crDb;
+		responseWeb.status=ResponseStatus.SUCCESS;
 		
-		
-		ResponseJSend<ChangeRequest> response = new ResponseJSend<ChangeRequest>();
-		response.data=crDb;
-		response.status=ResponseStatus.SUCCESS;
-		
-		return response;
+		return responseWeb;
 	}
 
 	@Override
@@ -1381,11 +1610,138 @@ public class EntityServiceJPA implements EntityService {
 		
 		BooleanBuilder p = new BooleanBuilder();
 		p = p.and(q.createdBy.id.eq(empId)).andNot(
-				q.currentState.eq(ChangeState.APPROVED).or(q.currentState.eq(ChangeState.REJECTED)));
+				q.currentState.eq(ChangeState.APPROVED).or(q.currentState.eq(ChangeState.REJECTED)
+						.or(q.currentState.eq(ChangeState.HRMIS_REQUEST))));
 		
 		Iterable<ChangeRequest> requests = changeRequestRepo.findAll(p);
 		
-		return requests;
+		List<ChangeRequest> allRequest = Lists.newArrayList(requests);
+
+		
+		// now check
+		ChangeRequest request = hrPersonalClient.findChangeRequestByEmp(empId);
+		log.debug(request);
+		allRequest.add(request);
+		
+		return allRequest;
+	}
+
+	
+	
+	@Override
+	public Iterable<DomainValue> findAllNationality() {
+		GetListRaceResponse response = hrPersonalFormClient.getListRace();
+		List<DomainValue> nationality = new ArrayList<DomainValue>();
+		for(MTRace mtList : response.getGetListRaceResult().getObj().getMTRace()) {
+			DomainValue domVal = new DomainValue();
+			domVal.setDomainName("Nationality");
+			domVal.setId(mtList.getRaceID());
+			domVal.setThName(mtList.getRaceName());
+			domVal.setValue(mtList.getRaceCode());
+			nationality.add(domVal);
+		}
+		return nationality;
+	}
+
+
+
+
+	@Override
+	public Iterable<DomainValue> findAllMaritalStatus() {
+		GetListMaritalStatusResponse response = hrGeneralFormClient.getListMaritalStatusResponse();
+		List<DomainValue> religions = new ArrayList<DomainValue>();
+		for(progress.hrStaffGeneral.form.wsdl.MTListOfValue mtList : response.getGetListMaritalStatusResult().getObj().getMTListOfValue()) {
+			DomainValue domVal = new DomainValue();
+			domVal.setDomainName(mtList.getLOVGroup());
+			domVal.setId(mtList.getLOVUID());
+			domVal.setThName(mtList.getLOVName());
+			domVal.setValue(mtList.getLOVValue());
+			religions.add(domVal);
+		}
+		return religions;
+	}
+
+
+
+	@Override
+	public Iterable<DomainValue> findAllReligions() {
+		GetListReligionResponse response = hrPersonalFormClient.getListReligion();
+		List<DomainValue> religions = new ArrayList<DomainValue>();
+		for(MTListOfValue mtList : response.getGetListReligionResult().getObj().getMTListOfValue()) {
+			DomainValue domVal = new DomainValue();
+			domVal.setDomainName(mtList.getLOVGroup());
+			domVal.setId(mtList.getLOVUID());
+			domVal.setThName(mtList.getLOVName());
+			domVal.setValue(mtList.getLOVValue());
+			religions.add(domVal);
+		}
+		return religions;
+	}
+
+	@Override
+	public Iterable<Title> findAllTitle() {
+		GetListTitleNameResponse response = hrGeneralFormClient.getListTitleName();
+		List<Title> titles = new ArrayList<Title>();
+		for(MTNameTitle mtTitle : response.getGetListTitleNameResult().getObj().getMTNameTitle()) {
+			if(mtTitle.getTitleTHName().length() > 1) {
+				Title title = new Title();
+				
+				title.setId(mtTitle.getTitleID());
+				title.setThName(mtTitle.getTitleTHName());
+				title.setEnName(mtTitle.getTitleENName());
+				
+				titles.add(title);
+			}
+		}
+		
+		titles.sort(new Comparator<Title>() {
+			@Override
+			public int compare(Title o1, Title o2) {
+				return o1.getId().compareTo(o2.getId());
+			}
+		});
+		
+		
+		return titles;
+	}
+
+
+
+
+	@Override
+	public  ResponseJSend<Page<Employee>> findAllEmployeWithCriteriaAndPage(Integer pageIndex, String criteria) {
+		pageIndex = pageIndex-1;
+		GetEmployeeListResponse response = hrStaffListInfoClient.getEmployeeList(
+				15, pageIndex, criteria, "ENFirstName");
+		
+		PageRequest pageRequest= new PageRequest(pageIndex, 15);
+		
+		PageImpl<Employee> empPage = null;
+		
+		if(response.getGetEmployeeListResult().getTotalItemCount() > 0) {
+			ArrayList<Employee> empList = new ArrayList<Employee>();
+			for(ListEmployeeList emp :  response.getGetEmployeeListResult().getObj().getListEmployeeList()) {
+				Employee e = new Employee();
+				
+				log.debug("emp.getEmployeeId : " + emp.getEmployeeID());
+				
+				e.setId (new Long( emp.getEmployeeID() ) );
+				e.setEnFirstName(emp.getENFirstName());
+				e.setEnLastName(emp.getENLastName());
+				e.setPosition(emp.getPositionName());
+				e.setDivision(emp.getDepartmentName());
+				
+				empList.add(e);
+			}
+			
+			empPage = new PageImpl<Employee>(empList, pageRequest, response.getGetEmployeeListResult().getTotalItemCount());
+			
+		}
+		ResponseJSend<Page<Employee>> responseJSend = new ResponseJSend<Page<Employee>>();
+		responseJSend.data = empPage;
+		responseJSend.status = ResponseStatus.SUCCESS;
+		
+		return responseJSend;
 	}
 	
 	

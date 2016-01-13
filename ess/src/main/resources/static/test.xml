@@ -1,0 +1,61 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+	<SOAP-ENV:Header />
+	<SOAP-ENV:Body>
+		<ns2:Update xmlns:ns2="http://tempuri.org/" xmlns:ns3="empInfo">
+			<ns2:obj>
+				<ns2:EmployeeID>5646</ns2:EmployeeID>
+				<ns2:EmployeePersonalTransactionID
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+				<ns2:IDCardNo>2-2399-00018-10-3</ns2:IDCardNo>
+				<ns2:TAXNo />
+				<ns2:BirthDate>1990-05-13T00:00:00</ns2:BirthDate>
+				<ns2:NationalityID>8</ns2:NationalityID>
+				<ns2:NationalityName>Thai</ns2:NationalityName>
+				<ns2:RaceID>8</ns2:RaceID>
+				<ns2:RaceName>Thai</ns2:RaceName>
+				<ns2:ReligionID>163</ns2:ReligionID>
+				<ns2:ReligionName>Buddhism</ns2:ReligionName>
+				<ns2:MartialStatusID>110</ns2:MartialStatusID>
+				<ns2:MartialStatusName>Exception</ns2:MartialStatusName>
+				<ns2:MartialRemark />
+				<ns2:SalaryAccountNo>635-2-37313-1</ns2:SalaryAccountNo>
+				<ns2:BankCode>635-2-37313-0</ns2:BankCode>
+				<ns2:DoorAccessCardKeyNo />
+				<ns2:DepartmentAdmissionDate
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+				<ns2:DepartmentCancellationDate
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+				<ns2:DepartmentResignationDate
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+				<ns2:IsIncludedInPerformanceIndex
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+				<ns2:ReasonOfResignationID
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+				<ns2:DepartmentID>0</ns2:DepartmentID>
+				<ns2:SalaryAccountBankID>1</ns2:SalaryAccountBankID>
+				<ns2:ContractInfoID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:OutsourceCompanyID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:DivisionID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:OrganizationID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:PublishedDate>2015-02-12T10:01:58.143</ns2:PublishedDate>
+				<ns2:PublishedByName>Wongwipat Worarat</ns2:PublishedByName>
+				<ns2:PublishedBy>5646</ns2:PublishedBy>
+				<ns2:IDCardTypeID>72</ns2:IDCardTypeID>
+				<ns2:CreatedDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:CreatedBy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:UpdatedDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:UpdatedBy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:nil="true" />
+				<ns2:ResignationCategoryID
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+			</ns2:obj>
+		</ns2:Update>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

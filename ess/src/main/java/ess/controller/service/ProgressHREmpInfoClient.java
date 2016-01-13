@@ -3,6 +3,8 @@ package ess.controller.service;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
 
+import progress.hrEmployeeInfo.wsdl.GetEmployeeGeneralInfoContact;
+import progress.hrEmployeeInfo.wsdl.GetEmployeeGeneralInfoContactResponse;
 import progress.hrEmployeeInfo.wsdl.GetListEmployeeAddressInfo;
 import progress.hrEmployeeInfo.wsdl.GetListEmployeeAddressInfoResponse;
 import progress.hrEmployeeInfo.wsdl.GetListEmployeeCertificationInfo;
@@ -18,7 +20,7 @@ public class ProgressHREmpInfoClient extends WebServiceGatewaySupport {
 	
 		GetListEmployeeEducationInfoResponse response = (GetListEmployeeEducationInfoResponse) getWebServiceTemplate().marshalSendAndReceive(
 				request, new SoapActionCallback("http://tempuri.org/getListEmployeeEducationInfo"));
-				
+
 		return response;
 	}
 	
@@ -43,5 +45,20 @@ public class ProgressHREmpInfoClient extends WebServiceGatewaySupport {
 				
 		return response;
 	}
+	
+	public GetEmployeeGeneralInfoContactResponse getEmployeeGeneralInfoContact(Long id) {
+		GetEmployeeGeneralInfoContact request = new GetEmployeeGeneralInfoContact();
+		request.setEmployeeID(id.intValue());
+
+	
+		GetEmployeeGeneralInfoContactResponse response = (GetEmployeeGeneralInfoContactResponse) getWebServiceTemplate().marshalSendAndReceive(
+				request, new SoapActionCallback("http://tempuri.org/getEmployeeGeneralInfoContact"));
+				
+		return response;
+	}
+	
+
+	
+	
 	
 }

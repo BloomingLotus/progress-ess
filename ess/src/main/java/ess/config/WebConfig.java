@@ -32,6 +32,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         
         Hibernate4Module hm = new Hibernate4Module();
         hm.enable(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
+        hm.disable(Feature.USE_TRANSIENT_ANNOTATION);
         
         // Registering Hibernate4Module to support lazy objects
         mapper.registerModule(hm);

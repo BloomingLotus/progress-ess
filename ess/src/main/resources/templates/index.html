@@ -13,116 +13,33 @@
 	<div layout:fragment="content">
 		<div class="row blog-page">
 			<!-- Start Post -->
-			<div class="blog-post standard-post">
+			<div class="blog-post standard-post"  th:each="post : ${posts}">
 				<!-- Post Content -->
 				<div class="post-content">
 					<div class="post-type">
 						<i class="fa fa-pencil"></i>
 					</div>
 					<h2>
-						<a href="#">Standard Post Without Image</a>
+						<a href="#" th:text="${post.title}">Standard Post Without Image</a>
 					</h2>
 					<ul class="post-meta">
-						<li>By <a href="#">iThemesLab</a></li>
-						<li>December 30, 2013</li>
-						<li><a href="#">WordPress</a>, <a href="#">Graphic</a></li>
-						<li><a href="#">4 Comments</a></li>
+						<li>By <a href="#" th:text="${post.createdBy.thFirstName}">iThemesLab</a></li>
+						<li th:text="${post.createdTime}">December 30, 2013</li>
+						<li th:text="${post.tag}"><a href="#">WordPress</a>, <a href="#">Graphic</a></li>
 					</ul>
+					<div th:utext="${post.text}">
 					<p>Sed ut perspiciatis unde omnis iste natus error sit
 						voluptatem accusantium doloremque laudantium, totam rem aperiam,
 						eaque ipsa quae ab illo inventore veritatis et quasi architecto
 						beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
 						voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
 						magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-					<a class="main-button" href="#">Read More <i
-						class="fa fa-angle-right"></i></a>
+					</div>
 				</div>
 			</div>
 			<!-- End Post -->
 
-			<!-- Start Post -->
-			<div class="blog-post standard-post">
-				<!-- Post Content -->
-				<div class="post-content">
-					<div class="post-type">
-						<i class="fa fa-pencil"></i>
-					</div>
-					<h2>
-						<a href="#">Standard Post Without Image</a>
-					</h2>
-					<ul class="post-meta">
-						<li>By <a href="#">iThemesLab</a></li>
-						<li>December 30, 2013</li>
-						<li><a href="#">WordPress</a>, <a href="#">Graphic</a></li>
-						<li><a href="#">4 Comments</a></li>
-					</ul>
-					<p>Sed ut perspiciatis unde omnis iste natus error sit
-						voluptatem accusantium doloremque laudantium, totam rem aperiam,
-						eaque ipsa quae ab illo inventore veritatis et quasi architecto
-						beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
-						voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-						magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-					<a class="main-button" href="#">Read More <i
-						class="fa fa-angle-right"></i></a>
-				</div>
-			</div>
-			<!-- End Post -->
 
-			<!-- Start Post -->
-			<div class="blog-post standard-post">
-				<!-- Post Content -->
-				<div class="post-content">
-					<div class="post-type">
-						<i class="fa fa-pencil"></i>
-					</div>
-					<h2>
-						<a href="#">Standard Post Without Image</a>
-					</h2>
-					<ul class="post-meta">
-						<li>By <a href="#">iThemesLab</a></li>
-						<li>December 30, 2013</li>
-						<li><a href="#">WordPress</a>, <a href="#">Graphic</a></li>
-						<li><a href="#">4 Comments</a></li>
-					</ul>
-					<p>Sed ut perspiciatis unde omnis iste natus error sit
-						voluptatem accusantium doloremque laudantium, totam rem aperiam,
-						eaque ipsa quae ab illo inventore veritatis et quasi architecto
-						beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
-						voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-						magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-					<a class="main-button" href="#">Read More <i
-						class="fa fa-angle-right"></i></a>
-				</div>
-			</div>
-			<!-- End Post -->
-
-			<!-- Start Post -->
-			<div class="blog-post standard-post">
-				<!-- Post Content -->
-				<div class="post-content">
-					<div class="post-type">
-						<i class="fa fa-pencil"></i>
-					</div>
-					<h2>
-						<a href="#">Standard Post Without Image</a>
-					</h2>
-					<ul class="post-meta">
-						<li>By <a href="#">iThemesLab</a></li>
-						<li>December 30, 2013</li>
-						<li><a href="#">WordPress</a>, <a href="#">Graphic</a></li>
-						<li><a href="#">4 Comments</a></li>
-					</ul>
-					<p>Sed ut perspiciatis unde omnis iste natus error sit
-						voluptatem accusantium doloremque laudantium, totam rem aperiam,
-						eaque ipsa quae ab illo inventore veritatis et quasi architecto
-						beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
-						voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-						magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-					<a class="main-button" href="#">Read More <i
-						class="fa fa-angle-right"></i></a>
-				</div>
-			</div>
-			<!-- End Post -->
 		</div>
 	</div>
 </body>

@@ -12,11 +12,13 @@ import ess.model.Address;
 import ess.model.Certified;
 import ess.model.ChangeRequest;
 import ess.model.ComputerExperience;
+import ess.model.DomainValue;
 import ess.model.Education;
 import ess.model.EmergencyContact;
 import ess.model.Employee;
 import ess.model.Family;
 import ess.model.ProjectOnHand;
+import ess.model.Title;
 import ess.model.Training;
 import ess.model.WorkExperience;
 import ess.security.model.EssUserDetails;
@@ -124,4 +126,14 @@ public interface EntityService {
 	ResponseJSend<ChangeRequest> updateChangeRequest(JsonNode node, EssUserDetails user) throws JsonProcessingException, IOException;
 
 	Iterable<ChangeRequest> findChagnerReqeustByEmployeeIdAndNotFinalState(Long empId);
+
+	Iterable<Title> findAllTitle();
+
+	Iterable<DomainValue> findAllReligions();
+
+	Iterable<DomainValue> findAllMaritalStatus();
+
+	Iterable<DomainValue> findAllNationality();
+
+	 ResponseJSend<Page<Employee>>  findAllEmployeWithCriteriaAndPage(Integer pageIndex, String criteria);
 }

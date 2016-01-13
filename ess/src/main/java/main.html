@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<link rel="shortcut icon" href="../../assets/ico/favicon.ico" />
+
+<title>Smart Teen</title>
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/static/css/font-awesome.css}" rel="stylesheet" />
+<link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/webjars/jquery-ui/1.9.0/css/smoothness/jquery-ui-1.9.0.custom.css}" rel="stylesheet" />
+<link th:href="@{/webjars/jquery-file-upload/9.8.1/css/jquery.fileupload.css}" rel="stylesheet" />
+<link th:href="@{/webjars/jquery-file-upload/9.8.1/css/jquery.fileupload-ui.css}" rel="stylesheet" />
+<link th:href="@{/webjars/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.css}" rel="stylesheet" />
+<link th:href="@{/webjars/ckeditor/4.4.7-1/standard/contents.css}" rel="stylesheet" />
+
+<link th:href="@{/static/css/fuelux.min.css}" rel="stylesheet" />
+<link th:href="@{/static/css/dashboard.css}" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<!--     <link href="dashboard.css" rel="stylesheet"> -->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="aboutModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<span style="font-weight: bold;">SMART TEEN Application Info</span>
+			</div>
+			<div class="modal-body">
+				<div>
+				<b>Build #</b><span th:utext="#{application.buildNumber}">buildTimestamp</span>-<span th:utext="#{application.buildTimestamp}">buildTimestamp</span>
+				</div>
+				<div>
+					<b>JDBC URL : </b> <span th:utext="#{jdbc.url}">jdbc.url</span>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	<div id="errorModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+			<div class="modal-header" style="color: #a94442;background-color: #f2dede;border-color: #ebccd1;">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<span style="font-weight: bold;"></span>
+			</div>
+			<div class="modal-body">
+				
+			</div>
+			</div>
+		</div>
+	</div>			
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> 
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				
+				<img style="float: left; margin: 5px; vertical-align: middle;" width="50" src="/static/graphics/logo.gif" th:src="@{/static/graphics/logo.gif}"/> 
+				<img style="float: left; margin: 5px; vertical-align: middle;" width="50" src="/static/graphics/logo_smarteen.gif" th:src="@{/static/graphics/logo_smarteen.gif}"/>
+				
+				<a style="vertical-align: middle;font-weight: bolder;margin-top:7px;" class="navbar-brand" href="#" th:href="@{/}">SMARTTEEN</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a style="vertical-align: middle;margin-top:7px;" href="#" id="aboutLnk"  tabindex="0" onclick="showAboutModal();">About</a></li>
+					<li><a style="vertical-align: middle;margin-top:7px;" href="logout" th:href="@{/logout}">logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 main">
+
+				<div layout:fragment="content">
+					<!-- Content!!! -->
+					<h1 class="pageheader">Dashboard</h1>
+
+					
+
+					<!-- content -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the webPage. load faster -->
+	
+	
+	<script type="text/javascript" src="../../static/js/jquery-1.11.1.js"
+		th:src="@{/static/js/jquery-1.11.1.js}"></script>
+	
+	<script type="text/javascript" src="../../static/js/jquery-1.11.1.js"
+		th:src="@{/webjars/modernizr/2.8.3/modernizr.js}"></script>
+	
+	<script type="text/javascript" src="../../static/js/jquery-1.11.1.js"
+		th:src="@{/webjars/jquery-ui/1.9.0/js/jquery-ui-1.9.0.custom.js}"></script>
+		
+	<script type="text/javascript" src="../../static/js/underscore-1.7.0.js"
+		th:src="@{/static/js/underscore-1.7.0.js}"></script>
+	<script type="text/javascript" src="../../static/js/bootstrap.js"
+		th:src="@{/static/js/bootstrap.js}"></script>
+	<script type="text/javascript" src="../../static/js/fuelux.js"
+		th:src="@{/static/js/fuelux.js}"></script>
+	<script type="text/javascript" src="../../static/js/backbone-1.1.2.js"
+		th:src="@{/static/js/backbone-1.1.2.js}"></script>
+	<script type="text/javascript" src="../../static/js/backbone-relational-0.8.8.js"
+		th:src="@{/static/js/backbone-relational-0.8.8.js}"></script>
+	<script type="text/javascript" src="../../static/js/handlebars-v2.0.0.js"
+		th:src="@{/static/js/handlebars-v2.0.0.js}"></script>
+		
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/webjars/jquery-file-upload/9.8.1/js/jquery.fileupload.js}"></script>
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/webjars/jquery-file-upload/9.8.1/js/jquery.iframe-transport.js}"></script>
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/webjars/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.js}"></script>
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/webjars/bootstrap-datepicker/1.4.0/locales/bootstrap-datepicker.th.min.js}"></script>
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/webjars/ckeditor/4.4.7-1/standard/ckeditor.js}"></script>
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/webjars/ckeditor/4.4.7-1/standard/config.js}"></script>
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/webjars/jquery.fileDownload/50171edfab/jquery.fileDownload.js}"></script>
+		
+		
+	<script type="text/javascript" src="../../static/pagejs/appUtil.js"
+		th:src="@{/static/pagejs/appUtil.js}"></script>
+	<script type="text/javascript" src="../../static/pagejs/backbone/models.js"
+		th:src="@{/static/pagejs/backbone/models.js}"></script>
+
+		
+	
+	<script id="errorModalBodyTemplate" type="text/x-handlebars-template">
+		<div>
+			<b>Error Timestamp : </b> {{timestamp}}
+		</div>
+		<div>
+			<b>Error Message : </b> {{message}}
+		</div>
+		<div>
+			<b>Stack Trace : </b>
+			<pre class="pre-scrollable">{{stackTrace}}</pre>
+		</div>
+	</script>
+		
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(document).ready(function() {
+		   // register Global error handling here .. if there isn't one
+		   
+			$(document).ajaxError( function(event, jqXHR, ajaxSettings, thrownError){
+				if(jqXHR.status == 403) {
+					alert('Session Timeout,  Please Log in again');
+					window.location.reload();
+				} else {
+		 
+					$('#errorModal').find('.modal-header span').html("<h3>Error Status Code: " + jqXHR.status + " " + jqXHR.statusText +"</h3>");
+					
+					var json =jqXHR.responseJSON;
+					var errorTemplate = Handlebars.compile($("#errorModalBodyTemplate").html());
+					
+					$('#errorModal').find('.modal-body').html(errorTemplate(json));
+					
+					$('#errorModal').modal({show: true, backdrop: 'static', keyboard: false});
+				}
+				
+			});
+	 });
+	
+	function showAboutModal() {
+		$('#aboutModal').modal({show: true, backdrop: 'static', keyboard: false});
+	}
+	/*]]>*/
+	</script>
+		
+	<div layout:fragment="pageScript">
+	</div>
+	
+</body>
+</html>

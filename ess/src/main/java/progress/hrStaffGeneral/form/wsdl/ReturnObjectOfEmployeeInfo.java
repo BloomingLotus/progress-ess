@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ReturnObjectOfEmployeeInfo", propOrder = {
+@XmlType(name = "ReturnObjectOfEmployeeInfo_generalForm", namespace="generalForm", propOrder = {
     "obj"
 })
 public class ReturnObjectOfEmployeeInfo

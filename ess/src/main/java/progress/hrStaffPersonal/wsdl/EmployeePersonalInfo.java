@@ -898,4 +898,26 @@ public class EmployeePersonalInfo {
         this.lockedBy = value;
     }
 
+	@Override
+	public String toString() {
+		
+		return "EmployeePersonalInfo [employeeID=" + employeeID + ", idCardNo=" + idCardNo + ", taxNo=" + taxNo
+				+ ", birthDate=" + birthDate + ", religionID=" + religionID + ", martialStatusID=" + martialStatusID
+				+ ", martialRemark=" + martialRemark + ", martialStatusName=" + martialStatusName + ", religionName="
+				+ religionName + ", nationalityName=" + nationalityName + ", nationalityID=" + nationalityID
+				+ ", raceID=" + raceID + ", raceName=" + raceName + ", salaryAccountBankID=" + salaryAccountBankID
+				+ ", salaryAccountNo=" + salaryAccountNo + ", doorAccessCardKeyNo=" + doorAccessCardKeyNo
+				+ ", departmentAdmissionDate=" + departmentAdmissionDate + ", departmentCancellationDate="
+				+ departmentCancellationDate + ", departmentResignationDate=" + departmentResignationDate
+				+ ", isIncludedInPerformanceIndex=" + isIncludedInPerformanceIndex + ", reasonOfResignationDetail="
+				+ reasonOfResignationDetail + ", reasonOfResignationName=" + reasonOfResignationName
+				+ ", reasonOfResignationID=" + reasonOfResignationID + ", idCardTypeID=" + idCardTypeID
+				+ ", publishedDate=" + publishedDate + ", publishedByName=" + publishedByName + ", publishedBy="
+				+ publishedBy + ", sourceTypeID=" + sourceTypeID + ", lockedDate=" + lockedDate + ", lockedByName="
+				+ lockedByName + ", lockedBy=" + lockedBy + "]";
+
+	
+	}
+
+
 }

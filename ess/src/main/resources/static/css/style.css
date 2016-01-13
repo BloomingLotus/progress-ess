@@ -47,6 +47,7 @@ body {
 	font-weight: 300;
 	color: #888;
 	background: url(../images/patterns/1.png) fixed repeat;
+	margin: 0px;
 }
 strong, b {
 	font-weight: 600;
@@ -58,11 +59,10 @@ img {
 }
 
 ul, ol {
-	list-style: none;
 }
 
 ul {
-    padding: 0;
+    padding: 15;
     margin: 0;
 }
 
@@ -1443,7 +1443,7 @@ input[type="submit"] {
 }
 
 .panel-heading {
-	padding: 0;
+	padding: 10px 15px;
 }
 
 .panel-title {
@@ -5698,4 +5698,16 @@ ul.footer-nav li a:hover {
 	text-decoration: none;
     font-weight: bold;
      color: #8a6d3b;
+}
+
+a > img {
+	outline: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+.cellHeader {
+	background-color: #428BCA;
+	 color: #fff;
 }

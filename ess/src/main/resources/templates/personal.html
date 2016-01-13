@@ -304,7 +304,7 @@
 				{{txtInput model "enNickName" "ชื่อเล่น (EN):" 4 8 "static"}}
 				{{txtInput model "mobilePhone" "เบอร์โทรศัพท์มือถือ:" 4 8 "static"}}
 				{{txtInput model "email" "อีเมล์:" 4 8 "static"}}
-				{{txtInput model "religious" "ศาสนา:" 4 8 "static"}}
+				{{txtInput model "religionName" "ศาสนา:" 4 8 "static"}}
 			</div>
 			<div class="col-md-4 col-md-offset-6">
 				{{#if model.hasChangeSet}}
@@ -1112,23 +1112,23 @@
 	<div class="row">
 		<form class="form-horizontal">		
 			<div class="col-md-6">
-				{{txtInput model "thTitle" "คำนำหน้าชื่อ (TH):" 4 8  "static"}}
-				{{txtInput model "thFirstName" "ชื่อ (TH):" 4 8  "static"}}
-				{{txtInput model "thLastName" "นามสกุล (TH):" 4 8  "static"}}
+				{{sltInput model "titles" "thName" "titleId" "คำนำหน้าชื่อ (TH):" 4 8}}
+				{{txtInput model "thFirstName" "ชื่อ (TH):" 4 8}}
+				{{txtInput model "thLastName" "นามสกุล (TH):" 4 8 }}
 				{{txtInput model "thNickName" "ชื่อเล่น (TH):" 4 8  }}
-				{{txtInput model "status" "สถานภาพ:" 4 8  }}
+				{{sltInput model "maritalStatus" "thName" "id" "สถาพภาพ:" 4 8}}
 				{{txtInput model "homePhoneNo" "เบอร์โทรศัพท์บ้าน:" 4 8  }}
-				{{txtInput model "nationalityName" "สัญชาติ:" 4 8  "static"}}
+				{{sltInput model "nationality" "thName" "id" "สัญชาติ:" 4 8}}
 				{{txtInput model "bankAccount" "เลขที่บัญชีธนาคาร:" 4 8  }}
 			</div>
 			<div class="col-md-6">
-				{{txtInput model "enTitle" "คำนำหน้าชื่อ (EN):" 4 8  "static"}}	
-				{{txtInput model "enFirstName" "ชื่อ (EN):" 4 8 "static"}}
-				{{txtInput model "enLastName" "นามสกุล (EN):" 4 8  "static"}}
+				{{sltInput model "titles" "enName" "titleId" "คำนำหน้าชื่อ (TH):" 4 8}}
+				{{txtInput model "enFirstName" "ชื่อ (EN):" 4 8 }}
+				{{txtInput model "enLastName" "นามสกุล (EN):" 4 8 }}
 				{{txtInput model "enNickName" "ชื่อเล่น (EN):" 4 8  }}
 				{{txtInput model "mobilePhone" "โทรศัพท์มือถือ:" 4 8  }}
 				{{txtInput model "email" "อีเมล์:" 4 8  static}}
-				{{txtInput model "religious" "ศาสนา:" 4 8  }}
+				{{sltInput model "religions" "thName" "id" "ศาสนา:" 4 8}}
 			</div>
 		</form>
 	</div>

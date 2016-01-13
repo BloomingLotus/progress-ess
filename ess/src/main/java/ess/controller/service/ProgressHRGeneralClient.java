@@ -3,6 +3,8 @@ package ess.controller.service;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
 
+import progress.hrStaffGeneral.form.wsdl.GetListMaritalStatus;
+import progress.hrStaffGeneral.form.wsdl.GetListMaritalStatusResponse;
 import progress.hrStaffGeneral.wsdl.GetItem;
 import progress.hrStaffGeneral.wsdl.GetItemGeneralDetailData;
 import progress.hrStaffGeneral.wsdl.GetItemGeneralDetailDataResponse;
@@ -32,5 +34,7 @@ public class ProgressHRGeneralClient extends WebServiceGatewaySupport {
 				
 		return response;
 	}
+	
+
 	
 }

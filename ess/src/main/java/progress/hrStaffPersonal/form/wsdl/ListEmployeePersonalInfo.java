@@ -1291,4 +1291,32 @@ public class ListEmployeePersonalInfo {
         this.resignationCategoryName = value;
     }
 
+	@Override
+	public String toString() {
+		return "ListEmployeePersonalInfo [employeeID=" + employeeID + ", employeePersonalTransactionID="
+				+ employeePersonalTransactionID + ", idCardNo=" + idCardNo + ", taxNo=" + taxNo + ", birthDate="
+				+ birthDate + ", nationalityID=" + nationalityID + ", nationalityName=" + nationalityName + ", raceID="
+				+ raceID + ", raceName=" + raceName + ", religionID=" + religionID + ", religionName=" + religionName
+				+ ", martialStatusID=" + martialStatusID + ", martialStatusName=" + martialStatusName
+				+ ", martialRemark=" + martialRemark + ", salaryAccountNo=" + salaryAccountNo + ", bankCode=" + bankCode
+				+ ", bankName=" + bankName + ", doorAccessCardKeyNo=" + doorAccessCardKeyNo
+				+ ", departmentAdmissionDate=" + departmentAdmissionDate + ", departmentCancellationDate="
+				+ departmentCancellationDate + ", departmentResignationDate=" + departmentResignationDate
+				+ ", isIncludedInPerformanceIndex=" + isIncludedInPerformanceIndex + ", reasonOfResignationID="
+				+ reasonOfResignationID + ", reasonOfResignationName=" + reasonOfResignationName
+				+ ", reasonOfResignationDetail=" + reasonOfResignationDetail + ", companyName=" + companyName
+				+ ", departmentID=" + departmentID + ", salaryAccountBankID=" + salaryAccountBankID
+				+ ", contractInfoID=" + contractInfoID + ", outsourceCompanyID=" + outsourceCompanyID + ", divisionID="
+				+ divisionID + ", organizationID=" + organizationID + ", publishedDate=" + publishedDate
+				+ ", publishedByName=" + publishedByName + ", publishedBy=" + publishedBy + ", idCardTypeID="
+				+ idCardTypeID + ", idCardTypeName=" + idCardTypeName + ", createdDate=" + createdDate + ", createdBy="
+				+ createdBy + ", createdByName=" + createdByName + ", updatedDate=" + updatedDate + ", updatedBy="
+				+ updatedBy + ", updatedByName=" + updatedByName + ", resignationCategoryID=" + resignationCategoryID
+				+ ", resignationCategoryName=" + resignationCategoryName + "]";
+	}
+    
+    
+
+    
+    
 }

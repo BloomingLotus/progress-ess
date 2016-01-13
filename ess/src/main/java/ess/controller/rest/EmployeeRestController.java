@@ -4,12 +4,16 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -19,11 +23,13 @@ import ess.controller.service.EntityService;
 import ess.model.Address;
 import ess.model.Certified;
 import ess.model.ComputerExperience;
+import ess.model.DomainValue;
 import ess.model.Education;
 import ess.model.EmergencyContact;
 import ess.model.Employee;
 import ess.model.Family;
 import ess.model.ProjectOnHand;
+import ess.model.Title;
 import ess.model.Training;
 import ess.model.WorkExperience;
 import ess.webUI.ResponseJSend;
@@ -31,6 +37,8 @@ import ess.webUI.ResponseJSend;
 @RestController
 @RequestMapping("/service/Employee")
 public class EmployeeRestController {
+	
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	@Autowired
 	private EntityService entityService;
@@ -41,7 +49,42 @@ public class EmployeeRestController {
 		return entityService.findEmployeeById(id);
 	}
 	
+	@RequestMapping(value="/Titles",method=RequestMethod.GET)
+	public Iterable<Title> findAllTitle() {
+		return entityService.findAllTitle();
+	}
+	
+	@RequestMapping(value="/Religions",method=RequestMethod.GET)
+	public Iterable<DomainValue> findAllReligious() {
+		return entityService.findAllReligions();
+	}
 
+	@RequestMapping(value="/MaritalStatus",method=RequestMethod.GET)
+	public Iterable<DomainValue> findAllMaritalStatus() {
+		return entityService.findAllMaritalStatus();
+	}
+	
+	@RequestMapping(value="/Nationality",method=RequestMethod.GET)
+	public Iterable<DomainValue> findAllNationality() {
+		return entityService.findAllNationality();
+	}
+	
+	@RequestMapping(value="/search", method=RequestMethod.POST)
+	public  ResponseJSend<Page<Employee>>  findAllEmployeWithCriteria(
+			@RequestParam(value="enFirstName") String enFirstName,
+			@RequestParam(value="pageNum") Integer pageNum) {
+		String criteria = "";
+		if(enFirstName != null && enFirstName.length()>0) {
+			criteria += "ENFirstName like '%" +enFirstName+ "%' ";
+			
+			criteria += " and EmployeeStatusName like 'Active'";
+		}
+		
+		log.debug("criteria:" + criteria);
+		log.debug("pageNum: " + pageNum);
+		
+		return entityService.findAllEmployeWithCriteriaAndPage(pageNum, criteria);
+	}
 	
 	@RequestMapping(value="/{id}/Picture", method = {RequestMethod.GET})
 	public void getPicture(@PathVariable Long id, HttpServletResponse response) throws IOException {

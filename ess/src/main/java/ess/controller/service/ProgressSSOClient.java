@@ -5,6 +5,8 @@ import org.springframework.ws.soap.client.core.SoapActionCallback;
 
 import progress.hrsso.wsdl.GetAllApplicationName;
 import progress.hrsso.wsdl.GetAllApplicationNameResponse;
+import progress.hrsso.wsdl.GetCurrentRoleInApplication;
+import progress.hrsso.wsdl.GetCurrentRoleInApplicationResponse;
 import progress.hrsso.wsdl.GetStaffProfileByName;
 import progress.hrsso.wsdl.GetStaffProfileByNameResponse;
 import progress.hrsso.wsdl.Login;
@@ -19,7 +21,7 @@ public class ProgressSSOClient extends WebServiceGatewaySupport {
 		LoginResponse response = (LoginResponse) getWebServiceTemplate().marshalSendAndReceive(
 				request, new SoapActionCallback("http://tempuri.org/Login"));
 		
-		
+
 		return response;
 	}
 	
@@ -39,6 +41,18 @@ public class ProgressSSOClient extends WebServiceGatewaySupport {
 				new SoapActionCallback("http://tempuri.org/GetAllApplicationName"));
 		
 		return response;
+	}
+	
+	public GetCurrentRoleInApplicationResponse getCurrentRoleInApplication(String token, String appName) {
+		GetCurrentRoleInApplication request = new GetCurrentRoleInApplication();
+		request.setToken(token);
+		request.setApplicationName(appName);
+		
+		GetCurrentRoleInApplicationResponse response = (GetCurrentRoleInApplicationResponse) getWebServiceTemplate().marshalSendAndReceive(request,
+				new SoapActionCallback("http://tempuri.org/GetCurrentRoleInApplication"));
+		
+		return response;
+		
 	}
 	
 }

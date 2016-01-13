@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/full-page">
+<head>
+<title>ESS | Progress</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h2 layout:fragment="bannerTitle">ADMIN: ข้อมูลประกาศ</h2>
+	<ul layout:fragment="breadcrumbs">
+		<li class="active"><b>รายการประกาศ</b></li>		
+	</ul>
+	<div layout:fragment="content">
+		<div id="mainContent">
+			<div id="searchView">
+			</div>
+			
+			<div class="row" id="tableResultView">
+
+			</div>
+			<div class="row" id="formView">
+		
+			</div>
+		</div>
+		<div id="blogPostModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<span style="font-weight: bold;"></span>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger pull-right" id="impactModalCloseBtn"><i class="fa fa-times"></i>
+					ปิดหน้าต่าง</button>
+				</div>
+				</div>
+			</div>
+		</div>		
+	</div>
+	
+<div layout:fragment="pageScripts">
+	
+<script th:src="@{/static/pagejs/admin/blogPost.js}"></script>
+
+<script id="defaultBreadCrumbTemplate" type="text/x-handlebars-template" th:inline="text">
+<li><a href="[[@{/}]]"><i class="fa fa-home"></i> Home</a></li>
+<li id="rootBreadcrumb" class="active">[[${title}]]</li>
+</script>
+
+<script id="newFormBreadCrumbTemplate" type="text/x-handlebars-template" th:inline="text">
+<li><a href="#" th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+<li id="rootBreadcrumb"><a href="#">[[${title}]]</a></li>
+<li class="active">สร้าง[[${typeTxt}]]ใหม่</li>
+</script>
+
+<script id="editFormBreadCrumbTemplate" type="text/x-handlebars-template" th:inline="text">
+<li><a href="#" th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+<li id="rootBreadcrumb"><a href="#">[[${title}]]</a></li>
+<li class="active">แก้ไข[[${typeTxt}]](#{{companyId}})</li>
+</script>			
+
+<script  id="formViewTemplate" type="text/x-handlebars-template">
+<div class="col-md-12">
+	<form class="form-horizontal" role="form">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<b><i class="fa fa-pencil-square-o"></i> ตรวจสอบข้อมูล</b>
+		</div>
+		<div class="panel-body">
+			<form class="form-horizontal">	
+				<div class="row">
+					{{txtInput model "title" "หัวเรื่อง:" 2 10 }}
+				</div>
+				<div class="row">
+					{{txtAreaInput model "text" "เนื้อเรื่อง:" 2 10 }}
+				</div>
+				<div class="row">
+					
+				</div>
+			</form>
+		</div>
+		<div class="panel-footer">
+			<button id="backBtn" type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i> กลับหน้าเดิม</button>
+			{{#unless model.action}}
+			<button id="saveFormBtn" type="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> บันทึกข้อมูล</button>
+			{{/unless}}
+		</div>
+	</div>
+	</form>
+</div>
+</script>
+
+<script  id="searchViewTemplate" type="text/x-handlebars-template"  th:inline="text">
+<div class="panel panel-primary">
+<div class="panel-heading">
+ 			<h4 class="panel-title">ค้นหา</h4>
+		</div>
+		<div class="panel-body">
+	<form class="form-horizontal" role="form" id="searchForm">
+
+		<div class="row">
+			<div class="col-md-12" style="text-align: center;">
+					<button type="button" class="btn btn-default" id="newFormBtn">
+						<i class="fa fa-plus"></i> เพิ่มข้อมูล</button>
+					<button type="button" class="btn btn-default" id="searchBtn">
+						<span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+					<button type="button" class="btn btn-default" id="clearFormBtn">
+						<i class="fa fa-times-circle"></i> ล้างข้อมูลค้นหา</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</script>
+
+<script id="tableResultViewTemplate" type="text/x-handlebars-template" th:inline="text">
+<div class="panel panel-default">
+	<div class="panel-body">
+		<b>ผลการค้นหา</b>
+	</div>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<td style="width: 25px;text-align:center;"></td>
+				<td style="text-align:center;" class=""><b>ชื่อประกาศ</b></td>
+				<td style="width: 200px;text-align:center;" class=""><b>ผู้ประกาศ</b></td>
+				<td style="width: 200px;text-align:center;" class=""><b>วันที่สร้าง</b></td>
+				<td style="width: 200px;text-align:center;" class=""><b>สถานะปัจจุบัน</b></td>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each content}}
+			<tr data-id="{{id}}">
+				<td>
+					<button type="button" class="btn btn-info btn-xs editBtn"><i class="fa fa-edit"> </i></button>
+				</td>
+				<td style="">{{title}}</td>
+				<td style="text-align:center;">{{createdBy.thFirstName}}</td>
+				<td style="text-align:center;">{{formatTimeStamp createdTime}}</td>
+				<td style="text-align:center;">{{currentState}}</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+	<form class="form-inline">
+	<div class="panel-footer">
+		<div class="row">
+			<div class="col-md-6">
+				1-15 จาก {{page.totalElements}} รายการ  
+			</div>
+			<div class="col-md-6" style="text-align: right;">
+				{{#unless page.first}}<button class="btn btn-default btn-sm btnPageNav" data-targetPage="{{page.prevPage}}" type="button"><i class="fa fa-chevron-left"></i></button>{{/unless}}
+				หน้าที่ <input class="form-control input-sm" size="2" type="text" id="pageNavTxt" data-value="{{page.pageNumber}}" value="{{page.pageNumber}}"></input> จาก {{page.totalPages}} หน้า
+				{{#unless page.last}}<button class="btn btn-default btn-sm btnPageNav" data-targetPage="{{page.nextPage}}" type="button"><i class="fa fa-chevron-right"></i></button>{{/unless}}
+			</div>
+		</div>
+	</div>
+	</form>
+</div>
+</script>
+
+
+<script type="text/javascript" th:inline="javascript">
+//<!--
+
+var appRouter;
+
+$( document ).ready(function() {
+	
+	//initialize things
+		
+		searchView = new SearchView({
+			el: "#searchView"
+		});
+		
+		tableResultView = new TableResultView({
+			el: "#tableResultView"
+		});
+		
+		formView = new FormView({
+			el: "#formView"
+		})
+		
+		
+		
+		appRouter = new AppRouter({
+			searchView: searchView,
+			tableResultView: tableResultView,
+			formView: formView
+		});
+		Backbone.history.start();
+		
+		
+
+	
+	
+});
+
+
+//-->
+</script>			
+</div>	
+</body>
+</html>

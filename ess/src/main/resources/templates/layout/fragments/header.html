@@ -137,7 +137,7 @@
 								<a th:href="@{/web/form}" th:class="${formPage} ? 'active' : 'inactive'">แบบฟอร์มออนไลน์</a>
 							</li>
 							<li sec:authorize="isAuthenticated()">
-								<a th:href="@{../admin/changeRequest}" th:class="${adminPage} ? 'active' : 'inactive'">Admin</a>
+								<a th:href="@{../admin/}" th:class="${adminPage} ? 'active' : 'inactive'">Admin</a>
 							</li>
 						</ul>
 						<!-- End Navigation List -->
