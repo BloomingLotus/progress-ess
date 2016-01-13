@@ -89,6 +89,7 @@ var SearchView = Backbone.View.extend({
     	"submit #searchForm" : "onSubmitSearchForm"
     		
     },
+    
     onClickClearFormBtn: function(e) {
     	this.searchModel = new ess.Model.Employee();
     	appRouter.search();
